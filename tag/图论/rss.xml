@@ -307,7 +307,7 @@ signed int main() &amp;#123;
             <category>图论</category>
             <pubDate>Thu, 07 Sep 2023 16:18:38 +0800</pubDate>
             <description><![CDATA[ &lt;h1&gt;$\operatorname{Tarjan}$ 基础用法&lt;/h1&gt;
-&lt;h2 id=&#34;operatorname-Tarjan-求最近公共祖先&#34;&gt;$\operatorname{Tarjan}$ 求最近	公共祖先&lt;/h2&gt;
+&lt;h2 id=&#34;operatorname-Tarjan-求最近公共祖先&#34;&gt;$\operatorname{Tarjan}$ 求最近公共祖先&lt;/h2&gt;
 &lt;h3 id=&#34;前置芝士&#34;&gt;前置芝士&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;最近公共祖先(Lowest Common Ancestor , LCA)&lt;/strong&gt;：一棵树中两个结点的 公共祖先里面，离根最远的那个被称为最近公共祖先。我们记点集 $S=\{v_1,v_2,\dots,v_n\}$ 的最近公共祖先为 $\operatorname{LCA}(v_1,v_2,\dots,v_n)$ 或 $\operatorname{LCA}(S)$。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;性质&lt;/strong&gt;：&lt;/p&gt;
