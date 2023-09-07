@@ -1,0 +1,520 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>最短路径基础总结 | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>最短路径基础总结</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/9/7
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #00bcd4">图论</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>最短路径</h1>
+<h2 id="operatorname-Floyd-（全源最短路）">$\operatorname{Floyd}$（全源最短路）</h2>
+<p>我们定义一个数组 $f_{k,x,y}$ 表示只经过节点 $1$ ~ $k$ 的情况下，$x$ 到 $y$ 的最短路长度，那么显然的，当一个图中节点个数为 $n$ 时，$f_{n,x,y}$ 就是我们所要求的答案。实现 $\operatorname{Floyd}$ 算法需要我们从 $k=0$ 时的情况逐渐递推到 $k=n$。$k=0$ 时，$x$ 和 $y$​ 不相等的情况下不可能通过任何情况联通，而一个点到自己的距离显然为 $0$，所以我们认为：</p>
+$$\displaylines{\left\{\begin{matrix}
+f_{0,x,y}(x \ne y)=\infty
+ \\
+f_{0,x,y}(x=y)=0
+\end{matrix}\right.
+}$$<p>于是我们就得到了递推式的第一项，我们考虑动态规划。对于每一个点，我都有两种选择：第一种是经过这个点，即 $f_{k-1,x,y}$；而第二种是不经过这个点，即 $f_{k-1,x,k}+f_{k-1,k,y}$ 。我们寻找最短路时只要判断经过当前的点的代价和不经过当前点的代价哪个更小就可以了，所以 $k,x,y$ 都从 $1$ 开始枚举一遍就可以得出答案，下面是具体实现（切勿忘记初始化）：</p>
+<pre><code class="language-cpp">for (int k = 1; k &lt;= n; ++k) &#123;
+	for (int x = 1; x &lt;= n; ++x) &#123;
+		for (int y = 1; y &lt;= n; ++y) &#123;
+            f[k][x][y] = min(f[k-1][x][y], f[k-1][x][k] +f[k-1][k][y]);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>因为 $f_{k-1,x,y}$ 表示的就是当 $k-1$ 这一维中所有元素的最小值，那么该维其它值对于我们来说没有贡献，我们就可以考虑把这一维去掉，将三维数组压缩成二维数组，像这样：</p>
+<pre><code class="language-cpp">for (int k = 1; k &lt;= n; ++k) &#123;
+	for (int x = 1; x &lt;= n; ++x) &#123;
+		for (int y = 1; y &lt;= n; ++y) &#123;
+            f[x][y] = min(f[x][y], f[x][k] + f[k][y]);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>最终我们算法的时间复杂度为 $O(n^3)$，空间复杂度为 $O(n^2)$，常数很小。但是我们发现，当我们要求单源最短路时，这种方法求出的其它最短路对于我们来说就是一种浪费，但这又是无法避免的，所以我们考虑，对于单源最短路有没有其它的做法。</p>
+<h2 id="operatorname-Dijkstra-（非负权图单源最短路）">$\operatorname{Dijkstra}$（非负权图单源最短路）</h2>
+<p>$\operatorname{Dijkstra}$ 算法将一张图内所有结点分为了两个集合，其中一个集合内放已经确定了起点到其的最短路的点，另一个放还没有确定最短路的点，我们分别记为 $S$ 和 $T$ 。为了记录源点到每个点的最短路，我们要用一个数组 $dis$。刚开始的时候所有的点都属于集合 $T$，接下来，每一次操作都从 $T$ 中取出最短路长度最小的点放入 $S$ 集合中，对其进行<strong>松弛操作</strong>，什么是松弛呢？我们进行如下定义：对于一条边$(u,v)$，设其边权为 $w$ ，则 $dis_v = min(dis(v),dis(u) + w)$。这个操作就叫做松弛，而它的含义是显而易见的，就是当我们走到一个点的时候考虑要不要去走某一条边。</p>
+<p>那么如何维护这两个集合呢？我们考虑用一个 $used$ 数组来记录当前点以前是否更新过，也就是说记录其是否在集合 $S$ 中。然后每次遍历找到 $T$ 中最小的那个点，对它所有出边进行松弛即可，下面是代码实现：</p>
+<pre><code class="language-cpp">typedef long long LL;
+const LL N = 2e5 + 7, INF = 1e18;
+struct edge &#123; LL v, w; &#125;;
+vector&lt;edge&gt; e[N];
+LL dis[N];
+bool used[N];
+LL n, m, b;
+
+inline void Dijkstra(int s) &#123;
+    for (int i = 1; i &lt;= n; ++i) &#123; dis[i] = INF; &#125;
+    // 所有点最短路径初始时要置无穷大
+    dis[s] = 0;// 起点到自己的最短路为0
+    for (int i = 1; i &lt;= n; ++i) &#123;
+        LL u = 0, now = LONG_LONG_MAX;
+        // now用来记录当前T中找到的最短路最小的点
+        for (int j = 1; j &lt;= n; ++j) &#123;
+            if (!used[j] &amp;&amp; dis[j] &lt; now) &#123;
+            // 如果在集合T中且其最短路长比之前找到的还小就更新
+                u = j; 
+                now = dis[j];
+            &#125;
+        &#125;
+        used[u] = true;// 放入S集合
+        for (auto it : e[u]) &#123;// 对出边进行松弛
+            auto v = it.v, w = it.w;
+            if (dis[v] &gt; dis[u] + w) &#123;
+                dis[v] = dis[u] + w;
+            &#125;
+        &#125;
+    &#125;
+    return;
+&#125;
+</code></pre>
+<p>这样做的时间复杂度是 $O(n^2)$，比刚刚有了很大的提升，但当我们打开一道题，发现数据可能随随便便就超过了 $10^5$，$O(n^2)$ 显然是过不去的，所以我们考虑对其用优先队列进行堆优化。我们发现，在暴力做法中，我们每次都要遍历 $1$ ~ $n$ 去寻找集合 $T$ 中最短路最小的那个点，那么我们就想能不能每次直接从 $T$ 中拿出最短路最小的点。我们考虑每次从堆顶取出一个点，然后判断这个点是否在集合 $T$ 中，如果不在那么扔掉再取下一个，否则就进行松弛，成功松弛后 $u$ 就光荣完成了它的使命，扔进 $S$ 集合中，而 $v$ 就入队排序等待后面把它取出。这样重复直到队列为空，我们也就更新完了所有的点，下面是具体实现：</p>
+<pre><code class="language-cpp">typedef long long LL;
+typedef pair&lt;LL, LL&gt; PII;
+const LL N = 2e5 + 7, INF = 1e18;
+struct edge &#123; LL v, w; &#125;;
+vector&lt;edge&gt; e[N];
+priority_queue&lt;PII, vector&lt;PII&gt;, greater&lt;PII&gt; &gt; q;
+LL n, m, b;
+LL dis[N];
+bool used[N];
+
+inline void Dijkstra(int s) &#123;
+    for (int i = 1; i &lt;= n; ++i) &#123; dis[i] = INF; &#125;
+    dis[s] = 0;
+    q.push(&#123;0, s&#125;);
+    while (!q.empty()) &#123;
+        auto t = q.top(); q.pop();
+        // 按照dis排序，每次取出堆顶的点
+        LL u = t.second;
+        if (used[u]) &#123; continue; &#125;
+        // 如果在S集合中就扔掉不管
+        used[u] = true;
+        // u完成使命放入S集合中
+        for (auto it : e[u]) &#123;
+            LL v = it.v, w = it.w;
+            if (dis[v] &gt; dis[u] + w) &#123;
+                dis[v] = dis[u] + w;
+                q.push(&#123;dis[v], v&#125;);
+                // 成功松弛就扔进队列里
+            &#125;
+        &#125;
+    &#125;
+    return;
+&#125;
+</code></pre>
+<p>队列中元素的个数是 $O(m)$ 个，那么维护堆的时间复杂度就是 $O(logm)$，我们对每个点都更新一次，所以优化后的时间复杂度是 $O(mlogm)$。</p>
+<p>我们发现，$\operatorname{Dijkstra}$ 算法虽然很好用，但是在遇到负边权的时候，每次松弛都会选到负的那条边，因为这样显然更小。松弛后，开始在 $T$ 中寻找下一个点，结果我们发现最小边权的点变成了上次松弛的 $v$，我们又松弛 $v$，再下一次又找到了第一次的 $u$。结果最后我们在负边相连的两个点间反复横跳，这个算法就寄了，这就是为什么 $\operatorname{Dijkstra}$ 处理的是非负权图单源最短路。那么遇到负权难道我们就得牺牲时间去用 $\operatorname{Floyd}$ 了么？显然不是，我们还有其它算法。</p>
+<h2 id="operatorname-Bellman-Ford-（带负权单源最短路）">$\operatorname{Bellman-Ford}$ （带负权单源最短路）</h2>
+<p>$\operatorname{Bellman-Ford}$ 寻找最短路的方法也是通过和刚刚一样的松弛操作，它每次对所有点都松弛一次，直到松弛到无法松弛为止。一个图内单源最短路的数量最多为 $n-1$，这个结论很平凡。所以松弛操作肯定也是最多执行 $n-1$ 次，那么如果执行多了说明什么？显然是说明有一个负权边使得那两个点开始左右横跳了，那么就判断出了负环。请注意，从 $s$ 点出发没有找到负环并不能说明图中没有负环，只能说明 $s$ 点出发抵达的点和边构成的子图中没有负环。想要判断一个图中有没有负环，需要建立一个超级源点，这个源点和图上每一个点都有一条边且边权均为 $0$，以超级源点为源点跑 $\operatorname{Bellman-Ford}$ 就一定可以判断出有没有负环。下面是 $\operatorname{Bellman-Ford}$ 的具体实现：</p>
+<pre><code class="language-cpp">typedef long long LL;
+const LL N = 2e5 + 7, INF = 1e18;
+struct edge &#123; LL v, w; &#125;;
+vector&lt;edge&gt; e[N];
+LL n, m, b;
+LL dis[N];
+
+inline bool Bellman_Ford(int s) &#123;
+    for (int i = 1; i &lt;= n; ++i) &#123; dis[i] = INF; &#125;
+    dis[s] = 0;
+    bool flag; 
+    // flag用来判断循环时有没有进行松弛
+    for (int i = 1; i &lt;= n; ++i) &#123;
+        flag = false;
+        for (int u = 1; u &lt;= n; ++u) &#123;
+            for (auto it : e[u]) &#123;
+                auto v = it.v, w = it.w;
+                if (dis[v] &gt; dis[u] + w) &#123;
+                    dis[v] = dis[u] + w;
+                    flag = true;
+                    // 松弛后打上标记
+                &#125;
+            &#125;
+        &#125;
+        if (!flag) &#123; break; &#125;
+        // 如果没有松弛说明所有路径更新完毕，可以直接结束
+    &#125;
+    // n轮松弛后如果仍然能进行松弛，说明一定存在负环
+    return flag;
+&#125;
+</code></pre>
+<p>最多进行 $n$ 次松弛操作，每轮操作最多进行 $m$ 次松弛，所以 $\operatorname{Bellman-Ford}$ 的时间复杂度为 $O(nm)$，数据大的题也是过不去的，所以需要对其进行优化，于是就有了一个人们耳熟能详的算法：$\operatorname{SPFA}$ 算法。</p>
+<p>$\operatorname{SPFA}$ 的主要思路就是在 $\operatorname{Bellman-Ford}$ 的基础上，用队列进行优化。我们每次松弛的时候，真正起到实际作用的操作其实只有当 $u$ 为源点或上次被松弛过，这次的松弛操作才有意义，所以我们把每次松弛的点都扔进队列里，只从队列中取出点来松弛就可以降低时间复杂度。**但是请注意，这是一个假算法！**诶，那这很奇怪啊，为什么广为人知，受人追捧的可爱的 $\operatorname{SPFA}$ 会是一个假算法呢？因为我们用优先队列，并不是忽略或者对哪个点不进行松弛，而是改变了松弛的顺序从而达到优化目的，那么如果遇到刻意构造的数据，就可以轻轻松松将 $\operatorname{SPFA}$ 卡到 $O(nm)$ 从而让你的程序寄掉。这是某一年国赛带给全体 $OIer$ 的惨痛教训，所以在没有负环的情况下，尽量不要使用 $\operatorname{SPFA}$。下面给出参考代码：</p>
+<pre><code class="language-cpp">typedef long long LL;
+const LL N = 1e6 + 7, INF = 1e18;
+struct edge &#123; LL v, w; &#125;;
+vector&lt;edge&gt; e[N];
+queue&lt;int&gt; q;
+LL n, m, b;
+LL dis[N], cnt[N];
+bool used[N];
+
+inline bool SPFA(int s) &#123;
+    for (int i = 1; i &lt;= n; ++i) &#123; dis[i] = INF; &#125;
+    dis[s] = 0;
+    used[s] = true;
+    q.push(s);
+    while (!q.empty()) &#123;
+        int u = q.front(); q.pop();
+        used[u] = false;
+        for (auto it : e[u]) &#123;
+            auto v = it.v, w = it.w;
+            if (dis[v] &gt; dis[u] + w) &#123;
+                dis[v] = dis[u] + w;
+                cnt[v] = cnt[u] + 1;
+                if (cnt[v] &gt;= n) &#123; return false; &#125;
+                if (!used[v]) &#123; 
+                    q.push(v);
+                    used[v] = true; 
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+    return true;
+&#125;
+</code></pre>
+<p>说了这么多了让我们来理一理，我们最开始因为 $\operatorname{Floyd}$ 算法求全源最短路对单源最短路的问题又浪费，所以学习了 $\operatorname{Dijkstra}$，又因为其无法处理负权学习了 $\operatorname{Bellman-Ford}$。那么，我们需要考虑这样一个问题：如果我们要处理全源最短路，但是数据范围又比较大该怎么办呢？我们是不是可以跑 $n$ 遍 $\operatorname{Dijkstra}$，这样复杂度也不是很高，但碰到负权就寄了，所以就有了另外一个算法。</p>
+<h2 id="operatorname-Johnson-（全源最短路）">$\operatorname{Johnson}$（全源最短路）</h2>
+<p>$\operatorname{Johnson}$ 可以说是前面算法的大杂烩了，$\operatorname{Dijkstra}$ 和 $\operatorname{Bellman-Ford}$ 揉在一起再跑。如何处理负环呢，我们首先建立一个超级源点，也就是传说中的 $0$ 号点，前面已经说过了不再赘述。建立好了以后以这个超级源点为源点跑 $SPFA$，其中 $0$ 号点到 $i$ 号点的最短路记为 $newdis_i$。接下来对于边 $(u,v)=w$，将其边权设置为 $w + newdis_u - newdis_v$，然后再跑 $n$ 遍 $\operatorname{Dijkstra}$，每次求出的 $dis+newdis_v-newdis_u$ 就是答案了。这种做法的正确性在于从 $s$ 到 $t$ 的最短路径长度的势能是没有变的，具体证明见下面这篇博客：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/StudyingFather/johnson-algorithm">正确性证明</a>。下面是参考代码：</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+#define LL long long
+#define PII pair&lt;LL, LL&gt;
+#define clear(cc) memset(cc, 0, sizeof(cc))
+using namespace std;
+
+namespace SHAWN &#123;
+    const LL N = 6e3 + 7, INF = 1e9;
+    struct edge &#123; LL v, w; &#125;;
+    vector&lt;edge&gt; e[N];
+    LL n, m;
+    LL dis[N], newdis[N];
+    int cnt[N];
+    bool used[N];
+
+    inline bool SPFA(int s) &#123;
+        queue&lt;int&gt; sq;
+        for (int i = 1; i &lt;= n; ++i) &#123; newdis[i] = INF; &#125;
+        clear(used);
+        newdis[s] = 0;
+        used[s] = true;
+        sq.push(s);
+        while (!sq.empty()) &#123;
+            int u = sq.front(); sq.pop();
+            used[u] = false;
+            for (auto it : e[u]) &#123;
+                LL v = it.v, w = it.w;
+                if (newdis[v] &gt; newdis[u] + w) &#123;
+                    newdis[v] = newdis[u] + w;
+                    cnt[v] = cnt[u] + 1;
+                    if (cnt[v] &gt; n) &#123; return false; &#125;
+                    // 注意这里因为插入了超级源点，所以要多跑一轮，&gt;=要变成&gt;
+                    if (!used[v]) &#123;
+                        sq.push(v);
+                        used[v] = true;
+                    &#125; 
+                &#125;
+            &#125;
+        &#125;
+        return true;
+    &#125;
+
+    inline void Dijkstra(int s) &#123;
+        priority_queue&lt;PII, vector&lt;PII&gt;, greater&lt;PII&gt; &gt; q;
+        for (int i = 1; i &lt;= n; ++i) &#123; dis[i] = INF; &#125;
+        clear(used);
+        dis[s] = 0;
+        q.push(&#123;0,s&#125;);
+        while (!q.empty()) &#123;
+            auto t = q.top(); q.pop();
+            int u = t.second;
+            if (used[u]) &#123; continue; &#125;
+            used[u] = true;
+            for (auto it : e[u]) &#123;
+                LL v = it.v, w = it.w;
+                if (dis[v] &gt; dis[u] + w) &#123;
+                    dis[v] = dis[u] + w;
+                    q.push(&#123;dis[v], v&#125;);
+                &#125;
+            &#125;
+        &#125;
+        return;
+    &#125;
+    
+    int work()
+    &#123;
+        cin &gt;&gt; n &gt;&gt; m;
+        for (int i = 1, x, y, z; i &lt;= m; ++i) &#123;
+            cin &gt;&gt; x &gt;&gt; y &gt;&gt; z;
+            e[x].push_back(&#123;y, z&#125;);
+        &#125;
+        for (int i = 1; i &lt;= n; ++i) &#123; e[0].push_back(&#123;i, 0&#125;); &#125;
+        // 建立超级源点
+        if (!SPFA(0)) &#123; cout &lt;&lt; &quot;-1\n&quot;; return 0;&#125;
+        // 先跑SPFA预处理边权
+        for (int u = 1; u &lt;= n; ++u) &#123;
+            for (int i = 0; i &lt; e[u].size(); ++i) &#123;
+                e[u][i].w += newdis[u] - newdis[e[u][i].v];
+            &#125;
+        &#125;
+        // 更改每条边的边权
+        for (int i = 1; i &lt;= n; ++i) &#123;
+            Dijkstra(i);// 跑n遍Dijkstra就做完了
+            LL ans = 0;
+            for (int j = 1; j &lt;= n; ++j) &#123;
+                if (dis[j] == INF) &#123; ans += j * INF; &#125;
+                else  &#123; ans += j * (dis[j] + newdis[j] - newdis[i]); &#125;
+            &#125;
+            cout &lt;&lt; ans &lt;&lt; '\n';
+        &#125;
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+<p>这样的时间复杂度是 $O(nmlogm)$，相比 $\operatorname{Floyd}$ 还是非常优化的。</p>
+<h2 id="总结">总结</h2>
+<p>想要求单源最短路，可以选择 $\operatorname{Dijkstra}$ 或 $\operatorname{Bellman-Ford(SPFA)}$，时间复杂度分别为 $O(mlogm)$ 和 $O(nm)$，前者只能处理非负权图，而后者可以处理带负权图。想要求全源最短路，可以选择 $\operatorname{Floyd}$ 或 $\operatorname{Johnson}$，时间复杂度分别为 $O(n^3)$ 和 $O(nmlogm)$，二者均可以处理带负权图。也就是说除了 $\operatorname{Dijkstra}$，其余的三个算法均可以处理带负权图以及判断负环。比赛时尽量使用 $\operatorname{Dijkstra}$ 和 $\operatorname{Johnson}$，不到迫不得已尽量不要用剩下两种，否则很容易被卡。</p>
+<p>以上就是全部内容，如有错误欢迎各位大佬指正。</p>
+<h2 id="参考文献">参考文献</h2>
+<p><a target="_blank" rel="noopener" href="https://oi-wiki.org/graph/shortest-path/">OI-Wiki 最短路</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/StudyingFather/johnson-algorithm">[洛谷日报#242]Johnson 全源最短路径算法学习笔记</a></p>
+<p>《算法导论（第3版）》</p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

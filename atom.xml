@@ -3,14 +3,305 @@
     <id>http://example.com</id>
     <title>NERV - SN</title>
     <link href="http://example.com" />
-    <updated>2023-09-07T08:18:38.000Z</updated>
-    <category term="Tarjan" />
+    <updated>2023-09-07T12:34:44.000Z</updated>
+    <category term="图论" />
+    <entry>
+        <id>http://example.com/2023/09/07/%E6%9C%80%E7%9F%AD%E8%B7%AF/</id>
+        <title>最短路径基础总结</title>
+        <link rel="alternate" href="http://example.com/2023/09/07/%E6%9C%80%E7%9F%AD%E8%B7%AF/"/>
+        <content type="html">&lt;h1&gt;最短路径&lt;/h1&gt;
+&lt;h2 id=&#34;operatorname-Floyd-（全源最短路）&#34;&gt;$\operatorname{Floyd}$（全源最短路）&lt;/h2&gt;
+&lt;p&gt;我们定义一个数组 $f_{k,x,y}$ 表示只经过节点 $1$ ~ $k$ 的情况下，$x$ 到 $y$ 的最短路长度，那么显然的，当一个图中节点个数为 $n$ 时，$f_{n,x,y}$ 就是我们所要求的答案。实现 $\operatorname{Floyd}$ 算法需要我们从 $k=0$ 时的情况逐渐递推到 $k=n$。$k=0$ 时，$x$ 和 $y$​ 不相等的情况下不可能通过任何情况联通，而一个点到自己的距离显然为 $0$，所以我们认为：&lt;/p&gt;
+$$\displaylines{\left\{\begin{matrix}
+f_{0,x,y}(x \ne y)=\infty
+ \\
+f_{0,x,y}(x=y)=0
+\end{matrix}\right.
+}$$&lt;p&gt;于是我们就得到了递推式的第一项，我们考虑动态规划。对于每一个点，我都有两种选择：第一种是经过这个点，即 $f_{k-1,x,y}$；而第二种是不经过这个点，即 $f_{k-1,x,k}+f_{k-1,k,y}$ 。我们寻找最短路时只要判断经过当前的点的代价和不经过当前点的代价哪个更小就可以了，所以 $k,x,y$ 都从 $1$ 开始枚举一遍就可以得出答案，下面是具体实现（切勿忘记初始化）：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;for (int k = 1; k &amp;lt;= n; ++k) &amp;#123;
+	for (int x = 1; x &amp;lt;= n; ++x) &amp;#123;
+		for (int y = 1; y &amp;lt;= n; ++y) &amp;#123;
+            f[k][x][y] = min(f[k-1][x][y], f[k-1][x][k] +f[k-1][k][y]);
+        &amp;#125;
+    &amp;#125;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因为 $f_{k-1,x,y}$ 表示的就是当 $k-1$ 这一维中所有元素的最小值，那么该维其它值对于我们来说没有贡献，我们就可以考虑把这一维去掉，将三维数组压缩成二维数组，像这样：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;for (int k = 1; k &amp;lt;= n; ++k) &amp;#123;
+	for (int x = 1; x &amp;lt;= n; ++x) &amp;#123;
+		for (int y = 1; y &amp;lt;= n; ++y) &amp;#123;
+            f[x][y] = min(f[x][y], f[x][k] + f[k][y]);
+        &amp;#125;
+    &amp;#125;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;最终我们算法的时间复杂度为 $O(n^3)$，空间复杂度为 $O(n^2)$，常数很小。但是我们发现，当我们要求单源最短路时，这种方法求出的其它最短路对于我们来说就是一种浪费，但这又是无法避免的，所以我们考虑，对于单源最短路有没有其它的做法。&lt;/p&gt;
+&lt;h2 id=&#34;operatorname-Dijkstra-（非负权图单源最短路）&#34;&gt;$\operatorname{Dijkstra}$（非负权图单源最短路）&lt;/h2&gt;
+&lt;p&gt;$\operatorname{Dijkstra}$ 算法将一张图内所有结点分为了两个集合，其中一个集合内放已经确定了起点到其的最短路的点，另一个放还没有确定最短路的点，我们分别记为 $S$ 和 $T$ 。为了记录源点到每个点的最短路，我们要用一个数组 $dis$。刚开始的时候所有的点都属于集合 $T$，接下来，每一次操作都从 $T$ 中取出最短路长度最小的点放入 $S$ 集合中，对其进行&lt;strong&gt;松弛操作&lt;/strong&gt;，什么是松弛呢？我们进行如下定义：对于一条边$(u,v)$，设其边权为 $w$ ，则 $dis_v = min(dis(v),dis(u) + w)$。这个操作就叫做松弛，而它的含义是显而易见的，就是当我们走到一个点的时候考虑要不要去走某一条边。&lt;/p&gt;
+&lt;p&gt;那么如何维护这两个集合呢？我们考虑用一个 $used$ 数组来记录当前点以前是否更新过，也就是说记录其是否在集合 $S$ 中。然后每次遍历找到 $T$ 中最小的那个点，对它所有出边进行松弛即可，下面是代码实现：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;typedef long long LL;
+const LL N = 2e5 + 7, INF = 1e18;
+struct edge &amp;#123; LL v, w; &amp;#125;;
+vector&amp;lt;edge&amp;gt; e[N];
+LL dis[N];
+bool used[N];
+LL n, m, b;
+
+inline void Dijkstra(int s) &amp;#123;
+    for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; dis[i] = INF; &amp;#125;
+    // 所有点最短路径初始时要置无穷大
+    dis[s] = 0;// 起点到自己的最短路为0
+    for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+        LL u = 0, now = LONG_LONG_MAX;
+        // now用来记录当前T中找到的最短路最小的点
+        for (int j = 1; j &amp;lt;= n; ++j) &amp;#123;
+            if (!used[j] &amp;amp;&amp;amp; dis[j] &amp;lt; now) &amp;#123;
+            // 如果在集合T中且其最短路长比之前找到的还小就更新
+                u = j; 
+                now = dis[j];
+            &amp;#125;
+        &amp;#125;
+        used[u] = true;// 放入S集合
+        for (auto it : e[u]) &amp;#123;// 对出边进行松弛
+            auto v = it.v, w = it.w;
+            if (dis[v] &amp;gt; dis[u] + w) &amp;#123;
+                dis[v] = dis[u] + w;
+            &amp;#125;
+        &amp;#125;
+    &amp;#125;
+    return;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样做的时间复杂度是 $O(n^2)$，比刚刚有了很大的提升，但当我们打开一道题，发现数据可能随随便便就超过了 $10^5$，$O(n^2)$ 显然是过不去的，所以我们考虑对其用优先队列进行堆优化。我们发现，在暴力做法中，我们每次都要遍历 $1$ ~ $n$ 去寻找集合 $T$ 中最短路最小的那个点，那么我们就想能不能每次直接从 $T$ 中拿出最短路最小的点。我们考虑每次从堆顶取出一个点，然后判断这个点是否在集合 $T$ 中，如果不在那么扔掉再取下一个，否则就进行松弛，成功松弛后 $u$ 就光荣完成了它的使命，扔进 $S$ 集合中，而 $v$ 就入队排序等待后面把它取出。这样重复直到队列为空，我们也就更新完了所有的点，下面是具体实现：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;typedef long long LL;
+typedef pair&amp;lt;LL, LL&amp;gt; PII;
+const LL N = 2e5 + 7, INF = 1e18;
+struct edge &amp;#123; LL v, w; &amp;#125;;
+vector&amp;lt;edge&amp;gt; e[N];
+priority_queue&amp;lt;PII, vector&amp;lt;PII&amp;gt;, greater&amp;lt;PII&amp;gt; &amp;gt; q;
+LL n, m, b;
+LL dis[N];
+bool used[N];
+
+inline void Dijkstra(int s) &amp;#123;
+    for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; dis[i] = INF; &amp;#125;
+    dis[s] = 0;
+    q.push(&amp;#123;0, s&amp;#125;);
+    while (!q.empty()) &amp;#123;
+        auto t = q.top(); q.pop();
+        // 按照dis排序，每次取出堆顶的点
+        LL u = t.second;
+        if (used[u]) &amp;#123; continue; &amp;#125;
+        // 如果在S集合中就扔掉不管
+        used[u] = true;
+        // u完成使命放入S集合中
+        for (auto it : e[u]) &amp;#123;
+            LL v = it.v, w = it.w;
+            if (dis[v] &amp;gt; dis[u] + w) &amp;#123;
+                dis[v] = dis[u] + w;
+                q.push(&amp;#123;dis[v], v&amp;#125;);
+                // 成功松弛就扔进队列里
+            &amp;#125;
+        &amp;#125;
+    &amp;#125;
+    return;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;队列中元素的个数是 $O(m)$ 个，那么维护堆的时间复杂度就是 $O(logm)$，我们对每个点都更新一次，所以优化后的时间复杂度是 $O(mlogm)$。&lt;/p&gt;
+&lt;p&gt;我们发现，$\operatorname{Dijkstra}$ 算法虽然很好用，但是在遇到负边权的时候，每次松弛都会选到负的那条边，因为这样显然更小。松弛后，开始在 $T$ 中寻找下一个点，结果我们发现最小边权的点变成了上次松弛的 $v$，我们又松弛 $v$，再下一次又找到了第一次的 $u$。结果最后我们在负边相连的两个点间反复横跳，这个算法就寄了，这就是为什么 $\operatorname{Dijkstra}$ 处理的是非负权图单源最短路。那么遇到负权难道我们就得牺牲时间去用 $\operatorname{Floyd}$ 了么？显然不是，我们还有其它算法。&lt;/p&gt;
+&lt;h2 id=&#34;operatorname-Bellman-Ford-（带负权单源最短路）&#34;&gt;$\operatorname{Bellman-Ford}$ （带负权单源最短路）&lt;/h2&gt;
+&lt;p&gt;$\operatorname{Bellman-Ford}$ 寻找最短路的方法也是通过和刚刚一样的松弛操作，它每次对所有点都松弛一次，直到松弛到无法松弛为止。一个图内单源最短路的数量最多为 $n-1$，这个结论很平凡。所以松弛操作肯定也是最多执行 $n-1$ 次，那么如果执行多了说明什么？显然是说明有一个负权边使得那两个点开始左右横跳了，那么就判断出了负环。请注意，从 $s$ 点出发没有找到负环并不能说明图中没有负环，只能说明 $s$ 点出发抵达的点和边构成的子图中没有负环。想要判断一个图中有没有负环，需要建立一个超级源点，这个源点和图上每一个点都有一条边且边权均为 $0$，以超级源点为源点跑 $\operatorname{Bellman-Ford}$ 就一定可以判断出有没有负环。下面是 $\operatorname{Bellman-Ford}$ 的具体实现：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;typedef long long LL;
+const LL N = 2e5 + 7, INF = 1e18;
+struct edge &amp;#123; LL v, w; &amp;#125;;
+vector&amp;lt;edge&amp;gt; e[N];
+LL n, m, b;
+LL dis[N];
+
+inline bool Bellman_Ford(int s) &amp;#123;
+    for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; dis[i] = INF; &amp;#125;
+    dis[s] = 0;
+    bool flag; 
+    // flag用来判断循环时有没有进行松弛
+    for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+        flag = false;
+        for (int u = 1; u &amp;lt;= n; ++u) &amp;#123;
+            for (auto it : e[u]) &amp;#123;
+                auto v = it.v, w = it.w;
+                if (dis[v] &amp;gt; dis[u] + w) &amp;#123;
+                    dis[v] = dis[u] + w;
+                    flag = true;
+                    // 松弛后打上标记
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        if (!flag) &amp;#123; break; &amp;#125;
+        // 如果没有松弛说明所有路径更新完毕，可以直接结束
+    &amp;#125;
+    // n轮松弛后如果仍然能进行松弛，说明一定存在负环
+    return flag;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;最多进行 $n$ 次松弛操作，每轮操作最多进行 $m$ 次松弛，所以 $\operatorname{Bellman-Ford}$ 的时间复杂度为 $O(nm)$，数据大的题也是过不去的，所以需要对其进行优化，于是就有了一个人们耳熟能详的算法：$\operatorname{SPFA}$ 算法。&lt;/p&gt;
+&lt;p&gt;$\operatorname{SPFA}$ 的主要思路就是在 $\operatorname{Bellman-Ford}$ 的基础上，用队列进行优化。我们每次松弛的时候，真正起到实际作用的操作其实只有当 $u$ 为源点或上次被松弛过，这次的松弛操作才有意义，所以我们把每次松弛的点都扔进队列里，只从队列中取出点来松弛就可以降低时间复杂度。**但是请注意，这是一个假算法！**诶，那这很奇怪啊，为什么广为人知，受人追捧的可爱的 $\operatorname{SPFA}$ 会是一个假算法呢？因为我们用优先队列，并不是忽略或者对哪个点不进行松弛，而是改变了松弛的顺序从而达到优化目的，那么如果遇到刻意构造的数据，就可以轻轻松松将 $\operatorname{SPFA}$ 卡到 $O(nm)$ 从而让你的程序寄掉。这是某一年国赛带给全体 $OIer$ 的惨痛教训，所以在没有负环的情况下，尽量不要使用 $\operatorname{SPFA}$。下面给出参考代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;typedef long long LL;
+const LL N = 1e6 + 7, INF = 1e18;
+struct edge &amp;#123; LL v, w; &amp;#125;;
+vector&amp;lt;edge&amp;gt; e[N];
+queue&amp;lt;int&amp;gt; q;
+LL n, m, b;
+LL dis[N], cnt[N];
+bool used[N];
+
+inline bool SPFA(int s) &amp;#123;
+    for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; dis[i] = INF; &amp;#125;
+    dis[s] = 0;
+    used[s] = true;
+    q.push(s);
+    while (!q.empty()) &amp;#123;
+        int u = q.front(); q.pop();
+        used[u] = false;
+        for (auto it : e[u]) &amp;#123;
+            auto v = it.v, w = it.w;
+            if (dis[v] &amp;gt; dis[u] + w) &amp;#123;
+                dis[v] = dis[u] + w;
+                cnt[v] = cnt[u] + 1;
+                if (cnt[v] &amp;gt;= n) &amp;#123; return false; &amp;#125;
+                if (!used[v]) &amp;#123; 
+                    q.push(v);
+                    used[v] = true; 
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+    &amp;#125;
+    return true;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;说了这么多了让我们来理一理，我们最开始因为 $\operatorname{Floyd}$ 算法求全源最短路对单源最短路的问题又浪费，所以学习了 $\operatorname{Dijkstra}$，又因为其无法处理负权学习了 $\operatorname{Bellman-Ford}$。那么，我们需要考虑这样一个问题：如果我们要处理全源最短路，但是数据范围又比较大该怎么办呢？我们是不是可以跑 $n$ 遍 $\operatorname{Dijkstra}$，这样复杂度也不是很高，但碰到负权就寄了，所以就有了另外一个算法。&lt;/p&gt;
+&lt;h2 id=&#34;operatorname-Johnson-（全源最短路）&#34;&gt;$\operatorname{Johnson}$（全源最短路）&lt;/h2&gt;
+&lt;p&gt;$\operatorname{Johnson}$ 可以说是前面算法的大杂烩了，$\operatorname{Dijkstra}$ 和 $\operatorname{Bellman-Ford}$ 揉在一起再跑。如何处理负环呢，我们首先建立一个超级源点，也就是传说中的 $0$ 号点，前面已经说过了不再赘述。建立好了以后以这个超级源点为源点跑 $SPFA$，其中 $0$ 号点到 $i$ 号点的最短路记为 $newdis_i$。接下来对于边 $(u,v)=w$，将其边权设置为 $w + newdis_u - newdis_v$，然后再跑 $n$ 遍 $\operatorname{Dijkstra}$，每次求出的 $dis+newdis_v-newdis_u$ 就是答案了。这种做法的正确性在于从 $s$ 到 $t$ 的最短路径长度的势能是没有变的，具体证明见下面这篇博客：&lt;a href=&#34;https://www.luogu.com.cn/blog/StudyingFather/johnson-algorithm&#34;&gt;正确性证明&lt;/a&gt;。下面是参考代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;vector&amp;gt;
+#include &amp;lt;queue&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#define LL long long
+#define PII pair&amp;lt;LL, LL&amp;gt;
+#define clear(cc) memset(cc, 0, sizeof(cc))
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const LL N = 6e3 + 7, INF = 1e9;
+    struct edge &amp;#123; LL v, w; &amp;#125;;
+    vector&amp;lt;edge&amp;gt; e[N];
+    LL n, m;
+    LL dis[N], newdis[N];
+    int cnt[N];
+    bool used[N];
+
+    inline bool SPFA(int s) &amp;#123;
+        queue&amp;lt;int&amp;gt; sq;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; newdis[i] = INF; &amp;#125;
+        clear(used);
+        newdis[s] = 0;
+        used[s] = true;
+        sq.push(s);
+        while (!sq.empty()) &amp;#123;
+            int u = sq.front(); sq.pop();
+            used[u] = false;
+            for (auto it : e[u]) &amp;#123;
+                LL v = it.v, w = it.w;
+                if (newdis[v] &amp;gt; newdis[u] + w) &amp;#123;
+                    newdis[v] = newdis[u] + w;
+                    cnt[v] = cnt[u] + 1;
+                    if (cnt[v] &amp;gt; n) &amp;#123; return false; &amp;#125;
+                    // 注意这里因为插入了超级源点，所以要多跑一轮，&amp;gt;=要变成&amp;gt;
+                    if (!used[v]) &amp;#123;
+                        sq.push(v);
+                        used[v] = true;
+                    &amp;#125; 
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        return true;
+    &amp;#125;
+
+    inline void Dijkstra(int s) &amp;#123;
+        priority_queue&amp;lt;PII, vector&amp;lt;PII&amp;gt;, greater&amp;lt;PII&amp;gt; &amp;gt; q;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; dis[i] = INF; &amp;#125;
+        clear(used);
+        dis[s] = 0;
+        q.push(&amp;#123;0,s&amp;#125;);
+        while (!q.empty()) &amp;#123;
+            auto t = q.top(); q.pop();
+            int u = t.second;
+            if (used[u]) &amp;#123; continue; &amp;#125;
+            used[u] = true;
+            for (auto it : e[u]) &amp;#123;
+                LL v = it.v, w = it.w;
+                if (dis[v] &amp;gt; dis[u] + w) &amp;#123;
+                    dis[v] = dis[u] + w;
+                    q.push(&amp;#123;dis[v], v&amp;#125;);
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        return;
+    &amp;#125;
+    
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m;
+        for (int i = 1, x, y, z; i &amp;lt;= m; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; x &amp;gt;&amp;gt; y &amp;gt;&amp;gt; z;
+            e[x].push_back(&amp;#123;y, z&amp;#125;);
+        &amp;#125;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; e[0].push_back(&amp;#123;i, 0&amp;#125;); &amp;#125;
+        // 建立超级源点
+        if (!SPFA(0)) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;-1\n&amp;quot;; return 0;&amp;#125;
+        // 先跑SPFA预处理边权
+        for (int u = 1; u &amp;lt;= n; ++u) &amp;#123;
+            for (int i = 0; i &amp;lt; e[u].size(); ++i) &amp;#123;
+                e[u][i].w += newdis[u] - newdis[e[u][i].v];
+            &amp;#125;
+        &amp;#125;
+        // 更改每条边的边权
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            Dijkstra(i);// 跑n遍Dijkstra就做完了
+            LL ans = 0;
+            for (int j = 1; j &amp;lt;= n; ++j) &amp;#123;
+                if (dis[j] == INF) &amp;#123; ans += j * INF; &amp;#125;
+                else  &amp;#123; ans += j * (dis[j] + newdis[j] - newdis[i]); &amp;#125;
+            &amp;#125;
+            cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样的时间复杂度是 $O(nmlogm)$，相比 $\operatorname{Floyd}$ 还是非常优化的。&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+&lt;p&gt;想要求单源最短路，可以选择 $\operatorname{Dijkstra}$ 或 $\operatorname{Bellman-Ford(SPFA)}$，时间复杂度分别为 $O(mlogm)$ 和 $O(nm)$，前者只能处理非负权图，而后者可以处理带负权图。想要求全源最短路，可以选择 $\operatorname{Floyd}$ 或 $\operatorname{Johnson}$，时间复杂度分别为 $O(n^3)$ 和 $O(nmlogm)$，二者均可以处理带负权图。也就是说除了 $\operatorname{Dijkstra}$，其余的三个算法均可以处理带负权图以及判断负环。比赛时尽量使用 $\operatorname{Dijkstra}$ 和 $\operatorname{Johnson}$，不到迫不得已尽量不要用剩下两种，否则很容易被卡。&lt;/p&gt;
+&lt;p&gt;以上就是全部内容，如有错误欢迎各位大佬指正。&lt;/p&gt;
+&lt;h2 id=&#34;参考文献&#34;&gt;参考文献&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://oi-wiki.org/graph/shortest-path/&#34;&gt;OI-Wiki 最短路&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.luogu.com.cn/blog/StudyingFather/johnson-algorithm&#34;&gt;[洛谷日报#242]Johnson 全源最短路径算法学习笔记&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;《算法导论（第3版）》&lt;/p&gt;
+</content>
+        <category term="图论" />
+        <updated>2023-09-07T12:34:44.000Z</updated>
+    </entry>
     <entry>
         <id>http://example.com/2023/09/07/Tarjan/</id>
         <title>Tarjan 基础用法</title>
         <link rel="alternate" href="http://example.com/2023/09/07/Tarjan/"/>
         <content type="html">&lt;h1&gt;$\operatorname{Tarjan}$ 基础用法&lt;/h1&gt;
-&lt;p&gt;[TOC]&lt;/p&gt;
 &lt;h2 id=&#34;operatorname-Tarjan-求最近公共祖先&#34;&gt;$\operatorname{Tarjan}$ 求最近	公共祖先&lt;/h2&gt;
 &lt;h3 id=&#34;前置芝士&#34;&gt;前置芝士&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;最近公共祖先(Lowest Common Ancestor , LCA)&lt;/strong&gt;：一棵树中两个结点的 公共祖先里面，离根最远的那个被称为最近公共祖先。我们记点集 $S=\{v_1,v_2,\dots,v_n\}$ 的最近公共祖先为 $\operatorname{LCA}(v_1,v_2,\dots,v_n)$ 或 $\operatorname{LCA}(S)$。&lt;/p&gt;
@@ -649,7 +940,7 @@ signed int main() &amp;#123;
 &lt;li&gt;洛谷网校《深入浅出程序设计竞赛进阶篇》&lt;/li&gt;
 &lt;/ul&gt;
 </content>
-        <category term="Tarjan" />
+        <category term="图论" />
         <updated>2023-09-07T08:18:38.000Z</updated>
     </entry>
 </feed>
