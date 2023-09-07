@@ -9,8 +9,7 @@
         <id>http://example.com/2023/09/07/%E6%9C%80%E7%9F%AD%E8%B7%AF/</id>
         <title>最短路径基础总结</title>
         <link rel="alternate" href="http://example.com/2023/09/07/%E6%9C%80%E7%9F%AD%E8%B7%AF/"/>
-        <content type="html">&lt;h1&gt;最短路径&lt;/h1&gt;
-&lt;h2 id=&#34;operatorname-Floyd-（全源最短路）&#34;&gt;$\operatorname{Floyd}$（全源最短路）&lt;/h2&gt;
+        <content type="html">&lt;h2 id=&#34;operatorname-Floyd-（全源最短路）&#34;&gt;$\operatorname{Floyd}$（全源最短路）&lt;/h2&gt;
 &lt;p&gt;我们定义一个数组 $f_{k,x,y}$ 表示只经过节点 $1$ ~ $k$ 的情况下，$x$ 到 $y$ 的最短路长度，那么显然的，当一个图中节点个数为 $n$ 时，$f_{n,x,y}$ 就是我们所要求的答案。实现 $\operatorname{Floyd}$ 算法需要我们从 $k=0$ 时的情况逐渐递推到 $k=n$。$k=0$ 时，$x$ 和 $y$​ 不相等的情况下不可能通过任何情况联通，而一个点到自己的距离显然为 $0$，所以我们认为：&lt;/p&gt;
 $$\displaylines{\left\{\begin{matrix}
 f_{0,x,y}(x \ne y)=\infty
@@ -301,8 +300,7 @@ signed int main() &amp;#123;
         <id>http://example.com/2023/09/07/Tarjan/</id>
         <title>Tarjan 基础用法</title>
         <link rel="alternate" href="http://example.com/2023/09/07/Tarjan/"/>
-        <content type="html">&lt;h1&gt;$\operatorname{Tarjan}$ 基础用法&lt;/h1&gt;
-&lt;h2 id=&#34;operatorname-Tarjan-求最近公共祖先&#34;&gt;$\operatorname{Tarjan}$ 求最近公共祖先&lt;/h2&gt;
+        <content type="html">&lt;h2 id=&#34;operatorname-Tarjan-求最近公共祖先&#34;&gt;$\operatorname{Tarjan}$ 求最近公共祖先&lt;/h2&gt;
 &lt;h3 id=&#34;前置芝士&#34;&gt;前置芝士&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;最近公共祖先(Lowest Common Ancestor , LCA)&lt;/strong&gt;：一棵树中两个结点的 公共祖先里面，离根最远的那个被称为最近公共祖先。我们记点集 $S=\{v_1,v_2,\dots,v_n\}$ 的最近公共祖先为 $\operatorname{LCA}(v_1,v_2,\dots,v_n)$ 或 $\operatorname{LCA}(S)$。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;性质&lt;/strong&gt;：&lt;/p&gt;

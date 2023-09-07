@@ -171,7 +171,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ffa2c4">图论</a>
+                <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ff7d73">图论</a>
             </span>
             
         </span>
@@ -179,8 +179,7 @@
     </div>
     
     <div class="content" v-pre>
-        <h1>最短路径</h1>
-<h2 id="operatorname-Floyd-（全源最短路）">$\operatorname{Floyd}$（全源最短路）</h2>
+        <h2 id="operatorname-Floyd-（全源最短路）">$\operatorname{Floyd}$（全源最短路）</h2>
 <p>我们定义一个数组 $f_{k,x,y}$ 表示只经过节点 $1$ ~ $k$ 的情况下，$x$ 到 $y$ 的最短路长度，那么显然的，当一个图中节点个数为 $n$ 时，$f_{n,x,y}$ 就是我们所要求的答案。实现 $\operatorname{Floyd}$ 算法需要我们从 $k=0$ 时的情况逐渐递推到 $k=n$。$k=0$ 时，$x$ 和 $y$​ 不相等的情况下不可能通过任何情况联通，而一个点到自己的距离显然为 $0$，所以我们认为：</p>
 $$\displaylines{\left\{\begin{matrix}
 f_{0,x,y}(x \ne y)=\infty
