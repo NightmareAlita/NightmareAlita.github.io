@@ -5,6 +5,7 @@
     <link href="http://example.com" />
     <updated>2023-09-07T12:34:44.000Z</updated>
     <category term="图论" />
+    <category term="OIer 日记" />
     <entry>
         <id>http://example.com/2023/09/07/%E6%9C%80%E7%9F%AD%E8%B7%AF/</id>
         <title>最短路径基础总结</title>
