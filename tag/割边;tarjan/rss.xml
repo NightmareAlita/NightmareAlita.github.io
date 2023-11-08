@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>NERV - SN • Posts by &#34;割边;tarjan&#34; tag</title>
+        <link>http://example.com</link>
+        <description></description>
+        <language>zh-cn</language>
+        <pubDate>Thu, 24 Aug 2023 09:16:00 +0800</pubDate>
+        <lastBuildDate>Thu, 24 Aug 2023 09:16:00 +0800</lastBuildDate>
+        <category>OIer 日记</category>
+        <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/24/P7687%20[CEOI2005]%20Critical%20Network%20Lines/</guid>
+            <title>题解 洛谷 P7687 [CEOI2005] Critical Network Lines</title>
+            <link>http://example.com/2023/08/24/P7687%20[CEOI2005]%20Critical%20Network%20Lines/</link>
+            <category>割边;Tarjan</category>
+            <pubDate>Thu, 24 Aug 2023 09:16:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P7687 [CEOI2005] Critical Network Lines&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一张图，图上有两类点 $A$ 和 $B$，现在要求你找到满足下面条件的边：删除这条边后该图变为两个块，且至少有一个块中只包含 $A$ 类点或只包含 $B$ 类点。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://oi-wiki.org/graph/cut/#%E5%89%B2%E8%BE%B9&#34;&gt;前置芝士：割边（桥）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我们不难看出题目想让我们求的边是图中的割边，但并非所有的割边都满足题目的条件。如下图（图中边上的数字是编号不是边权）：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/24/pPYBlad.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这幅图中的割边有 $1,4,5,6,8$ 五条，而符合题目条件的只有 $1,6,8$ 这三条。仔细考虑我们在深搜的时候形成的深度优先生成树的性质，我们发现，&lt;strong&gt;当一个割边满足条件当且仅当它连接的一个节点在深度优先生成树中的子树内只包含一类点&lt;/strong&gt;（如果后面看不懂建议反复阅读体会这句话）。求割边的时候，每找到一条割边 $(u,v)$，我们就检查一下以 $v$ 为根结点的子树内 $A$ 和 $B$ 类结点各自的数量，当其中一个个数为 $0$ 或者全满，就是要求的边，打上标记并给计数的答案加一就可以了。求数量的过程，可以在 $\operatorname{dfs}$ 的时候递归计算。&lt;/p&gt;
+&lt;h2 id=&#34;实现&#34;&gt;实现&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 2e6 + 7;
+    // 请注意这里一定要开二倍空间，要不然会寄
+    int head[N], cnt;
+    struct edge &amp;#123; int to, next; &amp;#125;edge[N];
+    int n, m, a, b, tim, res;
+    int dfn[N], low[N], acnt[N], bcnt[N], par[N];
+    // acnt[i]表示i结点子树中A类点数量，bcnt同理
+    // par用来记每个结点在dfs生成树中的父亲
+    bool flag[N];
+
+    inline void add(int u, int v) &amp;#123;
+        edge[++cnt].next = head[u];
+        edge[cnt].to = v;
+        head[u] = cnt;
+    &amp;#125;
+
+    void Tarjan(int u, int fa) &amp;#123;
+        low[u] = dfn[u] = ++tim;
+        par[u] = fa;
+        for (int i = head[u]; i; i = edge[i].next) &amp;#123;
+            int v = edge[i].to;
+            if (!dfn[v]) &amp;#123;
+                Tarjan(v, u);
+                low[u] = min(low[u], low[v]);
+                if (low[v] &amp;gt; dfn[u]) &amp;#123;
+                    if (!acnt[v] || !bcnt[v] || acnt[v] == a || bcnt[v] == b) &amp;#123;
+                        // A类或B类有一个为0或全满就说明符合要求
+                        flag[v] = true;
+                        ++res;
+                        // 后来看大家的做法这里用vector套一个pair存也非常方便
+                    &amp;#125;
+                &amp;#125;
+                acnt[u] += acnt[v]; bcnt[u] += bcnt[v];
+                // 从下向上递归统计子树情况
+            &amp;#125;
+            else if (dfn[v] &amp;lt; dfn[u] &amp;amp;&amp;amp; fa != v) &amp;#123;
+                low[u] = min(low[u], dfn[v]);
+            &amp;#125;
+        &amp;#125;
+    &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m &amp;gt;&amp;gt; a &amp;gt;&amp;gt; b;
+        for (int i = 1, x; i &amp;lt;= a; ++i) &amp;#123; cin &amp;gt;&amp;gt; x; acnt[x] = 1; &amp;#125;
+        for (int i = 1, x; i &amp;lt;= b; ++i) &amp;#123; cin &amp;gt;&amp;gt; x; bcnt[x] = 1; &amp;#125;
+        // 最开始每个点的子树就是自己
+        for (int i = 1, x, y; i &amp;lt;= m; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; x &amp;gt;&amp;gt; y;
+            add(x, y); add(y, x);
+        &amp;#125;
+        Tarjan(1, 0);
+        cout &amp;lt;&amp;lt; res &amp;lt;&amp;lt; &#39;\n&#39;;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            if (flag[i]) &amp;#123;
+                cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; &#39; &#39; &amp;lt;&amp;lt; par[i] &amp;lt;&amp;lt; &#39;\n&#39;;
+            &amp;#125;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

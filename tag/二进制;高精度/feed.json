@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"二进制;高精度\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/08/18/P1045%20[NOIP2003%20%E6%99%AE%E5%8F%8A%E7%BB%84]%20%E9%BA%A6%E6%A3%AE%E6%95%B0/",
+            "url": "http://example.com/2023/08/18/P1045%20[NOIP2003%20%E6%99%AE%E5%8F%8A%E7%BB%84]%20%E9%BA%A6%E6%A3%AE%E6%95%B0/",
+            "title": "题解 洛谷 P1045 [NOIP2003 普及组] 麦森数",
+            "date_published": "2023-08-18T09:00:00.000Z",
+            "content_html": "<h1>题解 洛谷 P1045 [NOIP2003 普及组] 麦森数</h1>\n<h3 id=\"简要题意：\">简要题意：</h3>\n<p>给定一个数$p$，求$2^p$-1的位数和后500位的值，其中$p\\in [1\\times10^3,3.1\\times10^6]$。</p>\n<h2 id=\"策略分析：\">策略分析：</h2>\n<p>我们可以将这个问题分为两步来处理，第一步求出位数，第二步求后$500$位</p>\n<h3 id=\"求出位数：\">求出位数：</h3>\n<p>首先有一个非常平凡的结论：$10^k$的位数为$k+1$。那么一个$10^k$的数的位数也等于$lg10^k$，设$n =2^p$，因为不存在最后一位为$0$的$2^p$的数，所以$2^p-1$的位数一定与$2^p$的位数相同。我们希望能够将$10^k$所具有的性质应用在$2^p$中，设$10^m=2$，那么$lg2=m$，所以$10^{lg2}=2$，所以$n=2^p=(10^{lg2})^p=10^{(lg2)·p}$，那么$n$的位数就等于$10^{(lg2)·p}$的位数，即$(lg2)·p+1$，那这不就简单多了，直接$cmath$库里随便一搞就出来了</p>\n<h3 id=\"求后500位的值：\">求后500位的值：</h3>\n<p>我们发现一个朴素的高精度乘法的时间复杂度是$O(n^2)$，那么就寄了，所以我们要用<strong>超级快速的高精乘法</strong>，C++里什么样的数据类型存的数最大呢？~~（谁刚说__$int128$拉出去枪毙$5$分钟）~~显然我们要用$unsigned$  $long$  $long$来存储这500位，那么我们就要尽量挑战它的极限，一次乘$2^{60}$ <s>（讨厌没有边界感的$ull$）</s>，这样我们就可以在更短的时间内完成计算</p>\n<h3 id=\"AC代码：\">AC代码：</h3>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#include &lt;cmath&gt;\n#define ULL unsigned long long\nusing namespace std;\n\nnamespace Rick &#123; int work() &#123; cout &lt;&lt; &quot;Never gonna give you up, never gonna let you down~\\n&quot;; &#125; &#125;\nnamespace SHAWN &#123;\n    const int N = 507;\n    ULL t[N] = &#123; 1 &#125;;\n    int p;\n    int work()\n    &#123;\n        cin &gt;&gt; p;\n        cout &lt;&lt; (int)(log10(2) * p) + 1 &lt;&lt; '\\n';\n        for (; p &gt; 0; p -= 60) &#123;\n            ULL jin = 0;\n            for (int i = 0; i &lt; 500; ++i) &#123;\n                if (p &gt; 60) &#123; t[i] &lt;&lt;= 60; &#125;\n                else &#123; t[i] &lt;&lt;= p; &#125;\n                t[i] += jin; jin = t[i] / 10; t[i] %= 10;\n            &#125;\n        &#125;\n        t[0] -= 1; \n        // 最开始为了让乘法有值我们设成了1，所以一通操作后要减1\n        for (int i = 499; i &gt;= 0; --i) &#123;\n            cout &lt;&lt; t[i];\n            if (! (i % 50)) &#123; cout &lt;&lt; '\\n'; &#125;\n        &#125;\n        return 0;\n    &#125;\n&#125;\n\nsigned int main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    // return SHAWN :: work();\n    return Rick :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "二进制;高精度"
+            ]
+        }
+    ]
+}

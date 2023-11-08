@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>NERV - SN • Posts by &#34;平面几何&#34; tag</title>
+        <link>http://example.com</link>
+        <description></description>
+        <language>zh-cn</language>
+        <pubDate>Fri, 18 Aug 2023 11:15:00 +0800</pubDate>
+        <lastBuildDate>Fri, 18 Aug 2023 11:15:00 +0800</lastBuildDate>
+        <category>OIer 日记</category>
+        <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/CF958E1%20Guard%20Duty%20(easy)/</guid>
+            <title>题解 洛谷 CF958E1 Guard Duty (easy)</title>
+            <link>http://example.com/2023/08/18/CF958E1%20Guard%20Duty%20(easy)/</link>
+            <category>平面几何</category>
+            <pubDate>Fri, 18 Aug 2023 11:15:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 CF958E1 Guard Duty (easy)&lt;/h1&gt;
+&lt;h2 id=&#34;这是一道诈骗题&#34;&gt;这是一道诈骗题&lt;/h2&gt;
+&lt;h3 id=&#34;简要题意&#34;&gt;简要题意&lt;/h3&gt;
+&lt;p&gt;给你 $n$ 个 $R$ 点和 $m$ 个 $B$ 点，现在给你这些点的坐标，问能否在这两类点间连线来构造出一种情况使得一个线段两边分别是 $R$ 和 $B$。&lt;/p&gt;
+&lt;h3 id=&#34;策略分析&#34;&gt;策略分析&lt;/h3&gt;
+&lt;h4 id=&#34;不合法情况&#34;&gt;不合法情况&lt;/h4&gt;
+&lt;p&gt;当 $n\ne m$ 时，我们顺次连接 $R$ 和 $B$，先不考虑相交不相交，发现连到最后要么 $R$ 和 $R$ 相连，要么 $B$ 和 $B$ 相连，一定不合法。&lt;/p&gt;
+&lt;h4 id=&#34;合法情况&#34;&gt;合法情况&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;当 $n=m$ 时，答案一定合法&lt;/strong&gt;&lt;/p&gt;
+&lt;h5 id=&#34;正确性证明&#34;&gt;正确性证明&lt;/h5&gt;
+&lt;p&gt;我们设有点 $R_1,R_2,B_1,B_2$，那么我们加上边 $(R_1,B_1),(R_2,B_1),(R_1,B_2)$，发现相交了，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/22/pPJ85D0.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但我们发现，当这种相交情况出现时，我们只需要改连边 $(R_1,B_1),(R_2,B_1),(R_2,B_2)$，就一定能变成不相交的情况，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/22/pPJ84uq.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;于是我们做完了，下面是AC代码&lt;/p&gt;
+&lt;h3 id=&#34;参考代码&#34;&gt;参考代码&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    int n, m;
+    int work()
+    &amp;#123;   
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m;
+        n == m ? cout &amp;lt;&amp;lt; &amp;quot;Yes\n&amp;quot; : cout &amp;lt;&amp;lt; &amp;quot;No\n&amp;quot;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

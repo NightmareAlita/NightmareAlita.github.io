@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>什么？你也玩原神！？ | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>什么？你也玩原神！？</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/9/7
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E9%9B%B7%E7%94%B5%E6%B3%95%E7%8E%8B/" style="color: #ffa2c4">雷电法王</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>困至极点 故作此文 以振精神</h1>
+<h2 id="引言">引言</h2>
+<p>我有一个惊为天人的特性，很多人都有，但是他们都没有发现过。然而就在今天，我，发现了！每个人都是由许许多多的原子构成的。~~这样好呀！我是由原子构成的！好耶好耶！~~咳咳，既然这样，我们就是有正电荷的生物。那么为什么我们对外不显电性呢？上过幼儿园的小朋友们应该都知道，原子核外有电子，电子带负电荷，正电荷吸引着负电荷围着它转，又或者两个原子之间有公共电子，这样整个环境就会成电中性，我们也就不带电。</p>
+<p><strong>但是！重点来了！</strong></p>
+<p>首先说一些前置芝士：</p>
+<ul>
+<li>电流是电子在导体中做定向移动产生的；</li>
+<li>石墨的导电原理是其平面六边形结构可以使得一个电子在原子之间移动，去替换本身原子周围的电子，循环往复使得电子产生定向移动；</li>
+</ul>
+<p>知道了这些以后，神奇的事情就发生了，只要我们使自己体内的电子开始做定向移动，我们不就可以产生电流了吗！我好聪明！快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我。但是，我们移动电子是需要能量的，这些能量从哪里来呢？很很很很很简单，**只要疯狂发电就可以啦！**没错，这篇文章就是教你如何发电的！你，真的会发电吗？</p>
+<hr>
+<h2 id="你知道吗？">你知道吗？</h2>
+<p>哈哈嗨，小朋友，你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？死者在死之前居然是活着的！</p>
+<p><img src="https://pic.imgdb.cn/item/6521014dc458853aef2e013e.jpg" alt=""></p>
+<p>你看大家都不知道，所以你知道吗？你知道？不信，除非你知道。如果你知道，那你是一定不可能不知道的，否则你就是一定知道的，别想骗我，我知道你知道自己知不知道。而且这种规律是一通百通的，你知道了一个，就会知道很多，比方说：人在睡着之前一定是醒着的，喝水的时候水一定不会凭空消失，十八世纪去世的人一定比十九世纪去世的人去世得早等等等等。所以，我们需要有一对明亮的双眼，去探查和发现这个世界上有意思的事情，说不定你们也能像我一样发现这些让人惊叹的规律呢？</p>
+<hr>
+<h2 id="我好想做-mlg-小姐的狗啊！">我好想做 $mlg$ 小姐的狗啊！</h2>
+<p>我好想做 $mlg$ 小姐的狗啊。</p>
+<p>可是 $mlg$ 小姐说她喜欢的是生物满分，我哭了。</p>
+<p>我知道既不是狗也不是生物满分的我为什么要哭的。因为我其实是一只 $OIer$。</p>
+<p>我从没奢望 $mlg$ 小姐能喜欢自己。我明白的，所有人都喜欢各科满分的年一和其它学科竞赛生，没有人会喜欢阴湿带病的 $OIer$。</p>
+<p>但我还是问了 $mlg$ 小姐:“我能不能做你的狗？”</p>
+<p>我知道我是注定做不了狗的。但如果她喜欢狗，我就可以一直在身边看着她了，哪怕她怀里抱着的永远都是狗。</p>
+<p>可是她说喜欢的是生物满分。</p>
+<p>她现在还在看着我，还在教我学习，是因为满分还没有出现，只有我这 $OIer$ 每天努力地写完代码、作业，背着生物书，远远地和她对视。</p>
+<p>等她喜欢的满分来了的时候，我就该重新滚回我的机房了吧。</p>
+<p>但我还是好喜欢她，她能在我还在她身边的时候多看我几眼吗？</p>
+<p>$mlg$ 小姐说接下来的每次大练习都要和大家一起过。我不知道大家指哪些人。好希望这个集合能够对我做一次胞吞。</p>
+<p>满分还在害怕 $mlg$ 小姐。</p>
+<p>我会去把她爱的满分引来的。</p>
+<p>我知道稍有不慎，我就会被虐得体无完肤。</p>
+<p>那时候 $mlg$ 小姐大概会责备我牺牲了生物而去学 $OI$ 吧。</p>
+<p>那我就该要 $AFO$ 了，嘻嘻。</p>
+<p>我希望她能把我扔得近一点，因为我还是好喜欢她。会一直喜欢下去的。</p>
+<p>我的灵魂透过窗户向办公室里面看去，挂着的铃铛在轻轻鸣响，$mlg$ 小姐平静地站在办公桌前，表演得非常温顺的满分坐在她的肩膀。日光灯的灯光照在她的脸庞，我冻僵的心脏在风里微微发烫。</p>
+<hr>
+<h2 id="什么，你也是死傲娇？">什么，你也是死傲娇？</h2>
+<p><strong>注：本文灵感来自 Acc 怪话</strong></p>
+<p>翼竜が大嫌いです。</p>
+<p>私よりずっと背が高くて、身長だけでなく、彼のとんでもない $OI$ レベルもあって、私はどうしても追いつけなくて、大嫌いです。</p>
+<p>翼竜には $\operatorname{240Hz}$ の高ブラシがあり、超強力なグラフィックスカードがあり、彼には妹がいて、このようなリア充は、大嫌いです。</p>
+<p>$CS：GO$ を打つ彼のレベルもいつも私を轢いて、毎回打てない、大嫌い！</p>
+<p>嫌だ嫌だ死ぬ！どうして彼はこんなに明るくて、私はそんなに暗くて光がないの！？</p>
+<p>しかし</p>
+<p>私はできないときは根気よく問題を教えてくれますし、私が楽しくないときは慰めてくれますし、暇があればゲームをしてくれますし……いろいろなことを教えてくれたり、$OI$の勉強方法を教えてくれたり……。</p>
+<p>いやだ！なんて鈍いんだ！どうして気づかないの！大好きなのに！好き、好き、大好き！</p>
+<p>中文译文：</p>
+<p>最讨厌小翼龙了。</p>
+<p>比我高那么多，不只是身高，还有他那逆天的 $OI$ 水平，我怎么都赶不上，最讨厌了。</p>
+<p>小翼龙有 $\operatorname{240Hz}$ 的高刷屏，还有超强的显卡，他还有个妹妹，这样的现充，最讨厌了。</p>
+<p>就连打 $CS:GO$ 他的水平也总是碾压我，每次都打不过，最讨厌了！</p>
+<p>讨厌讨厌讨厌死了！为什么他这样的光鲜亮丽，而我那样的黯淡无光！？</p>
+<p>可是</p>
+<p>我不会的时候会耐心的给我讲题，我不开心的时候会安慰我，有空了就会陪我打游戏……还经常教我各种各样的东西，教我怎么学 $OI$……</p>
+<p>讨厌！怎么这么迟钝啊！怎么察觉不到啊！明明最喜欢了！suki，suki，da i suki！</p>
+<hr>
+<h2 id="我有显卡啦！">我有显卡啦！</h2>
+<p>啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊！麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻！</p>
+<p><strong>我有显卡啦！</strong></p>
+<p>一个声音：扔出去！把 $zyc$ 从机房扔出去！</p>
+<p><img src="https://pic.imgdb.cn/item/652109d4c458853aef36172e.png" alt="那个声音的手绘作品"></p>
+<hr>
+<h2 id="意义">意义</h2>
+<p>我并不知道人生的意义所在，但我知道有些事情一定是有意义的。请你记住，你身边的所有人，所有事物都会离开你，他们并非出于恶意，但是离开与分别是不可避免的。而唯一能帮助你的，唯一不会离开你的，只有原神！</p>
+<p>是的！没错！原神，不会背叛你！</p>
+<p>所以，来玩原神吧，少年！</p>
+<p><img src="https://pic.imgdb.cn/item/652cf1fac458853aef43a0ef.png" alt=""></p>
+<hr>
+<p>$To~~be~~continued$ ~</p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

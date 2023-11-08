@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 CF1413C Perform Easily | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 CF1413C Perform Easily</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/19
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%9E%84%E9%80%A0/" style="color: #ffa2c4">构造</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>题解 CF1413C Perform Easily</h1>
+<h2 id="简要题意">简要题意</h2>
+<p>给定一个含有 $6$ 个元素的可重集 $a$，一个数 $n$ 和一个含有 $n$ 个数的可重集 $b$，现在要求 $b$ 中每个数和 $a$ 中任意一个数作差使得作差后得到的新的集合 $b$ 中最大的数和最小的数的差最小。</p>
+<h2 id="策略分析">策略分析</h2>
+<p>首先考虑暴力，每个数最后的值都有 $6$ 种可能，所以总可能数有 $6^n$ 种，显然不行。题目中 $n$ 的大小为 $10^5$，所以我们期待一个 $O(n\log n)$ 的做法。我们发现，所有数也只有 $6$ 种可能，想要枚举答案不可能，但我们可以枚举结果。于是我们想到把 $b$ 中每个元素都和 $a$ 中所有元素作差，最后得到 $6n$ 个数放入一个新的数组 $cp$。因为我们要考虑最大和最小的差最小，所以我们需要使 $cp$ 数组中的值变得有序，于是我们对其进行排序。排序后为了查找的时候保证查找的区间内的数必须包含原来 $b$ 中每个数的至少一种差（显然其每个数都有 $6$ 种差），我们要在插入 $cp$ 前给每个数打好标记，标记它来自于哪个数。</p>
+<p>预处理做完后，我们考虑如何查找答案。因为我们需要一个区间最大值，还需要一个区间最小值，所以我们想到了用双指针来进行查找。我们设左指针为 $lidx$，右指针为 $ridx$。$ridx$ 先走，一直走到与 $lidx$ 间包含了的数包含了原来 $b$ 中每个数的至少一个结果为止。现在开始移动左指针，每移动一次就 $ridx$ 与 $lidx$ 所指的两数之差更新答案。当两指针之间包含的数不能包含原来 $b$ 中每个数的至少一个结果时，就回到第一步重新开始移动 $ridx$，循环一轮即可得到答案。</p>
+<p>枚举复杂度为 $O(n)$，排序复杂度为 $O(n\log n)$，最后搜索的复杂度为 $O(n)$，所以整个算法的时间复杂度为 $O(n\log n)$，于是我们做完了，下面是代码。</p>
+<h3 id="参考代码">参考代码</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+namespace SHAWN &#123;
+    const int N = 1e6 + 7, INF = 1e9;
+    struct node &#123; int val, id; &#125;cp[N];
+    int n, idx, ans = INF;
+    int a[7], b[N], cnt[N];
+    bool cmp(node x, node y) &#123; return x.val &lt; y.val; &#125;
+    int work()
+    &#123;
+        for (int i = 1; i &lt;= 6; ++i) &#123; cin &gt;&gt; a[i]; &#125;
+        cin &gt;&gt; n;
+        if (n == 1) &#123; cout &lt;&lt; &quot;0\n&quot;; return 0; &#125;
+        for (int i = 1; i &lt;= n; ++i) &#123;
+            cin &gt;&gt; b[i];
+            for (int j = 1; j &lt;= 6; ++j) &#123;
+                cp[++idx] = &#123;b[i] - a[j], i&#125;;
+            &#125;
+            cnt[i] = 0;
+        &#125;// 加标记
+        sort(cp + 1, cp + idx + 1, cmp);
+        int lidx = 1, ridx = 0, ncnt = 0;
+        // cnt数组和ncnt用来维护当前区间包含原来b数组中的数的结果的个数
+        while (ridx &lt; idx) &#123;
+            // 双指针搜索
+            if (!cnt[cp[++ridx].id]) &#123; ++ncnt; &#125;
+            ++cnt[cp[ridx].id];
+            while (lidx &lt; ridx &amp;&amp; cp[ridx].val - cp[lidx].val &gt;= ans) &#123;
+                if (cnt[cp[lidx].id] == 1) &#123; --ncnt; &#125;
+                --cnt[cp[lidx].id];
+                ++lidx;
+            &#125;
+            // 移动左指针到可行方案处
+            while (lidx &lt; ridx &amp;&amp; ncnt == n) &#123;
+                ans = min(ans, cp[ridx].val - cp[lidx].val);
+                if (cnt[cp[lidx].id] == 1) &#123; --ncnt; &#125;
+                --cnt[cp[lidx].id];
+                ++lidx;
+            &#125; 
+            // 移动左指针并不断更新答案
+        &#125;
+        cout &lt;&lt; ans &lt;&lt; '\n';
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

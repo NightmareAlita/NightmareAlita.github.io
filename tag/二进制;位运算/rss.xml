@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>NERV - SN • Posts by &#34;二进制;位运算&#34; tag</title>
+        <link>http://example.com</link>
+        <description></description>
+        <language>zh-cn</language>
+        <pubDate>Tue, 26 Sep 2023 08:05:00 +0800</pubDate>
+        <lastBuildDate>Tue, 26 Sep 2023 08:05:00 +0800</lastBuildDate>
+        <category>OIer 日记</category>
+        <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/26/AT_arc129_a%20[ARC129A]%20Smaller%20XOR/</guid>
+            <title>题解 AT_arc129_a [ARC129A] Smaller XOR</title>
+            <link>http://example.com/2023/09/26/AT_arc129_a%20[ARC129A]%20Smaller%20XOR/</link>
+            <category>二进制;位运算</category>
+            <pubDate>Tue, 26 Sep 2023 08:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;AT_arc129_a [ARC129A] Smaller XOR&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你三个数 $N, L, R$，询问满足 $x \in [L, R]$ 且 $(x \oplus N) &amp;lt; N$ 的整数 $x$ 的个数。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;我们考虑异或运算的性质，当某一位为 $0$ 时，它异或一个值可能增大或者不变，当某一位为 $1$ 时，它异或一个值可能减小或不变，也就是说一个数 $k$ 想要满足异或一个 $x$ 要比自己原来小，那么 $x$ 最高位的数值要是 $1$，且刚好要能对的上 $k$ 最高位那个 $1$。只要这一位变成 $0$ 了，后面 $x$ 的其它位想怎么取就怎么取，总之不管怎么取都一定比原来的数小。那么假设 $k$ 的第 $p$ 位为最高位，根据前面的分析，$x \in [2^p,2^{p+1}-1]$ 就可以满足条件，又因为 $x \in [L,R]$，二者取个交集即可。&lt;/p&gt;
+&lt;p&gt;上面我们讨论了能够得到 $x$ 的个数的性质，下面就把它套用在本题上。我们从 $N$ 的最低位开始扫，每当扫到一个 $1$ 就对以这一位为最高位的数计算一下 $x$ 的个数，然后累加起来就是本题的答案。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    LL n, l, r, ans; 
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; l &amp;gt;&amp;gt; r;
+        for (int i = 0; (1ll &amp;lt;&amp;lt; i) &amp;lt;= n; ++i) &amp;#123;
+            LL xl = 1ll &amp;lt;&amp;lt; i, xr = (xl &amp;lt;&amp;lt; 1) - 1;
+            if (!(xl &amp;amp; n)) &amp;#123; continue; &amp;#125;
+            LL edgel = max(l, xl), edger = min(r, xr);
+            ans = max(ans, ans + edger - edgel + 1);
+        &amp;#125;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

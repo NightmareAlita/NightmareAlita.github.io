@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;线性筛&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-08-28T02:15:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/08/28/P7960%20[NOIP2021]%20%E6%8A%A5%E6%95%B0/</id>
+        <title>题解 洛谷 P7960 [NOIP2021] 报数</title>
+        <link rel="alternate" href="http://example.com/2023/08/28/P7960%20[NOIP2021]%20%E6%8A%A5%E6%95%B0/"/>
+        <content type="html">&lt;h1&gt;P7960 [NOIP2021] 报数&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;报数游戏，凡是这个数字十进制表示含有 $7$的数和它的倍数都不能报，给定 $T$ 组询问，每次询问给定一个数 $x$，回答下一个要报的数，若 $x$ 是不能报的数，输出 &lt;code&gt;-1&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;经过良久的思考，我们发现找不到任何可行的 $O(1)$ 性质，所以我们&lt;s&gt;本能的采用暴力&lt;/s&gt;。类似线性筛法求素数，我们线性筛求不能报的数的倍数。如果是可以报的数，我们就要记下它该报的下一个数，如果是不可以报的数，我们就要打标记。具体的解释见代码。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e7 + 10;
+    int chk[N];
+    int t, x, lst;
+    // 我们可以把不符合要求的数的下一个看做-1
+    // 这样开一个数组就够了
+    
+    inline bool judge(int k) &amp;#123;
+    // 判断这个数十进制表示里有没有7
+        while (k) &amp;#123;
+            if (k % 10 == 7) &amp;#123; return true; &amp;#125;
+            k /= 10;
+        &amp;#125;
+        return false;
+    &amp;#125;
+
+    inline void _init() &amp;#123;
+    	// 线性筛
+        for (int i = 1; i &amp;lt; N; ++i) &amp;#123;
+            if (chk[i] == -1) &amp;#123; continue; &amp;#125;
+            // 已经标记过了就跳过
+            if (judge(i)) &amp;#123;// 如果十进制含有7
+                for (int j = i; j &amp;lt; N; j += i) &amp;#123;
+                    chk[j] = -1;
+                &amp;#125;// 这个数的所有倍数的下一个数都记成-1
+            &amp;#125;
+            // 如果
+            else &amp;#123;// 如果这个数满足要求
+            	chk[lst] = i;
+            	lst = i;
+                // 记下它下一个合法的数
+            &amp;#125;
+        &amp;#125;
+    &amp;#125;
+    
+    int work()
+    &amp;#123;
+        _init();
+        cin &amp;gt;&amp;gt; t;
+        while (t--) &amp;#123;
+            cin &amp;gt;&amp;gt; x;
+            cout &amp;lt;&amp;lt; chk[x] &amp;lt;&amp;lt; &#39;\n&#39;;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <category term="线性筛" />
+        <updated>2023-08-28T02:15:00.000Z</updated>
+    </entry>
+</feed>

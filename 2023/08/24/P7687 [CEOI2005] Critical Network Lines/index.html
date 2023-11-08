@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 洛谷 P7687 [CEOI2005] Critical Network Lines | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 洛谷 P7687 [CEOI2005] Critical Network Lines</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/24
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%89%B2%E8%BE%B9-Tarjan/" style="color: #00a596">割边;Tarjan</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>P7687 [CEOI2005] Critical Network Lines</h1>
+<h2 id="简要题意">简要题意</h2>
+<p>给你一张图，图上有两类点 $A$ 和 $B$，现在要求你找到满足下面条件的边：删除这条边后该图变为两个块，且至少有一个块中只包含 $A$ 类点或只包含 $B$ 类点。</p>
+<h2 id="策略分析">策略分析</h2>
+<p><a target="_blank" rel="noopener" href="https://oi-wiki.org/graph/cut/#%E5%89%B2%E8%BE%B9">前置芝士：割边（桥）</a></p>
+<p>我们不难看出题目想让我们求的边是图中的割边，但并非所有的割边都满足题目的条件。如下图（图中边上的数字是编号不是边权）：</p>
+<p><img src="https://s1.ax1x.com/2023/08/24/pPYBlad.png" alt=""></p>
+<p>这幅图中的割边有 $1,4,5,6,8$ 五条，而符合题目条件的只有 $1,6,8$ 这三条。仔细考虑我们在深搜的时候形成的深度优先生成树的性质，我们发现，<strong>当一个割边满足条件当且仅当它连接的一个节点在深度优先生成树中的子树内只包含一类点</strong>（如果后面看不懂建议反复阅读体会这句话）。求割边的时候，每找到一条割边 $(u,v)$，我们就检查一下以 $v$ 为根结点的子树内 $A$ 和 $B$ 类结点各自的数量，当其中一个个数为 $0$ 或者全满，就是要求的边，打上标记并给计数的答案加一就可以了。求数量的过程，可以在 $\operatorname{dfs}$ 的时候递归计算。</p>
+<h2 id="实现">实现</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+
+namespace SHAWN &#123;
+    const int N = 2e6 + 7;
+    // 请注意这里一定要开二倍空间，要不然会寄
+    int head[N], cnt;
+    struct edge &#123; int to, next; &#125;edge[N];
+    int n, m, a, b, tim, res;
+    int dfn[N], low[N], acnt[N], bcnt[N], par[N];
+    // acnt[i]表示i结点子树中A类点数量，bcnt同理
+    // par用来记每个结点在dfs生成树中的父亲
+    bool flag[N];
+
+    inline void add(int u, int v) &#123;
+        edge[++cnt].next = head[u];
+        edge[cnt].to = v;
+        head[u] = cnt;
+    &#125;
+
+    void Tarjan(int u, int fa) &#123;
+        low[u] = dfn[u] = ++tim;
+        par[u] = fa;
+        for (int i = head[u]; i; i = edge[i].next) &#123;
+            int v = edge[i].to;
+            if (!dfn[v]) &#123;
+                Tarjan(v, u);
+                low[u] = min(low[u], low[v]);
+                if (low[v] &gt; dfn[u]) &#123;
+                    if (!acnt[v] || !bcnt[v] || acnt[v] == a || bcnt[v] == b) &#123;
+                        // A类或B类有一个为0或全满就说明符合要求
+                        flag[v] = true;
+                        ++res;
+                        // 后来看大家的做法这里用vector套一个pair存也非常方便
+                    &#125;
+                &#125;
+                acnt[u] += acnt[v]; bcnt[u] += bcnt[v];
+                // 从下向上递归统计子树情况
+            &#125;
+            else if (dfn[v] &lt; dfn[u] &amp;&amp; fa != v) &#123;
+                low[u] = min(low[u], dfn[v]);
+            &#125;
+        &#125;
+    &#125;
+    int work()
+    &#123;
+        cin &gt;&gt; n &gt;&gt; m &gt;&gt; a &gt;&gt; b;
+        for (int i = 1, x; i &lt;= a; ++i) &#123; cin &gt;&gt; x; acnt[x] = 1; &#125;
+        for (int i = 1, x; i &lt;= b; ++i) &#123; cin &gt;&gt; x; bcnt[x] = 1; &#125;
+        // 最开始每个点的子树就是自己
+        for (int i = 1, x, y; i &lt;= m; ++i) &#123;
+            cin &gt;&gt; x &gt;&gt; y;
+            add(x, y); add(y, x);
+        &#125;
+        Tarjan(1, 0);
+        cout &lt;&lt; res &lt;&lt; '\n';
+        for (int i = 1; i &lt;= n; ++i) &#123;
+            if (flag[i]) &#123;
+                cout &lt;&lt; i &lt;&lt; ' ' &lt;&lt; par[i] &lt;&lt; '\n';
+            &#125;
+        &#125;
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>NERV - SN • Posts by &#34;数学&#34; tag</title>
+        <link>http://example.com</link>
+        <description></description>
+        <language>zh-cn</language>
+        <pubDate>Mon, 28 Aug 2023 11:06:00 +0800</pubDate>
+        <lastBuildDate>Mon, 28 Aug 2023 11:06:00 +0800</lastBuildDate>
+        <category>OIer 日记</category>
+        <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/28/P5686%20[CSP-S2019%20%E6%B1%9F%E8%A5%BF]%20%E5%92%8C%E7%A7%AF%E5%92%8C/</guid>
+            <title>题解 洛谷 P5686 [CSP-S2019 江西] 和积和</title>
+            <link>http://example.com/2023/08/28/P5686%20[CSP-S2019%20%E6%B1%9F%E8%A5%BF]%20%E5%92%8C%E7%A7%AF%E5%92%8C/</link>
+            <category>数学</category>
+            <pubDate>Mon, 28 Aug 2023 11:06:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P5686 [CSP-S2019 江西] 和积和&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定两个 $n$ 个元素的序列 $a,b$，求下面这个式子对 $10^9+7$ 取模的结果：&lt;/p&gt;
+$$\displaylines{\sum_{l=1}^{n}\sum_{r=l}^{n}(\sum_{i=l}^{r}a_i \times \sum_{i=l}^{r}b_i)
+}$$&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;如果直接模拟那么时间复杂度是爆炸级的 $O(n^3)$，显然正常人都不会这么做，正常人会选择可爱的前缀和，所以最后一层括号复杂度变成 $O(1)$，总复杂度 $O(n^2)$，比刚刚好了很多，但依然是过不去的，所以我们考虑对前缀和进行优化。&lt;/p&gt;
+&lt;p&gt;设 $a$ 的前缀数组为 $A$，$b$ 的前缀数组为 $B$。那么上面的式子显然可以写成：&lt;/p&gt;
+$$\displaylines{\sum_{l=1}^{n}\sum_{r=l}^n(A_r-A_{l-1})(B_r-B_{l-1}) \\
+=\sum_{l=1}^{n}\sum_{r=l}^n(A_rB_r+A_{l-1}B_{r-1}-A_rB_{l-1}-A_{l-1}B_r)
+}$$&lt;p&gt;这样看我们求解还不是很方便，因为存在前面的求和符号，我们不便于对整体的式子进行观察，所以我们用一个 $n$ 较小的式子看一下，比方说令 $n=4$，那么我们按照这个式子带进去展开化简得到：&lt;/p&gt;
+$$\displaylines{sum=4(A_1B_1+A_2B_2+A_3B_3+A_4B_4) \\
+-(A_1B_2+A_1B_3+A_1B_4+A_2B_1+A_2B_3+A_2B_4 \\
++A_3B_1+A_3B_2+A_3B_4+A_4B_1+A_4B_2+A_4B_3)
+}$$&lt;p&gt;那么前面系数为 $4$ 的那个式子我们就可以 $O(n)$ 求了，关键转移到了如何求后面这一坨东西。我们把 $A$ 和 $B$ 按照下标放到矩阵里看一看：&lt;/p&gt;
+$$\displaylines{\begin{bmatrix}
+ 0&amp;amp;  A_1B_2&amp;amp;  A_1B_3&amp;amp; A_1B_4\\
+  A_2B_1&amp;amp;  0&amp;amp;  A_2B_3&amp;amp; A_2B_4\\
+  A_3B_1&amp;amp;  A_3B_2&amp;amp;  0&amp;amp; A_3B_4\\
+  A_4B_1&amp;amp;  A_4B_2&amp;amp;  A_4B_3&amp;amp; 0 
+\end{bmatrix}
+}$$&lt;p&gt;我们发现这不就是 $A$ 每一项去乘 $B$ 每一项吗，唯一的遗憾是对角线全是 $0$。我们期望能够对这个式子进行因式分解使其变成两个只包含 $A$ 或 $B$ 的式子相乘，那么其实想办法把这个对角线给它补齐就行了，我们发现对角线的 $A,B$ 下标相等，那么就和刚刚系数为 $4$ 的那个式子一模一样了，所以我们在这多减一遍，前面多加一遍，整个式子的值不变，式子变成这样：&lt;/p&gt;
+$$\displaylines{sum=5 \times \sum_{i=1}^{4}A_iB_i-(\sum_{i=1}^4A_i \times \sum_{i=1}^4B_i)
+}$$&lt;p&gt;然后把这个结论归纳到 $n$ 项得：&lt;/p&gt;
+$$\displaylines{\begin{aligned}
+sum=(n+1) \times \sum_{i=1}^{n}A_iB_i-(\sum_{i=1}^{n}A_i \times \sum_{i=1}^{n}B_i) \\
+=\sum_{i=1}^{n}(n+1)\times A_iB_i-(\sum_{i=1}^{n}A_i \times \sum_{i=1}^{n}B_i)
+\end{aligned}
+}$$&lt;p&gt;图中三个求和符不存在嵌套，所以每一个都可以拿出来单独计算，时间复杂度降低到了 $O(n)$，于是这道题就做完了。做题的时候要注意，本题给定的数都特别大，所以在求解的过程中不要忘记&lt;strong&gt;时刻取模&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const LL N = 5e5 + 7, mod = 1e9 + 7;
+    LL n, ans, A, B;
+    LL a[N], b[N];
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; 
+            cin &amp;gt;&amp;gt; a[i];
+            a[i] = (a[i] + a[i - 1]) % mod;// 求a的前缀
+        &amp;#125;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; b[i];
+            b[i] = (b[i] + b[i - 1]) % mod;// 求b的前缀
+        &amp;#125;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            ans = (ans % mod + ((n + 1) * a[i]) % mod * b[i] % mod) % mod;
+            // 处理第一个求和符
+            A = (A + a[i]) % mod;
+            // 处理第二个求和符
+            B = (B + b[i]) % mod;
+            // 处理第三个求和符
+        &amp;#125;
+        ans = ((ans - (A * B % mod)) + mod) % mod;
+        // 将三个求和符号按照推出来的式子加到一块
+        cout &amp;lt;&amp;lt; ans % mod &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/</guid>
+            <title>题解 洛谷 U334987 营救千泷の小翼龙</title>
+            <link>http://example.com/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/</link>
+            <category>数学</category>
+            <pubDate>Fri, 18 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;U334987 营救千泷の小翼龙&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一个数 $n$ 和 $v$，求 $v \times \sum_{i=1}^n i^3 \bmod 998244353$。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;本题是一道纯纯诈骗题，我们打表或者运用数学归纳法都可以得到如下结论：&lt;/p&gt;
+$$\displaylines{\sum_{i=1}^n i^3 = (\sum_{i=1}^ni)^2 = (\frac{n + n^2}{2})
+}$$&lt;p&gt;于是我们就可以直接带进去 $O(1)$ 算了，于是我们做完了，写代码时请注意取模。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int mod = 998244353;
+    LL n, v, ans;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; v;
+        n %= mod; v %= mod;
+        ans = (1 + n) * n / 2 % mod;
+        ans = ((ans * ans) % mod * v) % mod;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

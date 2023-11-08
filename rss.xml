@@ -5,10 +5,491 @@
         <link>http://example.com</link>
         <description></description>
         <language>zh-cn</language>
-        <pubDate>Thu, 21 Sep 2023 23:00:00 +0800</pubDate>
-        <lastBuildDate>Thu, 21 Sep 2023 23:00:00 +0800</lastBuildDate>
+        <pubDate>Wed, 25 Oct 2023 17:17:00 +0800</pubDate>
+        <lastBuildDate>Wed, 25 Oct 2023 17:17:00 +0800</lastBuildDate>
         <category>OIer 日记</category>
         <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/10/25/CF1809D%20Binary%20String%20Sorting/</guid>
+            <title>题解 洛谷 CF1809D Binary String Sorting</title>
+            <link>http://example.com/2023/10/25/CF1809D%20Binary%20String%20Sorting/</link>
+            <category>构造;二进制;枚举</category>
+            <pubDate>Wed, 25 Oct 2023 17:17:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;CF1809D Binary String Sorting&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个 $01$ 串，要求你交换相邻两个数或删掉一个数，使得该串单调不降。其中交换相邻两个数的代价是 $10^{12}$，删除的代价是 $10^{12} + 1$，求最小代价。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;本题需要我们发现一个重要的性质，因为我们需要把数列变成形如 &lt;code&gt;00000...11111&lt;/code&gt; 的形式，所以必然存在一个分界点，这个分解点的两边的数可能是 $10$ 或 $01$。现在假设我们知道这个分界点在哪里了，那么我们就要把分界点左边的 $1$ 想办法弄到右边，或者直接扔掉。我们发现，除非是 $10$ 情况下的分界点左边的那个 $1$，其余的 $1$ 删掉的代价一定比一次一次交换过来少，因为删除只需要一次，而交换至少需要两次，显然 $2 \times 10^{12} &amp;gt; 10^{12} + 1$，处理分界点右边的 $0$ 同理。那么我们只需要枚举这个分界点在哪里，并判断分界点两边的数是 $10$ 还是 $01$ 即可，如果是 $10$ 还要额外判断一下转更优还是不转更优，顺序枚举一遍即可得解。&lt;/p&gt;
+&lt;p&gt;具体来讲，我们对于每个位置，预处理出其前面（包括自己在内）有多少个 $1$，后面有多少个 $0$，枚举到每一个位置的时候用预处理出的值乘以代价即可，注意预处理的前后缀数组要多组数据清空。&lt;/p&gt;
+&lt;p&gt;时间复杂度 $O(Tn)$。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const LL N = 3e5 + 7, C = 1e12 + 1;
+    LL q[N], h[N];
+    int T;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; T;
+        while (T--) &amp;#123;
+            string s; cin &amp;gt;&amp;gt; s;
+            int len = s.length();
+            s = &#39; &#39; + s;
+            LL ans = 1e18;
+            for (int i = 1; i &amp;lt;= len; ++i) &amp;#123;
+                q[i] = q[i - 1];
+                if (s[i] == &#39;1&#39;) &amp;#123; ++q[i]; &amp;#125;
+            &amp;#125;
+            for (int i = len; i &amp;gt;= 1; --i) &amp;#123;
+                h[i] = h[i + 1];
+                if (s[i] == &#39;0&#39;) &amp;#123; ++h[i]; &amp;#125;
+            &amp;#125;
+            for (int i = 0; i &amp;lt;= len; ++i) &amp;#123;
+                if (s[i] == &#39;1&#39; &amp;amp;&amp;amp; s[i + 1] == &#39;0&#39;) &amp;#123;
+                    ans = min(ans, q[i - 1] * C + h[i + 2] * C + C - 1);
+                &amp;#125;
+                ans = min(ans, q[i] * C + h[i + 1] * C);
+            &amp;#125;
+            cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+            for (int i = 0; i &amp;lt;= len; ++i) &amp;#123; q[i] = h[i] = 0; &amp;#125;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/10/24/SP6285%20NGM2%20-%20Another%20Game%20With%20Numbers/</guid>
+            <title>题解 SP6285 NGM2 - Another Game With Numbers</title>
+            <link>http://example.com/2023/10/24/SP6285%20NGM2%20-%20Another%20Game%20With%20Numbers/</link>
+            <category>状态压缩;容斥</category>
+            <pubDate>Tue, 24 Oct 2023 11:48:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;SP6285 NGM2 - Another Game With Numbers&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个长为 $K$ 的数组 $a$，其中 $1 \le K \le 15$ 且 $a_i \le 100$，再给定一个数 $N$，其中 $1 \le N \le 10^9$，要求求出 $[1, N]$ 中有多少数不能被 $a$ 中任意一个数整除。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;显然满足我们要求的数不能被 $a_i$ 整除，同时也不能被 $a$ 中任意 $p(2 \le p \le K)$ 个元素的最小公倍数整除。所以最朴素的想法是通过筛选出能够被整除的数的个数，再用 $N$ 减去它。如果你想到这里了，那么恭喜你这道题已经做完了。由于本题的 $K$ 非常非常小，所以我们可以直接暴力枚举出 $K$ 个数的所有组合的最大公约数，$O(1)$ 求出 $[1, N]$ 中能整除一个数 $x$ 的数有多少，然后做容斥就能得出答案了。&lt;/p&gt;
+&lt;p&gt;具体来讲，我们可以用状态压缩来对所有组合进行枚举，即对于 $K$，我们从 $1$ 枚举到 $2^{K} - 1$，枚举到的第 $i$ 个数的第 $j$ 位为 $1$ 则表示本次选取这位，否则不选，然后每次对所有选取的位置上的数求最小公倍数 $x$，然后用 $N$ 除以 $x$ 就能得出 $N$ 中能整除 $x$ 的数的个数 $y$。根据容斥原理，如果当前选取了奇数个数，就要把 $y$ 加入到答案中，否则将答案减去 $y$。注意这样算出的结果是 $[1, N]$ 中能整除 $a$ 中某个数的数的个数，所以最后要用 $N$ 减去它才能得到答案。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 107;
+    LL a[N];
+    LL n, k, ans;
+    inline LL gcd(LL x, LL y) &amp;#123; return !y ? x : gcd(y, x % y); &amp;#125;
+    inline LL lcm(LL x, LL y) &amp;#123; return x * y / gcd(x, y); &amp;#125;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k;
+        for (int i = 1; i &amp;lt;= k; ++i) &amp;#123; cin &amp;gt;&amp;gt; a[i]; &amp;#125;
+        for (int i = 1; i &amp;lt; (1 &amp;lt;&amp;lt; k); ++i) &amp;#123;
+            LL lrc = 1, cnt = 0;
+            for (int j = 1; j &amp;lt;= k; ++j) &amp;#123;
+                if (i &amp;amp; (1 &amp;lt;&amp;lt; (j - 1))) &amp;#123;
+                    lrc = lcm(lrc, a[j]);
+                    ++cnt;
+                &amp;#125;
+            &amp;#125;
+            if (cnt &amp;amp; 1) &amp;#123; ans += n / lrc; &amp;#125;
+            else &amp;#123; ans -= n / lrc; &amp;#125;
+        &amp;#125;
+        ans = n - ans;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/10/03/JZOJ5952.%20%E3%80%90NOIP2018%E6%A8%A1%E6%8B%9F11.5A%E7%BB%84%E3%80%91%E5%87%AF%E6%97%8B%E8%80%8C%E5%BD%92/</guid>
+            <title>题解 JZOJ5952. 【NOIP2018模拟11.5A组】凯旋而归</title>
+            <link>http://example.com/2023/10/03/JZOJ5952.%20%E3%80%90NOIP2018%E6%A8%A1%E6%8B%9F11.5A%E7%BB%84%E3%80%91%E5%87%AF%E6%97%8B%E8%80%8C%E5%BD%92/</link>
+            <category>二进制</category>
+            <pubDate>Tue, 03 Oct 2023 18:16:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;JZOJ5952. 【NOIP2018模拟11.5A组】凯旋而归&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;对于一个数列 $num$，一个函数 $f$ 定义如下：&lt;/p&gt;
+$$\displaylines{f(num) = \max\{(a_1 \oplus a_2 \oplus \dots a_i) + (a_{i+1} \oplus a_{i+2} \oplus\dots a_n) | i \in [0, n] \}
+}$$&lt;p&gt;现在给你一个数列，依次求出其所有前缀的 $f$ 的值。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;首先我们需要一些前置知识，我们在求一个数列的子段异或和的时候，可以像其普通加法求和一样处理出前缀和并 $O(1)$ 求解。那么对于异或前缀和数组 $a$ 来讲，区间 $[l,r]$ 的异或和就等于 $a_{l-1} \oplus a_r$。&lt;/p&gt;
+&lt;p&gt;知道了这个性质以后，我们就可以做出本题 50 分的做法，即对于每个位置 $i$ 都去暴力枚举 $[1,i]$ 或 $[0,i]$ 区间（枚举这两个区间得到的答案是等价的）的最大答案。假设我们枚举到了位置 $j$，那么我们要求的就是答案 $ans$ 就等于 $max(ans,a_j+(a_j \oplus a_i))$。也就是说，想让答案尽可能大，就要让 $a_j+(a_j \oplus a_i)$ 尽可能大。于是我们自然而然地想到拆位来考虑。对于第 $k$ 位（下标从 $0$ 开始），这一位能够让整个数增加当且仅当这一位为 $0$ 且能够被更改为 $1$。也就是说如果第 $k$ 位为 $0$，那么它变成 $1$ 就可以对整个数造成 $2^k$ 的贡献。那么对于一个形如 $x + (x \oplus y)$ 的式子来说，我们设 $x$ 和 $y$ 都只有一位（高位情况不过是拆开考虑），那么当 $y=1$ 时，无论 $x$ 为何值，最终得到的结果都是 $1$，不会对结果产生任何影响。但当 $y=0$ 时，我们就要想办法让它变成 $1$ 从而使得答案增加。那么我们的目的就变成了，找到一个 $a_j$ 能够使其跟当前的 $a_i$ 运算的结果尽可能的大。&lt;/p&gt;
+&lt;p&gt;那么我们就要考虑能不能往这一位填 $1$，这要求我们去判断在前缀数组的第 $i$ 位之前有没有一个数可以和这个数运算使得我们期望的 $0$ 位变成 $1$ 且不去影响已经填好的，我们知道，只要我们把高位的一个 $0$ 变成 $1$，那么低位的甭管怎么变都不可能比现在大，那么我们直接贪心地从高位往低位讨论就好了。问题就在于怎么去让高位已经填好的不变。这里我们定义一种二进制下的集合关系，即 $x \subseteq y := x \&amp;amp; y$，也就是说 $y$ 中为 $1$ 的位置在 $x$ 中也必须为 $1$。这样很抽象不好理解，我们举个例子。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;a = 111000101010
+b = 110000101010
+c = 100000101010
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上面的三个二进制数中，$b \subseteq a, c \subseteq b$。&lt;/p&gt;
+&lt;p&gt;定义了这个以后，我们定义一个数组 $f$，其中 $f_i=j$ 表示包含 $i$ 的数出现的位置的最小下标为 $j$，也就是存在一个数包含 $i$ 且这个数在 $a_i$ 里（当然也有可能不存在）最早出现的那个下标为 $j$。如果这个下标不存在那么显然值就是无穷大。我们在处理异或前缀和的时候就要初始化这个数组，初始化的过程非常显然但不便于用语言描述所以直接给出：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;f[a[i]] = min(f[a[i]], i);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;接下来我们要预处理这个数组，处理的时候从大的数向小的处理，这样可以一遍就找到我们想要的最小位置。因为本题数据范围是 $10^6$，所以我们大概从 $2^{21}-1$ 开始枚举即可，每次判断一下，如果 $f_i &amp;lt; \infty $ 那么我们就可以用 $f_i$ 去更新 $i$ 的子集（这里的子集和前面的包含关系定义是一样的）内的所有元素，更新的方法就是逐位枚举，如果是 $1$ 变成 $0$ 就是它的子集内的元素，那么更新就好了，但是更新完了要记得把改成 $0$ 的这一位再变回来更新下一位，实现过程如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;for (int i = (1 &amp;lt;&amp;lt; 20) - 1;i &amp;gt;= 0; --i) &amp;#123;
+    if(f[i] &amp;lt; INF) &amp;#123;
+        for (int j = 0; j &amp;lt; 20; ++j) &amp;#123;
+            if(i &amp;amp; p[j]) &amp;#123;
+                f[i ^ p[j]] = min(f[i ^ p[j]], f[i]);
+            &amp;#125;
+        &amp;#125;			
+    &amp;#125;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;注：这里的 $p_i$ 即表示 $2^i$ 次方的值，这个值在我们这道题中用其另一性质，即其二进制表示下第 $i$ 位为 $1$，其余均为 $0$，用一个数和 $p_i$ 做与运算可以判断这个数第 $i$ 位为 $1$ 还是 $0$。&lt;/p&gt;
+&lt;p&gt;预处理结束以后，我们就可以开始做了，逐个枚举前缀和，对于当前枚举到的 $a_i$，我们用一个 $s$ 来代表前面一半异或前缀和的值，那么我们仍然是从高位往低位枚举（基于贪心思想，高位为 $1$ 的贡献高于低位为 $1$ 的贡献。如果当前这一位是 $1$，那么我们就不用管它了，因为它不会再产生贡献。如果这一位为 $0$，那么我们就看能不能找到一个小于 $i$ 的位置上的元素使得其是 $s$ 这一位变成 $1$ 后的数的子集，只有这样才能保证操作完后以前操作的位上的值不会被改变，如果找到了就把 $s$ 这位变成 $1$，相反的，如果没找到就变回 $0$，再去枚举下一位。枚举完后按照 $a_j+(a_j \oplus a_i)$ 这个式子的形式算一下输出就好了，这个式子在这里变成了 $s + (s \oplus a_i)$，实现过程如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+    int s = 0;
+    for (int j = 19; j &amp;gt;= 0; --j) &amp;#123;
+        if (!(a[i] &amp;amp; p[j]) &amp;amp;&amp;amp; f[s | p[j]] &amp;lt;= i) &amp;#123;
+            s |= p[j];
+        &amp;#125;
+    &amp;#125;
+    cout &amp;lt;&amp;lt; s + (a[i] ^ s) &amp;lt;&amp;lt; &#39;\n&#39;;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+using namespace std;
+ 
+namespace SHAWN &amp;#123;
+	const int N=5e5 + 7, M = 2e6 + 7, INF = 1e9;
+	int a[N], f[M], p[32];
+	int n;
+	signed work()
+	&amp;#123;
+		cin &amp;gt;&amp;gt; n;
+        memset(f, 0x7f, sizeof(f));
+		for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; 
+            cin &amp;gt;&amp;gt; a[i];  a[i] ^= a[i - 1]; 
+            f[a[i]] = min(f[a[i]], i);
+        &amp;#125;
+		p[0] = 1;
+		for (int i = 1; i &amp;lt; 20; ++i) &amp;#123; p[i] = p[i - 1] &amp;lt;&amp;lt; 1; &amp;#125;
+		for (int i = (1 &amp;lt;&amp;lt; 20) - 1;i &amp;gt;= 0; --i) &amp;#123;
+			if(f[i] &amp;lt; INF) &amp;#123;
+				for (int j = 0; j &amp;lt; 20; ++j) &amp;#123;
+					if(i &amp;amp; p[j]) &amp;#123;
+						f[i ^ p[j]] = min(f[i ^ p[j]], f[i]);
+					&amp;#125;
+				&amp;#125;			
+			&amp;#125;
+		&amp;#125;
+		for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+			int s = 0;
+			for (int j = 19; j &amp;gt;= 0; --j) &amp;#123;
+				if (!(a[i] &amp;amp; p[j]) &amp;amp;&amp;amp; f[s | p[j]] &amp;lt;= i) &amp;#123;
+					s |= p[j];
+				&amp;#125;
+			&amp;#125;
+			cout &amp;lt;&amp;lt; s + (a[i] ^ s) &amp;lt;&amp;lt; &#39;\n&#39;;
+		&amp;#125;
+		return 0;
+	&amp;#125;
+&amp;#125;
+ 
+signed main() &amp;#123;
+	ios :: sync_with_stdio(false);
+	cin.tie(nullptr);
+	return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/26/AT_arc129_b%20[ARC129B]%20Range%20Point%20Distance/</guid>
+            <title>题解 AT_arc129_b Range Point Distance</title>
+            <link>http://example.com/2023/09/26/AT_arc129_b%20[ARC129B]%20Range%20Point%20Distance/</link>
+            <category>构造</category>
+            <pubDate>Tue, 26 Sep 2023 14:57:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;AT_arc129_b Range Point Distance&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定 $N$ 对 $L_i, R_i$，然后在每次给出后都要选一个 $x$ 使得 $x$ 到之前给出的所有区间的距离 $dist$ 的最大值最小。一个 $x$ 到区间 $l,r$ 的距离定义为 $dist=\max(0, l - x, x - r)$。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;既然我们每次都要输出答案，那我们不妨从 $dist$ 的定义入手，我们发现在这个定义中，当其结果不为 $0$ 时只有两种情况，要么 $l$ 在 $x$ 右边，要么 $r$ 在 $x$ 左边。那么我们考虑现在有一堆区间，因为我们求的是 $x$ 到所有区间距离的最大值，所以其实我们需要关心的，能够对我们答案造成影响的值就是最靠右的 $L$ 和最靠左的 $R$。得到这个结论后剩下的就比较简单了，我们只需要每次输入一个区间都更新一下这个关键的 $L$ 和 $R$ 即可。&lt;/p&gt;
+&lt;p&gt;我们现在知道了能够对我们答案造成影响的两个关键点，那么答案如何求解呢，我们进行分类讨论。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当 $L \le R$ 时，意味着之前输入的所有区间都有一个共同的交集 $[L,R]$，这个结论直接从 $L,R$ 的定义得出，那么我们随便在 $L,R$ 里怎么选都是 $0$，所以要找的最小值就是 $0$。&lt;/li&gt;
+&lt;li&gt;当 $L &amp;gt;R$ 时，以 $L$ 为左端点的区间和以 $R$ 为右端点的区间一定是之前输入的所有区间里距离最远的一组，只有这一对区间才会产生到 $x$ 的最大值。那么这个最大值最小当且仅当 $x$ 取在 $L,R$ 正中间，又因为要去最大值所以此时 $dist = \left \lceil \frac{L + R}{2}  \right \rceil$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;分析出这两条以后直接在线做就好了，时间复杂度是线性的。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const LL INF = 1e9 + 7;
+    LL n, sl = -INF, sr = INF;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            LL l, r; cin &amp;gt;&amp;gt; l &amp;gt;&amp;gt; r;
+            sl = max(sl, l), sr = min(sr, r);
+            // 更新两个关键点
+            if (sr &amp;gt;= sl) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;0\n&amp;quot;; &amp;#125;
+            else cout &amp;lt;&amp;lt; ((sl - sr + 1) &amp;gt;&amp;gt; 1) &amp;lt;&amp;lt; &#39;\n&#39;;
+            // 按照刚刚的分类讨论进行输出
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/26/P1486%20[NOI2004]%20%E9%83%81%E9%97%B7%E7%9A%84%E5%87%BA%E7%BA%B3%E5%91%98/</guid>
+            <title>题解 洛谷 P1486 [NOI2004] 郁闷的出纳员</title>
+            <link>http://example.com/2023/09/26/P1486%20[NOI2004]%20%E9%83%81%E9%97%B7%E7%9A%84%E5%87%BA%E7%BA%B3%E5%91%98/</link>
+            <category>平衡树;数据结构</category>
+            <pubDate>Tue, 26 Sep 2023 10:18:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P1486 [NOI2004] 郁闷的出纳员&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定 $n$ 次操作和一个阈值 $min$，每次操作包含一个字符 $opt$ 和一个整数 $k$，操作可以是一下四种之一：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;I k&lt;/code&gt; 如果 $k$ 小于 $min$ 不操作，否则将 $k$ 扔进一个集合 $s$ 中。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;A K&lt;/code&gt; 把 $s$ 里所有元素值加上 $k$。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;S k&lt;/code&gt; 把 $s$ 里所有元素值减去 $k$。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;F k&lt;/code&gt; 查询 $s$ 里第 $k$ 大的值，如果 $k &amp;gt; \left | s \right | $ 输出 &lt;code&gt;-1&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在每次操作中，一旦 $s$ 中有元素的值低于阈值 $min$，就要删除这个元素，程序最后要输出删除的元素总数（插入时就因为小于阈值没有插入进来的不算）&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;我们看到插入，删除，查询排名理所当然地想到了平衡树；看到全加上，全减去，理所当然地想到了线段树。但是很显然，这题肯定不是树套树。我们考虑，既然是全部加，单点查，我们其实并不用关心每个元素的更改，因为集体的更改不会导致排名的变化，只会影响我们后查询值，所以我们可以把这种更改用一个变量 $tag$ 记下来。&lt;/p&gt;
+&lt;h3 id=&#34;插入&#34;&gt;插入&lt;/h3&gt;
+&lt;p&gt;在新插入元素的时候，我们要先对插入的元素减去 $tag$，这样做是为了消除其对插入的值的排名的影响。当我们输出的时候，因为这一部分的值刚好被抵消，所以加上的就是插入它以后对它操作的值，满足题目的要求。与此同时我们要拿一个 $sum$ 来记一共插入了多少次，拿一个 $cnt$ 来记当前集合中的元素个数。&lt;/p&gt;
+&lt;h3 id=&#34;元素加减&#34;&gt;元素加减&lt;/h3&gt;
+&lt;p&gt;增加元素必然是直接加到 $tag$ 上就好了，但是为了维护集合内小于阈值的数的个数并成功把他们删除，我们必须要同步更改 $min$，如果集体增加就要下调 $min$，集体减少就要上调 $min$。每次减少的时候我们要进行删除操作，我们在平衡树上不断寻找 $min$ 的前驱并删除（一个数的前驱定义为小于它的最大的数），直到删完为止。&lt;/p&gt;
+&lt;h3 id=&#34;查询&#34;&gt;查询&lt;/h3&gt;
+&lt;p&gt;查询直接查就好了，需要注意的是平衡树查排名的时候查的是第 $k$ 小，而我们查的是第 $k$ 大，所以查的时候要传的参数是 $cnt - k + 1$。在这里我们不建议更改平衡树的代码，因为平衡树细节较多码量较大，如果在考场上改写可能会导致不必要的错误以及浪费更多时间，除非万不得已，否则建议只在传参上调整。最后只需要输出总的插入次数减去当前集合的大小就是被删掉的元素个数。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;random&amp;gt;
+#include &amp;lt;ctime&amp;gt;
+#include &amp;lt;limits.h&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 2e5 + 7;
+    mt19937 rd(time(nullptr));
+    namespace Treap &amp;#123;
+        #define ls son[ro][1]
+        #define rs son[ro][0]
+        int cont, root;
+        int son[N][2], pre[N], size[N], cnt[N]; LL val[N];
+        void update(int ro) &amp;#123;
+            if (!ro) &amp;#123; return; &amp;#125;
+            size[ro] = cnt[ro];
+            if (ls) &amp;#123; size[ro] += size[ls]; &amp;#125;
+            if (rs) &amp;#123; size[ro] += size[rs]; &amp;#125; 
+        &amp;#125;
+        void rotate(int ro, int fa, int opt) &amp;#123;
+            int s = son[ro][opt];
+            son[ro][opt] = son[s][!opt];
+            son[s][!opt] = ro;
+            if (!fa) &amp;#123; root = s; &amp;#125;
+            else &amp;#123; son[fa][son[fa][1] == ro] = s; &amp;#125; 
+            update(ro); update(s);
+        &amp;#125;
+        void insert(int ro, int fa, LL x) &amp;#123;
+            if (!ro) &amp;#123;
+                ro = ++cont;
+                cnt[ro] = 1; val[ro] = x;
+                pre[ro] = rd() % INT_MAX;
+                update(ro);
+                if (!fa) &amp;#123; root = ro; &amp;#125;
+                else &amp;#123; son[fa][x &amp;lt; val[fa]] = ro; &amp;#125;
+            &amp;#125;
+            else &amp;#123;
+                if (x == val[ro]) &amp;#123; ++cnt[ro]; update(ro); &amp;#125;
+                else if (x &amp;lt; val[ro]) &amp;#123;
+                    insert(ls, ro, x); update(ro);
+                    if (pre[ls] &amp;lt; pre[ro]) &amp;#123; rotate(ro, fa, 1); &amp;#125;
+                &amp;#125;
+                else &amp;#123;
+                    insert(rs, ro, x); update(ro);
+                    if (pre[rs] &amp;lt; pre[ro]) &amp;#123; rotate(ro, fa, 0); &amp;#125;
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        void del(int ro, int fa, LL x) &amp;#123;
+            if (!ro) &amp;#123; return; &amp;#125;
+            if (x == val[ro]) &amp;#123;
+                --cnt[ro];
+                if (!cnt[ro]) &amp;#123;
+                    int f = fa, s;
+                    update(ro);
+                    while(ls &amp;amp;&amp;amp; rs) &amp;#123;
+                        if (pre[ls] &amp;lt; pre[rs]) &amp;#123; s = ls; rotate(ro, f, 1); f = s; &amp;#125;
+                        else &amp;#123; s = rs; rotate(ro, f, 0); f = s; &amp;#125;
+                    &amp;#125;
+                    while (ls) &amp;#123; s = ls; rotate(ro, f, 1); f = s; &amp;#125;
+                    while (rs) &amp;#123; s = rs; rotate(ro, f, 0); f = s; &amp;#125;
+                    if (root == ro) &amp;#123; root = 0; &amp;#125;
+                    else &amp;#123; son[f][son[f][1] == ro] = 0; &amp;#125;
+                &amp;#125;
+                update(ro);
+            &amp;#125;
+            else &amp;#123;
+                if (x &amp;lt; val[ro]) &amp;#123; del(ls, ro, x); update(ro); &amp;#125;
+                else &amp;#123; del(rs, ro, x); update(ro); &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        LL find_pre(int ro, LL x) &amp;#123;
+            if (!ro) &amp;#123; return LONG_LONG_MIN; &amp;#125;
+            else if (x &amp;gt; val[ro]) &amp;#123; return max(val[ro], find_pre(rs, x)); &amp;#125;
+            else &amp;#123; return find_pre(ls, x); &amp;#125;
+        &amp;#125;
+        LL get_num(int ro, int x) &amp;#123;
+            if (x &amp;lt;= size[ls]) &amp;#123; return get_num(ls, x); &amp;#125;
+            else if (x &amp;lt;= size[ls] + cnt[ro]) &amp;#123; return val[ro]; &amp;#125;
+            else &amp;#123; return get_num(rs, x - size[ls] - cnt[ro]); &amp;#125;
+        &amp;#125;
+        void insert(LL x) &amp;#123; insert(root, 0, x); &amp;#125;
+        void del(LL x) &amp;#123; del(root, 0, x); &amp;#125;
+        LL findpre(LL x) &amp;#123; return find_pre(root, x); &amp;#125;
+        LL getnum(int x) &amp;#123; return get_num(root, x); &amp;#125;
+        #undef ls
+        #undef rs
+    &amp;#125;
+
+    int n; LL _min, tag, cnt, sum;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; _min;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; 
+            char opt; LL k; cin &amp;gt;&amp;gt; opt &amp;gt;&amp;gt; k;
+            if (opt == &#39;I&#39;) &amp;#123;
+                if (k - tag &amp;gt;= _min) &amp;#123;
+                    Treap :: insert(k - tag);
+                    ++cnt; ++sum;
+                &amp;#125;
+            &amp;#125;
+            else if (opt == &#39;A&#39;) &amp;#123; _min -= k; tag += k; &amp;#125;
+            else if (opt == &#39;S&#39;) &amp;#123;
+                _min += k; tag -= k;
+                LL tmp;
+                while ((tmp = Treap :: findpre(_min)) != LONG_LONG_MIN) &amp;#123;
+                    Treap :: del(tmp);
+                    --cnt;
+                &amp;#125;
+            &amp;#125;
+            else if (opt == &#39;F&#39;) &amp;#123;
+                if (cnt &amp;lt; k) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;-1\n&amp;quot;; &amp;#125;
+                else &amp;#123; cout &amp;lt;&amp;lt; Treap :: getnum(cnt - k + 1) + tag &amp;lt;&amp;lt; &#39;\n&#39;; &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; sum - cnt &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/26/AT_arc129_a%20[ARC129A]%20Smaller%20XOR/</guid>
+            <title>题解 AT_arc129_a [ARC129A] Smaller XOR</title>
+            <link>http://example.com/2023/09/26/AT_arc129_a%20[ARC129A]%20Smaller%20XOR/</link>
+            <category>二进制;位运算</category>
+            <pubDate>Tue, 26 Sep 2023 08:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;AT_arc129_a [ARC129A] Smaller XOR&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你三个数 $N, L, R$，询问满足 $x \in [L, R]$ 且 $(x \oplus N) &amp;lt; N$ 的整数 $x$ 的个数。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;我们考虑异或运算的性质，当某一位为 $0$ 时，它异或一个值可能增大或者不变，当某一位为 $1$ 时，它异或一个值可能减小或不变，也就是说一个数 $k$ 想要满足异或一个 $x$ 要比自己原来小，那么 $x$ 最高位的数值要是 $1$，且刚好要能对的上 $k$ 最高位那个 $1$。只要这一位变成 $0$ 了，后面 $x$ 的其它位想怎么取就怎么取，总之不管怎么取都一定比原来的数小。那么假设 $k$ 的第 $p$ 位为最高位，根据前面的分析，$x \in [2^p,2^{p+1}-1]$ 就可以满足条件，又因为 $x \in [L,R]$，二者取个交集即可。&lt;/p&gt;
+&lt;p&gt;上面我们讨论了能够得到 $x$ 的个数的性质，下面就把它套用在本题上。我们从 $N$ 的最低位开始扫，每当扫到一个 $1$ 就对以这一位为最高位的数计算一下 $x$ 的个数，然后累加起来就是本题的答案。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    LL n, l, r, ans; 
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; l &amp;gt;&amp;gt; r;
+        for (int i = 0; (1ll &amp;lt;&amp;lt; i) &amp;lt;= n; ++i) &amp;#123;
+            LL xl = 1ll &amp;lt;&amp;lt; i, xr = (xl &amp;lt;&amp;lt; 1) - 1;
+            if (!(xl &amp;amp; n)) &amp;#123; continue; &amp;#125;
+            LL edgel = max(l, xl), edger = min(r, xr);
+            ans = max(ans, ans + edger - edgel + 1);
+        &amp;#125;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
         <item>
             <guid isPermalink="true">http://example.com/2023/09/21/%E4%B8%80%E5%8F%AA%E5%9C%A8%E5%BD%B9%20OIer%20%E7%9A%84%E8%87%AA%E8%BF%B0/</guid>
             <title>一只在役 OIer 的自述</title>
@@ -23,6 +504,198 @@
 &lt;p&gt;上了高中以后，真正懂得我内心，给予我抚慰的是我所谓的“姑姑”，其实读者早就知道我们的关系了，读者只是出于疼爱没有拆穿我而已，这些是我知道，也是我能看出来的，无所谓啊，这不重要。交心的事也只有这层关系作为纽带才能够进行，同龄人的心只有最爱你的同龄人才能了解，互为对方的救赎是我们高中的常态，我希望以后也是。我要感谢我的姑姑，她是除了家长以外最爱我，也是最懂我的人，可以说是我活下去，努力下去和憧憬未来的动力。在 $OIer$ 中，最理解我也是对我帮助最大的非小翼龙莫属了，$OIer$ 最懂 $OIer$，我们之间的烦恼是互通的，所以情感自然也是互通的，毕竟同是天涯沦落人，倘若能和小翼龙一起拿到金牌，该是多么令人欣喜的一件事。谢谢小翼龙一直以来都无私地给我讲题，跟我分享烦恼。&lt;/p&gt;
 &lt;p&gt;所以啊，这篇文章是我作为一个竞赛生，写给我的家长，写给全体高中生的家长，写给全世界最爱我，最爱你们的人，写给全中国的学生和家长的，也许我说的有点过于广泛，有点不自量力。家长们，请不要指责你的孩子不懂事，你们的一言一行他们都会记在心里；在你的孩子伤心难过时，请多鼓励鼓励他们，他们需要的是你们的支持；请你们不要低估高中生之间的各种感情，真正理解同龄人的只能是同龄人，他们心灵的港湾与艳阳也一定是同龄人；请你们不要直接否定孩子们做出的决定，他们能做出莽撞的决定，是因为他们真的很难受；请记住，对他们的付出以及将他们养大不是你控制他们人生的借口；也请你记住，有些弯路是需要自己走的，你帮他们过去的弯，会成为他们人生的绊脚石；请你们记住，孩子们也有自己的烦恼，虽然与你们的不同，在你们看起来是自己曾经有过的幼稚的烦恼，但请你不要忘记自己当时是怎么度过的；请你们记住，你们并不是一代人，请不要试图用你的理论去理解他的烦恼；最后请你们记住，他们已经是成年人了，不再是温室里的雏鹰了，是芜湖起飞的时候了。&lt;/p&gt;
 &lt;p&gt;时间紧迫没有差错，有错别字请忽略，拜谢 $orz$。&lt;/p&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/</guid>
+            <title>题解 CF1204D2 Kirk and a Binary String (hard version)</title>
+            <link>http://example.com/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/</link>
+            <category>构造</category>
+            <pubDate>Wed, 20 Sep 2023 15:41:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;CF1204D2 Kirk and a Binary String (hard version)&lt;/h1&gt;
+&lt;h2 id=&#34;形式化题意&#34;&gt;形式化题意&lt;/h2&gt;
+&lt;p&gt;给你一个长为 $n$ 的仅包含 $0$ 和 $1$ 的串，要求尽可能多地将里面的 $1$ 改成 $0$ 使得在得到的新串中，对于 $\forall l,r\in [1,n](l \le r)$，两个串的 $[l,r]$ 区间内的最长不降子序列等长。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;题中给的数据范围是 $10^5$，我们很容易去思考一些 $O(n \log n)$ 的做法，从而去找数据结构来维护，但这是 CF 的题，所以我们坚信这一定是一道人类智慧题。所以我们充分发扬人类智慧，$O(n)$ 来构造这个题。&lt;/p&gt;
+&lt;p&gt;对于只有 $0,1$ 的串来讲，一个序列想要不降其实只需要满足两个条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果当前位为 $0$，那么后面无论 $0,1$ 都是不降的；&lt;/li&gt;
+&lt;li&gt;如果当前位为 $1$，那么后面为 $1$ 才是不降的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;那么我们是不是很容易发现本题的构造原则：一个 $1$ 能够被替换成 $0$ &lt;strong&gt;当且仅当这个 $1$ 后面的 $1$ 的个数大于等于 $0$ 的个数&lt;/strong&gt;。这个结论说出来很抽象，我们用一个例子来理解。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;0 1 1 1 1 1 0 0 0
+1 2 3 4 5 6 7 8 9 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;为了方便读者观看，这个串下面的数字是其下标。我们以下标为 $2$ 的这个下标的位置为例，$[2,9]$ 区间内的最长不降子序列是 &lt;code&gt;1 1 1 1 1&lt;/code&gt;，这一位改成 $0$ 后变成 &lt;code&gt;0 1 1 1 1&lt;/code&gt;，不管怎么变长度都不会变，因为其后 $1$ 比 $0$ 多，最长不降子序列一定是连着一坨 $1$。然而对于下标为 $4$ 这个位置的 $1$ 来讲，这一位后面的 $0$ 比 $1$ 多，我们将这一位换成 $0$ 后，$[4,9]$ 区间内的最长不降子序列从 &lt;code&gt;1 1 1&lt;/code&gt; 变成了 &lt;code&gt;0 0 0 0&lt;/code&gt;，不符合我们的构造条件。&lt;/p&gt;
+&lt;p&gt;出现这种情况的原因是，对于当前位来讲，它的最长不降子序列只能是一堆 $1$，这是我们刚刚提到过的结论，改成 $0$ 后就有了三种选择，而我们必须让它别无选择，这就要求更改的这一位只能继续选后面连一堆 $1$，那么我们发现这种别无选择的情况就必须让当前位后的 $1$ 的数量比 $0$ 的数量多，这就证明了我们刚刚得出的结论，这道题也就做完了。&lt;/p&gt;
+&lt;p&gt;在写代码的时候，我们可以把维护个数改成维护 $0$ 与 $1$ 的个数的差值，这样可以简化代码难度，当 $0$ 的个数减去 $1$ 的个数非正时就把这一位的 $1$ 换掉。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    string s;
+    int cnt;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; s;
+        for (int i = s.size() - 1; i &amp;gt;= 0; --i) &amp;#123;
+            if (s[i] == &#39;0&#39;) &amp;#123; ++cnt; &amp;#125;
+            else if (s[i] == &#39;1&#39; &amp;amp;&amp;amp; cnt &amp;lt;= 0) &amp;#123; s[i] = &#39;0&#39;; &amp;#125;
+            else &amp;#123; --cnt; &amp;#125;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; s &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/20/CF1204D1%20Kirk%20and%20a%20Binary%20String%20(easy%20version)/</guid>
+            <title>题解 CF1204D1 Kirk and a Binary String (easy version)</title>
+            <link>http://example.com/2023/09/20/CF1204D1%20Kirk%20and%20a%20Binary%20String%20(easy%20version)/</link>
+            <category>构造</category>
+            <pubDate>Wed, 20 Sep 2023 15:41:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;CF1204D1 Kirk and a Binary String (easy version)&lt;/h1&gt;
+&lt;h2 id=&#34;形式化题意&#34;&gt;形式化题意&lt;/h2&gt;
+&lt;p&gt;给你一个长为 $n$ 的仅包含 $0$ 和 $1$ 的串，要求尽可能多地将里面的 $1$ 改成 $0$ 使得在得到的新串中，对于 $\forall l,r\in [1,n](l \le r)$，两个串的 $[l,r]$ 区间内的最长不降子序列等长。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;题中给的数据范围完全可以 $O(n^2)$ 搜过，但这是 CF 的题，所以我们坚信这一定是一道人类智慧题。所以我们充分发扬人类智慧，$O(n)$ 来构造这个题。&lt;/p&gt;
+&lt;p&gt;对于只有 $0,1$ 的串来讲，一个序列想要不降其实只需要满足两个条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果当前位为 $0$，那么后面无论 $0,1$ 都是不降的；&lt;/li&gt;
+&lt;li&gt;如果当前位为 $1$，那么后面为 $1$ 才是不降的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;那么我们是不是很容易发现本题的构造原则：一个 $1$ 能够被替换成 $0$ &lt;strong&gt;当且仅当这个 $1$ 后面的 $1$ 的个数大于等于 $0$ 的个数&lt;/strong&gt;。这个结论说出来很抽象，我们用一个例子来理解。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;0 1 1 1 1 1 0 0 0
+1 2 3 4 5 6 7 8 9 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;为了方便读者观看，这个串下面的数字是其下标。我们以下标为 $2$ 的这个下标的位置为例，$[2,9]$ 区间内的最长不降子序列是 &lt;code&gt;1 1 1 1 1&lt;/code&gt;，这一位改成 $0$ 后变成 &lt;code&gt;0 1 1 1 1&lt;/code&gt;，不管怎么变长度都不会变，因为其后 $1$ 比 $0$ 多，最长不降子序列一定是连着一坨 $1$。然而对于下标为 $4$ 这个位置的 $1$ 来讲，这一位后面的 $0$ 比 $1$ 多，我们将这一位换成 $0$ 后，$[4,9]$ 区间内的最长不降子序列从 &lt;code&gt;1 1 1&lt;/code&gt; 变成了 &lt;code&gt;0 0 0 0&lt;/code&gt;，不符合我们的构造条件。&lt;/p&gt;
+&lt;p&gt;出现这种情况的原因是，对于当前位来讲，它的最长不降子序列只能是一堆 $1$，这是我们刚刚提到过的结论，改成 $0$ 后就有了三种选择，而我们必须让它别无选择，这就要求更改的这一位只能继续选后面连一堆 $1$，那么我们发现这种别无选择的情况就必须让当前位后的 $1$ 的数量比 $0$ 的数量多，这就证明了我们刚刚得出的结论，这道题也就做完了。&lt;/p&gt;
+&lt;p&gt;在写代码的时候，我们可以把维护个数改成维护 $0$ 与 $1$ 的个数的差值，这样可以简化代码难度，当 $0$ 的个数减去 $1$ 的个数非正时就把这一位的 $1$ 换掉。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    string s;
+    int cnt;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; s;
+        for (int i = s.size() - 1; i &amp;gt;= 0; --i) &amp;#123;
+            if (s[i] == &#39;0&#39;) &amp;#123; ++cnt; &amp;#125;
+            else if (s[i] == &#39;1&#39; &amp;amp;&amp;amp; cnt &amp;lt;= 0) &amp;#123; s[i] = &#39;0&#39;; &amp;#125;
+            else &amp;#123; --cnt; &amp;#125;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; s &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/13/CF1537E2%20Erase%20and%20Extend%20(Hard%20Version)/</guid>
+            <title>题解 CF1537E2 Erase and Extend (Hard Version)</title>
+            <link>http://example.com/2023/09/13/CF1537E2%20Erase%20and%20Extend%20(Hard%20Version)/</link>
+            <category>构造</category>
+            <pubDate>Wed, 13 Sep 2023 20:28:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;CF1537E2 Erase and Extend (Hard Version)&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一个字符串，找到该字符串的一个前缀并不断复制，可以删除末尾元素，最终要使得得到的字符串长度为 $k$ 且字典序最小。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;对于此类构造题，我们一般需要运用逆向思维，也就是说我们要从前往后扫而不是从后往前删。为什么这样想呢？我们可以发现，字典序最小当且仅当我们要找的前缀的第 $i$ 位比第 $i \bmod len$ 位的字典序小，这样拼接起来才能够使得字典序最小，这个结论是显然的，证明可以使用反证法。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    int n, k, l = 1;
+    string s;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k &amp;gt;&amp;gt; s;
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            if (s[i] &amp;lt; s[i % l]) &amp;#123; l = i + 1; &amp;#125;
+            else if (s[i] &amp;gt; s[i % l]) &amp;#123; break; &amp;#125;
+        &amp;#125;
+        for (int i = 0; i &amp;lt; k; ++i) &amp;#123;
+            cout &amp;lt;&amp;lt; s[i % l];
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/13/CF1537E1%20Erase%20and%20Extend%20(Easy%20Version)/</guid>
+            <title>题解 CF1537E1 Erase and Extend (Easy Version)</title>
+            <link>http://example.com/2023/09/13/CF1537E1%20Erase%20and%20Extend%20(Easy%20Version)/</link>
+            <category>构造</category>
+            <pubDate>Wed, 13 Sep 2023 11:42:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;CF1537E1 Erase and Extend (Easy Version)&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一个字符串，找到该字符串的一个前缀并不断复制，可以删除末尾元素，最终要使得得到的字符串长度为 $k$ 且字典序最小。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;对于此类构造题，我们一般需要运用逆向思维，也就是说我们要从前往后扫而不是从后往前删。为什么这样想呢？我们可以发现，字典序最小当且仅当我们要找的前缀的第 $i$ 位比第 $i \bmod len$ 位的字典序小 ，这样拼接起来才能够使得字典序最小，这个结论是显然的，证明可以使用反证法。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    int n, k, l = 1;
+    string s;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k &amp;gt;&amp;gt; s;
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            if (s[i] &amp;lt; s[i % l]) &amp;#123; l = i + 1; &amp;#125;
+            else if (s[i] &amp;gt; s[i % l]) &amp;#123; break; &amp;#125;
+        &amp;#125;
+        for (int i = 0; i &amp;lt; k; ++i) &amp;#123;
+            cout &amp;lt;&amp;lt; s[i % l];
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
  ]]></description>
         </item>
         <item>
@@ -314,6 +987,83 @@ signed int main() &amp;#123;
 &lt;p&gt;&lt;a href=&#34;https://oi-wiki.org/graph/shortest-path/&#34;&gt;OI-Wiki 最短路&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.luogu.com.cn/blog/StudyingFather/johnson-algorithm&#34;&gt;[洛谷日报#242]Johnson 全源最短路径算法学习笔记&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;《算法导论（第3版）》&lt;/p&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/07/%E4%BB%80%E4%B9%88%EF%BC%8C%E4%BD%A0%E4%B9%9F%E7%8E%A9%E5%8E%9F%E7%A5%9E%EF%BC%81%EF%BC%9F/</guid>
+            <title>什么？你也玩原神！？</title>
+            <link>http://example.com/2023/09/07/%E4%BB%80%E4%B9%88%EF%BC%8C%E4%BD%A0%E4%B9%9F%E7%8E%A9%E5%8E%9F%E7%A5%9E%EF%BC%81%EF%BC%9F/</link>
+            <category>雷电法王</category>
+            <pubDate>Thu, 07 Sep 2023 20:34:44 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;困至极点 故作此文 以振精神&lt;/h1&gt;
+&lt;h2 id=&#34;引言&#34;&gt;引言&lt;/h2&gt;
+&lt;p&gt;我有一个惊为天人的特性，很多人都有，但是他们都没有发现过。然而就在今天，我，发现了！每个人都是由许许多多的原子构成的。~~这样好呀！我是由原子构成的！好耶好耶！~~咳咳，既然这样，我们就是有正电荷的生物。那么为什么我们对外不显电性呢？上过幼儿园的小朋友们应该都知道，原子核外有电子，电子带负电荷，正电荷吸引着负电荷围着它转，又或者两个原子之间有公共电子，这样整个环境就会成电中性，我们也就不带电。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;但是！重点来了！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;首先说一些前置芝士：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;电流是电子在导体中做定向移动产生的；&lt;/li&gt;
+&lt;li&gt;石墨的导电原理是其平面六边形结构可以使得一个电子在原子之间移动，去替换本身原子周围的电子，循环往复使得电子产生定向移动；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;知道了这些以后，神奇的事情就发生了，只要我们使自己体内的电子开始做定向移动，我们不就可以产生电流了吗！我好聪明！快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我快夸我。但是，我们移动电子是需要能量的，这些能量从哪里来呢？很很很很很简单，**只要疯狂发电就可以啦！**没错，这篇文章就是教你如何发电的！你，真的会发电吗？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;你知道吗？&#34;&gt;你知道吗？&lt;/h2&gt;
+&lt;p&gt;哈哈嗨，小朋友，你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？你知道吗？死者在死之前居然是活着的！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://pic.imgdb.cn/item/6521014dc458853aef2e013e.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;你看大家都不知道，所以你知道吗？你知道？不信，除非你知道。如果你知道，那你是一定不可能不知道的，否则你就是一定知道的，别想骗我，我知道你知道自己知不知道。而且这种规律是一通百通的，你知道了一个，就会知道很多，比方说：人在睡着之前一定是醒着的，喝水的时候水一定不会凭空消失，十八世纪去世的人一定比十九世纪去世的人去世得早等等等等。所以，我们需要有一对明亮的双眼，去探查和发现这个世界上有意思的事情，说不定你们也能像我一样发现这些让人惊叹的规律呢？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;我好想做-mlg-小姐的狗啊！&#34;&gt;我好想做 $mlg$ 小姐的狗啊！&lt;/h2&gt;
+&lt;p&gt;我好想做 $mlg$ 小姐的狗啊。&lt;/p&gt;
+&lt;p&gt;可是 $mlg$ 小姐说她喜欢的是生物满分，我哭了。&lt;/p&gt;
+&lt;p&gt;我知道既不是狗也不是生物满分的我为什么要哭的。因为我其实是一只 $OIer$。&lt;/p&gt;
+&lt;p&gt;我从没奢望 $mlg$ 小姐能喜欢自己。我明白的，所有人都喜欢各科满分的年一和其它学科竞赛生，没有人会喜欢阴湿带病的 $OIer$。&lt;/p&gt;
+&lt;p&gt;但我还是问了 $mlg$ 小姐:“我能不能做你的狗？”&lt;/p&gt;
+&lt;p&gt;我知道我是注定做不了狗的。但如果她喜欢狗，我就可以一直在身边看着她了，哪怕她怀里抱着的永远都是狗。&lt;/p&gt;
+&lt;p&gt;可是她说喜欢的是生物满分。&lt;/p&gt;
+&lt;p&gt;她现在还在看着我，还在教我学习，是因为满分还没有出现，只有我这 $OIer$ 每天努力地写完代码、作业，背着生物书，远远地和她对视。&lt;/p&gt;
+&lt;p&gt;等她喜欢的满分来了的时候，我就该重新滚回我的机房了吧。&lt;/p&gt;
+&lt;p&gt;但我还是好喜欢她，她能在我还在她身边的时候多看我几眼吗？&lt;/p&gt;
+&lt;p&gt;$mlg$ 小姐说接下来的每次大练习都要和大家一起过。我不知道大家指哪些人。好希望这个集合能够对我做一次胞吞。&lt;/p&gt;
+&lt;p&gt;满分还在害怕 $mlg$ 小姐。&lt;/p&gt;
+&lt;p&gt;我会去把她爱的满分引来的。&lt;/p&gt;
+&lt;p&gt;我知道稍有不慎，我就会被虐得体无完肤。&lt;/p&gt;
+&lt;p&gt;那时候 $mlg$ 小姐大概会责备我牺牲了生物而去学 $OI$ 吧。&lt;/p&gt;
+&lt;p&gt;那我就该要 $AFO$ 了，嘻嘻。&lt;/p&gt;
+&lt;p&gt;我希望她能把我扔得近一点，因为我还是好喜欢她。会一直喜欢下去的。&lt;/p&gt;
+&lt;p&gt;我的灵魂透过窗户向办公室里面看去，挂着的铃铛在轻轻鸣响，$mlg$ 小姐平静地站在办公桌前，表演得非常温顺的满分坐在她的肩膀。日光灯的灯光照在她的脸庞，我冻僵的心脏在风里微微发烫。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;什么，你也是死傲娇？&#34;&gt;什么，你也是死傲娇？&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;注：本文灵感来自 Acc 怪话&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;翼竜が大嫌いです。&lt;/p&gt;
+&lt;p&gt;私よりずっと背が高くて、身長だけでなく、彼のとんでもない $OI$ レベルもあって、私はどうしても追いつけなくて、大嫌いです。&lt;/p&gt;
+&lt;p&gt;翼竜には $\operatorname{240Hz}$ の高ブラシがあり、超強力なグラフィックスカードがあり、彼には妹がいて、このようなリア充は、大嫌いです。&lt;/p&gt;
+&lt;p&gt;$CS：GO$ を打つ彼のレベルもいつも私を轢いて、毎回打てない、大嫌い！&lt;/p&gt;
+&lt;p&gt;嫌だ嫌だ死ぬ！どうして彼はこんなに明るくて、私はそんなに暗くて光がないの！？&lt;/p&gt;
+&lt;p&gt;しかし&lt;/p&gt;
+&lt;p&gt;私はできないときは根気よく問題を教えてくれますし、私が楽しくないときは慰めてくれますし、暇があればゲームをしてくれますし……いろいろなことを教えてくれたり、$OI$の勉強方法を教えてくれたり……。&lt;/p&gt;
+&lt;p&gt;いやだ！なんて鈍いんだ！どうして気づかないの！大好きなのに！好き、好き、大好き！&lt;/p&gt;
+&lt;p&gt;中文译文：&lt;/p&gt;
+&lt;p&gt;最讨厌小翼龙了。&lt;/p&gt;
+&lt;p&gt;比我高那么多，不只是身高，还有他那逆天的 $OI$ 水平，我怎么都赶不上，最讨厌了。&lt;/p&gt;
+&lt;p&gt;小翼龙有 $\operatorname{240Hz}$ 的高刷屏，还有超强的显卡，他还有个妹妹，这样的现充，最讨厌了。&lt;/p&gt;
+&lt;p&gt;就连打 $CS:GO$ 他的水平也总是碾压我，每次都打不过，最讨厌了！&lt;/p&gt;
+&lt;p&gt;讨厌讨厌讨厌死了！为什么他这样的光鲜亮丽，而我那样的黯淡无光！？&lt;/p&gt;
+&lt;p&gt;可是&lt;/p&gt;
+&lt;p&gt;我不会的时候会耐心的给我讲题，我不开心的时候会安慰我，有空了就会陪我打游戏……还经常教我各种各样的东西，教我怎么学 $OI$……&lt;/p&gt;
+&lt;p&gt;讨厌！怎么这么迟钝啊！怎么察觉不到啊！明明最喜欢了！suki，suki，da i suki！&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;我有显卡啦！&#34;&gt;我有显卡啦！&lt;/h2&gt;
+&lt;p&gt;啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊！麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻麻！&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;我有显卡啦！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一个声音：扔出去！把 $zyc$ 从机房扔出去！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://pic.imgdb.cn/item/652109d4c458853aef36172e.png&#34; alt=&#34;那个声音的手绘作品&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;意义&#34;&gt;意义&lt;/h2&gt;
+&lt;p&gt;我并不知道人生的意义所在，但我知道有些事情一定是有意义的。请你记住，你身边的所有人，所有事物都会离开你，他们并非出于恶意，但是离开与分别是不可避免的。而唯一能帮助你的，唯一不会离开你的，只有原神！&lt;/p&gt;
+&lt;p&gt;是的！没错！原神，不会背叛你！&lt;/p&gt;
+&lt;p&gt;所以，来玩原神吧，少年！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://pic.imgdb.cn/item/652cf1fac458853aef43a0ef.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;$To~~be~~continued$ ~&lt;/p&gt;
  ]]></description>
         </item>
         <item>
@@ -959,6 +1709,1887 @@ signed int main() &amp;#123;
 &lt;li&gt;&lt;a href=&#34;https://oi-wiki.org/graph/scc/&#34;&gt;OI-Wiki 强连通分量&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;洛谷网校《深入浅出程序设计竞赛进阶篇》&lt;/li&gt;
 &lt;/ul&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/02/P2376%20[USACO09OCT]%20Allowance%20G/</guid>
+            <title>题解 洛谷 P2376 [USACO09OCT] Allowance G</title>
+            <link>http://example.com/2023/09/02/P2376%20[USACO09OCT]%20Allowance%20G/</link>
+            <category>贪心</category>
+            <pubDate>Sat, 02 Sep 2023 11:43:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P2376 [USACO09OCT] Allowance G&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你 $n$ 种面值的货币，其中货币中面值小的货币的面值可以整除面值大的货币的面值，给你每种面值货币的数量。每周都要给贝茜发至少 $c$ 元的工资，问最多能发多少周。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;首先对于面值大于 $c$ 的货币，显然我们每周给出一张就行了，没有其它办法，所以可以直接把它们的数量加在答案中。接下来是对于面值小于 $c$ 的货币，我们先对所有货币按照面值降序排序，每次选取能够选的最大的，然后再用最小的去填补剩下的那一点点价格缝隙，因为我们有小面值货币面值是大面值货币面值因数这个条件，所以最大配最小这种做法一定会产生最小的浪费，从而得到最优解。如果这一次凑不出来了，那显然是钱不够了，那么所有情况就统计完毕，输出答案即可。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;vector&amp;gt;
+#include &amp;lt;algorithm&amp;gt;
+#define PII pair&amp;lt;int, int&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    vector&amp;lt;PII&amp;gt; v;
+    //v.first 代表面值，v.second 代表货币数量
+    int n, c, ans; 
+    bool cmp(PII x, PII y) &amp;#123; return x.first &amp;gt; y.first; &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; c;
+        for (int i = 1, val, b; i &amp;lt;= n; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; val &amp;gt;&amp;gt; b;
+            if (val &amp;gt;= c) &amp;#123; ans += b; &amp;#125;
+            else &amp;#123; v.push_back(&amp;#123;val, b&amp;#125;); &amp;#125;
+        &amp;#125;
+        sort(v.begin(), v.end(), cmp);
+        while (true) &amp;#123;
+            int tmp = c;
+            for (int i = 0; i &amp;lt; v.size(); ++i) &amp;#123;
+                while (tmp &amp;amp;&amp;amp; v[i].second &amp;amp;&amp;amp; tmp &amp;gt;= v[i].first) &amp;#123;
+                    tmp -= v[i].first; 
+                    --v[i].second;
+                &amp;#125;
+            &amp;#125;
+            if (tmp &amp;gt; 0) &amp;#123;
+                for (int i = v.size() - 1; i &amp;gt;= 0; --i) &amp;#123;
+                    if (v[i].second &amp;amp;&amp;amp; v[i].first &amp;gt;= tmp) &amp;#123;
+                        tmp -= v[i].first;
+                        --v[i].second;
+                        break;
+                    &amp;#125;
+                &amp;#125;
+            &amp;#125;
+            if (tmp &amp;gt; 0) &amp;#123; break; &amp;#125;
+            ++ans;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/31/CF1863C%20MEX%20Repetition/</guid>
+            <title>题解 CF1863C MEX Repetition</title>
+            <link>http://example.com/2023/08/31/CF1863C%20MEX%20Repetition/</link>
+            <category>构造</category>
+            <pubDate>Thu, 31 Aug 2023 09:18:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;CF1863C MEX Repetition&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个 $n$ 个元素的序列 $a$，其中的元素由小于等于 $n$ 的自然数构成且元素之间两两不同。现在定义一种操作，该操作会将第 $i$ 个位置的元素 $a_i$ 替换为该序列中当前没有的最小自然 数。每一轮操作都会从 $1$ 位置一直替换到 $n$。给定整数 $n,k$ 和序列 $a$，其中 $k$ 表示要进行 $k$ 轮操作，要求输出操作后的序列。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;题目中其实有一个诈骗条件。因为序列中的 $n$ 个元素包含小于等于 $n$ 的自然数且两两相同，所以我们可以发现，如果把原序列增加 $1$ 个元素，那么这个序列就变成了 $0 \sim n$ 的一个排列。而我们要替换用的那个数其实就是原序列中没有出现的那个数。我们发现，每当我们替换了一个数字，那么我们必然要用替换下来的这个数字去替换下一个数字，因为被替换下来的这个数字变成了当前序列中缺少的那个数。我们将最开始序列中缺少的那个数放在第 $n + 1$ 个位置。然后我们就可以显然地发现，每次操作实质上就是用第 $i$ 个位置的元素去替换第 $i+1$ 个位置的元素，推广到递推形式就是：&lt;/p&gt;
+$$\displaylines{a_{(i+1) \operatorname{mod} (n+1)}= a_{i \operatorname{mod}(n+1)}
+}$$&lt;p&gt;现在我们就知道了替换的方法，但是如果我们按照这个递推式进行模拟显然是行不通的，所以我们需要对这个做法进行优化。我们发现，每一轮操作结束后，都相当于把这个序列滚动一次，我们以下面的输入为例：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;5 5
+1 2 3 4 5
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们把没有出现的元素放在第 $n+1$ 个位置，然后我们每次进行一轮操作并记下来：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1 2 3 4 5 0
+0 1 2 3 4 5
+5 0 1 2 3 4
+4 5 0 1 2 3
+3 4 5 0 1 2 
+2 3 4 5 0 1
+1 2 3 4 5 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;于是我们就发现了，这种操作具有循环节，每一轮循环次数等于 $n+1$。原序列的元素顺序也没有太大的改变，所以我们就可以先确认没有第一次操作前没有出现的那个元素的位置，不难发现这个元素的位置等于 $k \operatorname{mod} (n+1)$。那么我们就可以直接做了。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e5 + 7;
+    int a[N];
+    bool chk[N];
+    int T, n, k;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; T;
+        while (T--) &amp;#123;
+            cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k;
+            for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+                cin &amp;gt;&amp;gt; a[i];    
+                chk[a[i]] = true;
+            &amp;#125;
+            int fir;
+            for (int i = 0; i &amp;lt;= n; ++i) &amp;#123;
+            // 不想写二分了所以直接 O(n) 查
+                if (!chk[i]) &amp;#123;
+                    fir = i;
+                    break;
+                &amp;#125;
+            &amp;#125;
+            a[++n] = fir;
+            int xh = k % n, cnt = n - 1;
+            int idx = n - xh + 1;
+            while (cnt--) &amp;#123;
+                if (idx &amp;gt; n) &amp;#123; idx = 1; &amp;#125;
+                cout &amp;lt;&amp;lt; a[idx++] &amp;lt;&amp;lt; &#39; &#39;;
+            &amp;#125;
+            cout &amp;lt;&amp;lt; &#39;\n&#39;;
+            memset(chk, 0, sizeof(chk));
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/29/P9118%20[%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023]%20%E5%B9%82%E6%AC%A1/</guid>
+            <title>题解 洛谷 P9118 [春季测试 2023] 幂次</title>
+            <link>http://example.com/2023/08/29/P9118%20[%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023]%20%E5%B9%82%E6%AC%A1/</link>
+            <category>容斥;根号分治</category>
+            <pubDate>Tue, 29 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P9118 [春季测试 2023] 幂次&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定两个参数 $n,k$，问在区间 $[1,n]$ 中有多少正整数 $x$ 满足 $x = a^p$，其中 $p \ge k$。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;前置芝士&lt;/strong&gt;：区间 $[1,n]$ 中完全平方数有 $\left \lfloor \sqrt{n}  \right \rfloor $ 个，这个结论用整除分块很容易就可以证出来。&lt;/p&gt;
+&lt;p&gt;有了这个结论，我们就已经处理完了这个题中 $k=2$ 的情况了，我们来分析剩下的情况。&lt;/p&gt;
+&lt;p&gt;当 $k=1$ 时，显然区间内每个数都可以表示为 $a^1$，所以答案就是 $n$。&lt;/p&gt;
+&lt;p&gt;当 $k \ge 3$ 时，底数为 $1$ 的情况就直接跳过，我们发现现在底数最小是 $2$，而我们单次计算最大的可能次数就是 $\log_2 n$，本题中 $n \le 10^{18}$，所以单次最多计算次数为 $\left \lceil \log_2 10^{18} \right \rceil = 60$。所以我们直接暴力枚举就可以了。平方不需要枚举直接用我们的结论，我们从 $\left \lfloor \sqrt[3]{n}   \right \rfloor $ 开始枚举即可，枚举到的数标记一下，下次如果标记过则计数器不操作，碰到完全平方数记一下最后把多算的这一次减掉就行。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;cmath&amp;gt;
+#include &amp;lt;map&amp;gt;
+#define LL unsigned long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    LL n, k, bcnt, ans, tmp, p;
+    //tmp表示底数，p表示幂次，ans是答案，bcnt是重复计算的完全平方数
+    map&amp;lt;LL, bool&amp;gt; m;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k;
+        LL bk = sqrtl(n);
+        // bk是[1,n]中完全平方数的数量
+        for (LL i = 2; i * i * i &amp;lt;= n; ++i) &amp;#123;
+            // 从三次根号下n开始枚举
+            tmp = i * i; p = 2;
+            while (tmp &amp;lt;= n/i) &amp;#123;
+                tmp *= i; ++p;
+                if (m[tmp] || p &amp;lt; k) &amp;#123; continue; &amp;#125;
+                LL k = sqrtl(tmp);
+                if (k * k == tmp) &amp;#123; ++bcnt; &amp;#125;
+                m[tmp] = true; ++ans;
+            &amp;#125;
+        &amp;#125;
+        if (k == 1) &amp;#123; cout &amp;lt;&amp;lt; n &amp;lt;&amp;lt; &#39;\n&#39;; &amp;#125;
+        else if (k == 2) &amp;#123; cout &amp;lt;&amp;lt; ans - bcnt + bk &amp;lt;&amp;lt; &#39;\n&#39;; &amp;#125;
+        else if (k &amp;gt;= 3) &amp;#123; cout &amp;lt;&amp;lt; ans + 1 &amp;lt;&amp;lt; &#39;\n&#39;;&amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;特别提醒&#34;&gt;特别提醒&lt;/h2&gt;
+&lt;p&gt;本题中要注意的是，开根的时候要用 &lt;code&gt;sqrtl()&lt;/code&gt; 而不是 &lt;code&gt;sqrt()&lt;/code&gt;，因为我们计算的对象和答案都是长长整型，用 &lt;code&gt;sqrt()&lt;/code&gt; 可能会出错。&lt;/p&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/29/CF690F1%20Tree%20of%20Life%20(easy)/</guid>
+            <title>题解 CF690F1 Tree of Life (easy)</title>
+            <link>http://example.com/2023/08/29/CF690F1%20Tree%20of%20Life%20(easy)/</link>
+            <category>枚举</category>
+            <pubDate>Tue, 29 Aug 2023 16:09:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;CF690F1 Tree of Life (easy)&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一棵树，求树上长度为 $2$ 的路径条数&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;我们看下面这张图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/29/pPdSEL9.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我们发现对于点 $u,v$，$v$ 是与 $u$ 相连的一个点，从 $u$ 出发的长度为 $2$ 的路径条数就等于 $v$ 的度数减去 $1$，因为 $u$ 本身也和 $v$ 相连，所以要把自己减掉。比如说上面这张图中，与 $1$ 距离为 $2$ 的点有 $6,7,8,9,5$ 这 $5$ 个，而 $1$ 的三个子节点的度数分别为 $3,3,2$，分别减去 $1$ 再相加刚好是 $5$。&lt;/p&gt;
+&lt;p&gt;我们对这整张图统计以后，其实对于每一个点我们都统计了与它距离为 $2$ 的点，因为存图时是无向图，所以同一条路径一定计算了两次，累加的答案要减半。&lt;/p&gt;
+&lt;p&gt;时间复杂度 $O(n^2)$。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;vector&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e4 + 7;
+    vector&amp;lt;int&amp;gt; edge[N];
+    int n, sum;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1, x, y; i &amp;lt; n; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; x &amp;gt;&amp;gt; y;
+            edge[x].emplace_back(y);
+            edge[y].emplace_back(x);
+        &amp;#125;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            for (auto it : edge[i]) &amp;#123; 
+                sum += edge[it].size() - 1; 
+            &amp;#125;
+        &amp;#125;
+        sum &amp;gt;&amp;gt;= 1;
+        cout &amp;lt;&amp;lt; sum &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/28/P5686%20[CSP-S2019%20%E6%B1%9F%E8%A5%BF]%20%E5%92%8C%E7%A7%AF%E5%92%8C/</guid>
+            <title>题解 洛谷 P5686 [CSP-S2019 江西] 和积和</title>
+            <link>http://example.com/2023/08/28/P5686%20[CSP-S2019%20%E6%B1%9F%E8%A5%BF]%20%E5%92%8C%E7%A7%AF%E5%92%8C/</link>
+            <category>数学</category>
+            <pubDate>Mon, 28 Aug 2023 11:06:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P5686 [CSP-S2019 江西] 和积和&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定两个 $n$ 个元素的序列 $a,b$，求下面这个式子对 $10^9+7$ 取模的结果：&lt;/p&gt;
+$$\displaylines{\sum_{l=1}^{n}\sum_{r=l}^{n}(\sum_{i=l}^{r}a_i \times \sum_{i=l}^{r}b_i)
+}$$&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;如果直接模拟那么时间复杂度是爆炸级的 $O(n^3)$，显然正常人都不会这么做，正常人会选择可爱的前缀和，所以最后一层括号复杂度变成 $O(1)$，总复杂度 $O(n^2)$，比刚刚好了很多，但依然是过不去的，所以我们考虑对前缀和进行优化。&lt;/p&gt;
+&lt;p&gt;设 $a$ 的前缀数组为 $A$，$b$ 的前缀数组为 $B$。那么上面的式子显然可以写成：&lt;/p&gt;
+$$\displaylines{\sum_{l=1}^{n}\sum_{r=l}^n(A_r-A_{l-1})(B_r-B_{l-1}) \\
+=\sum_{l=1}^{n}\sum_{r=l}^n(A_rB_r+A_{l-1}B_{r-1}-A_rB_{l-1}-A_{l-1}B_r)
+}$$&lt;p&gt;这样看我们求解还不是很方便，因为存在前面的求和符号，我们不便于对整体的式子进行观察，所以我们用一个 $n$ 较小的式子看一下，比方说令 $n=4$，那么我们按照这个式子带进去展开化简得到：&lt;/p&gt;
+$$\displaylines{sum=4(A_1B_1+A_2B_2+A_3B_3+A_4B_4) \\
+-(A_1B_2+A_1B_3+A_1B_4+A_2B_1+A_2B_3+A_2B_4 \\
++A_3B_1+A_3B_2+A_3B_4+A_4B_1+A_4B_2+A_4B_3)
+}$$&lt;p&gt;那么前面系数为 $4$ 的那个式子我们就可以 $O(n)$ 求了，关键转移到了如何求后面这一坨东西。我们把 $A$ 和 $B$ 按照下标放到矩阵里看一看：&lt;/p&gt;
+$$\displaylines{\begin{bmatrix}
+ 0&amp;amp;  A_1B_2&amp;amp;  A_1B_3&amp;amp; A_1B_4\\
+  A_2B_1&amp;amp;  0&amp;amp;  A_2B_3&amp;amp; A_2B_4\\
+  A_3B_1&amp;amp;  A_3B_2&amp;amp;  0&amp;amp; A_3B_4\\
+  A_4B_1&amp;amp;  A_4B_2&amp;amp;  A_4B_3&amp;amp; 0 
+\end{bmatrix}
+}$$&lt;p&gt;我们发现这不就是 $A$ 每一项去乘 $B$ 每一项吗，唯一的遗憾是对角线全是 $0$。我们期望能够对这个式子进行因式分解使其变成两个只包含 $A$ 或 $B$ 的式子相乘，那么其实想办法把这个对角线给它补齐就行了，我们发现对角线的 $A,B$ 下标相等，那么就和刚刚系数为 $4$ 的那个式子一模一样了，所以我们在这多减一遍，前面多加一遍，整个式子的值不变，式子变成这样：&lt;/p&gt;
+$$\displaylines{sum=5 \times \sum_{i=1}^{4}A_iB_i-(\sum_{i=1}^4A_i \times \sum_{i=1}^4B_i)
+}$$&lt;p&gt;然后把这个结论归纳到 $n$ 项得：&lt;/p&gt;
+$$\displaylines{\begin{aligned}
+sum=(n+1) \times \sum_{i=1}^{n}A_iB_i-(\sum_{i=1}^{n}A_i \times \sum_{i=1}^{n}B_i) \\
+=\sum_{i=1}^{n}(n+1)\times A_iB_i-(\sum_{i=1}^{n}A_i \times \sum_{i=1}^{n}B_i)
+\end{aligned}
+}$$&lt;p&gt;图中三个求和符不存在嵌套，所以每一个都可以拿出来单独计算，时间复杂度降低到了 $O(n)$，于是这道题就做完了。做题的时候要注意，本题给定的数都特别大，所以在求解的过程中不要忘记&lt;strong&gt;时刻取模&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const LL N = 5e5 + 7, mod = 1e9 + 7;
+    LL n, ans, A, B;
+    LL a[N], b[N];
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; 
+            cin &amp;gt;&amp;gt; a[i];
+            a[i] = (a[i] + a[i - 1]) % mod;// 求a的前缀
+        &amp;#125;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; b[i];
+            b[i] = (b[i] + b[i - 1]) % mod;// 求b的前缀
+        &amp;#125;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            ans = (ans % mod + ((n + 1) * a[i]) % mod * b[i] % mod) % mod;
+            // 处理第一个求和符
+            A = (A + a[i]) % mod;
+            // 处理第二个求和符
+            B = (B + b[i]) % mod;
+            // 处理第三个求和符
+        &amp;#125;
+        ans = ((ans - (A * B % mod)) + mod) % mod;
+        // 将三个求和符号按照推出来的式子加到一块
+        cout &amp;lt;&amp;lt; ans % mod &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/28/P5019%20[NOIP2018%20%E6%8F%90%E9%AB%98%E7%BB%84]%20%E9%93%BA%E8%AE%BE%E9%81%93%E8%B7%AF/</guid>
+            <title>题解 洛谷 P5019 [NOIP2018 提高组] 铺设道路</title>
+            <link>http://example.com/2023/08/28/P5019%20[NOIP2018%20%E6%8F%90%E9%AB%98%E7%BB%84]%20%E9%93%BA%E8%AE%BE%E9%81%93%E8%B7%AF/</link>
+            <category>贪心</category>
+            <pubDate>Mon, 28 Aug 2023 10:15:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P5019 [NOIP2018 提高组] 铺设道路&lt;/h1&gt;
+&lt;p&gt;本题还有一道&lt;a href=&#34;https://www.luogu.com.cn/problem/P1969&#34;&gt;姐妹题&lt;/a&gt;，两题题意一样，代码也一模一样。&lt;/p&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一个序列，每次选取一个区间对这个区间内所有数都减去 $1$，使得区间内至少一个数变成 $0$，重复执行这一过程直到整个序列都为 $0$，求最小操作次数。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;本题可以用贪心在 $O(n)$ 复杂度完成。&lt;/p&gt;
+&lt;h3 id=&#34;操作方法&#34;&gt;操作方法&lt;/h3&gt;
+&lt;p&gt;我们可以从头往尾扫，设第 $i$ 个位置的值为 $v_i$，当第 $i$ 个位置的值大于第 $i-1$ 个位置的值时，我们就要给答案加上 $v_{i-1}-v_i$，否则不操作。为了后面能够正常操作，第一次必须将第一个位置的直接减到 $0$。&lt;/p&gt;
+&lt;h3 id=&#34;正确性证明&#34;&gt;正确性证明&lt;/h3&gt;
+&lt;p&gt;考虑如果 $v_i \le v_{i-1}$， 那我们在填第 $i-1$ 个坑的时候一定可以把第 $i$ 个坑填上；而当 $v_i&amp;gt; v_{i-1}$ 时，我们填第$i$ 个坑的时候又可以顺便把第 $i-1$ 个坑填上，由此递推即可得出答案。&lt;/p&gt;
+&lt;h2 id=&#34;代码&#34;&gt;代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e5 + 7;
+    int v[N];
+    long long ans;
+    int work()
+    &amp;#123;
+        int n;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; cin &amp;gt;&amp;gt; v[i]; &amp;#125;
+        ans = v[1];
+        for (int i = 2; i &amp;lt;= n; ++i) &amp;#123;
+            if (v[i] &amp;gt; v[i - 1]) &amp;#123;
+                ans += (v[i] - v[i - 1]);
+            &amp;#125;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/28/P7960%20[NOIP2021]%20%E6%8A%A5%E6%95%B0/</guid>
+            <title>题解 洛谷 P7960 [NOIP2021] 报数</title>
+            <link>http://example.com/2023/08/28/P7960%20[NOIP2021]%20%E6%8A%A5%E6%95%B0/</link>
+            <category>线性筛</category>
+            <pubDate>Mon, 28 Aug 2023 10:15:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P7960 [NOIP2021] 报数&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;报数游戏，凡是这个数字十进制表示含有 $7$的数和它的倍数都不能报，给定 $T$ 组询问，每次询问给定一个数 $x$，回答下一个要报的数，若 $x$ 是不能报的数，输出 &lt;code&gt;-1&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;经过良久的思考，我们发现找不到任何可行的 $O(1)$ 性质，所以我们&lt;s&gt;本能的采用暴力&lt;/s&gt;。类似线性筛法求素数，我们线性筛求不能报的数的倍数。如果是可以报的数，我们就要记下它该报的下一个数，如果是不可以报的数，我们就要打标记。具体的解释见代码。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e7 + 10;
+    int chk[N];
+    int t, x, lst;
+    // 我们可以把不符合要求的数的下一个看做-1
+    // 这样开一个数组就够了
+    
+    inline bool judge(int k) &amp;#123;
+    // 判断这个数十进制表示里有没有7
+        while (k) &amp;#123;
+            if (k % 10 == 7) &amp;#123; return true; &amp;#125;
+            k /= 10;
+        &amp;#125;
+        return false;
+    &amp;#125;
+
+    inline void _init() &amp;#123;
+    	// 线性筛
+        for (int i = 1; i &amp;lt; N; ++i) &amp;#123;
+            if (chk[i] == -1) &amp;#123; continue; &amp;#125;
+            // 已经标记过了就跳过
+            if (judge(i)) &amp;#123;// 如果十进制含有7
+                for (int j = i; j &amp;lt; N; j += i) &amp;#123;
+                    chk[j] = -1;
+                &amp;#125;// 这个数的所有倍数的下一个数都记成-1
+            &amp;#125;
+            // 如果
+            else &amp;#123;// 如果这个数满足要求
+            	chk[lst] = i;
+            	lst = i;
+                // 记下它下一个合法的数
+            &amp;#125;
+        &amp;#125;
+    &amp;#125;
+    
+    int work()
+    &amp;#123;
+        _init();
+        cin &amp;gt;&amp;gt; t;
+        while (t--) &amp;#123;
+            cin &amp;gt;&amp;gt; x;
+            cout &amp;lt;&amp;lt; chk[x] &amp;lt;&amp;lt; &#39;\n&#39;;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/24/P7687%20[CEOI2005]%20Critical%20Network%20Lines/</guid>
+            <title>题解 洛谷 P7687 [CEOI2005] Critical Network Lines</title>
+            <link>http://example.com/2023/08/24/P7687%20[CEOI2005]%20Critical%20Network%20Lines/</link>
+            <category>割边;Tarjan</category>
+            <pubDate>Thu, 24 Aug 2023 09:16:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P7687 [CEOI2005] Critical Network Lines&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一张图，图上有两类点 $A$ 和 $B$，现在要求你找到满足下面条件的边：删除这条边后该图变为两个块，且至少有一个块中只包含 $A$ 类点或只包含 $B$ 类点。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://oi-wiki.org/graph/cut/#%E5%89%B2%E8%BE%B9&#34;&gt;前置芝士：割边（桥）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我们不难看出题目想让我们求的边是图中的割边，但并非所有的割边都满足题目的条件。如下图（图中边上的数字是编号不是边权）：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/24/pPYBlad.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这幅图中的割边有 $1,4,5,6,8$ 五条，而符合题目条件的只有 $1,6,8$ 这三条。仔细考虑我们在深搜的时候形成的深度优先生成树的性质，我们发现，&lt;strong&gt;当一个割边满足条件当且仅当它连接的一个节点在深度优先生成树中的子树内只包含一类点&lt;/strong&gt;（如果后面看不懂建议反复阅读体会这句话）。求割边的时候，每找到一条割边 $(u,v)$，我们就检查一下以 $v$ 为根结点的子树内 $A$ 和 $B$ 类结点各自的数量，当其中一个个数为 $0$ 或者全满，就是要求的边，打上标记并给计数的答案加一就可以了。求数量的过程，可以在 $\operatorname{dfs}$ 的时候递归计算。&lt;/p&gt;
+&lt;h2 id=&#34;实现&#34;&gt;实现&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 2e6 + 7;
+    // 请注意这里一定要开二倍空间，要不然会寄
+    int head[N], cnt;
+    struct edge &amp;#123; int to, next; &amp;#125;edge[N];
+    int n, m, a, b, tim, res;
+    int dfn[N], low[N], acnt[N], bcnt[N], par[N];
+    // acnt[i]表示i结点子树中A类点数量，bcnt同理
+    // par用来记每个结点在dfs生成树中的父亲
+    bool flag[N];
+
+    inline void add(int u, int v) &amp;#123;
+        edge[++cnt].next = head[u];
+        edge[cnt].to = v;
+        head[u] = cnt;
+    &amp;#125;
+
+    void Tarjan(int u, int fa) &amp;#123;
+        low[u] = dfn[u] = ++tim;
+        par[u] = fa;
+        for (int i = head[u]; i; i = edge[i].next) &amp;#123;
+            int v = edge[i].to;
+            if (!dfn[v]) &amp;#123;
+                Tarjan(v, u);
+                low[u] = min(low[u], low[v]);
+                if (low[v] &amp;gt; dfn[u]) &amp;#123;
+                    if (!acnt[v] || !bcnt[v] || acnt[v] == a || bcnt[v] == b) &amp;#123;
+                        // A类或B类有一个为0或全满就说明符合要求
+                        flag[v] = true;
+                        ++res;
+                        // 后来看大家的做法这里用vector套一个pair存也非常方便
+                    &amp;#125;
+                &amp;#125;
+                acnt[u] += acnt[v]; bcnt[u] += bcnt[v];
+                // 从下向上递归统计子树情况
+            &amp;#125;
+            else if (dfn[v] &amp;lt; dfn[u] &amp;amp;&amp;amp; fa != v) &amp;#123;
+                low[u] = min(low[u], dfn[v]);
+            &amp;#125;
+        &amp;#125;
+    &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m &amp;gt;&amp;gt; a &amp;gt;&amp;gt; b;
+        for (int i = 1, x; i &amp;lt;= a; ++i) &amp;#123; cin &amp;gt;&amp;gt; x; acnt[x] = 1; &amp;#125;
+        for (int i = 1, x; i &amp;lt;= b; ++i) &amp;#123; cin &amp;gt;&amp;gt; x; bcnt[x] = 1; &amp;#125;
+        // 最开始每个点的子树就是自己
+        for (int i = 1, x, y; i &amp;lt;= m; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; x &amp;gt;&amp;gt; y;
+            add(x, y); add(y, x);
+        &amp;#125;
+        Tarjan(1, 0);
+        cout &amp;lt;&amp;lt; res &amp;lt;&amp;lt; &#39;\n&#39;;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            if (flag[i]) &amp;#123;
+                cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; &#39; &#39; &amp;lt;&amp;lt; par[i] &amp;lt;&amp;lt; &#39;\n&#39;;
+            &amp;#125;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/24/P5058%20[ZJOI2004]%20%E5%97%85%E6%8E%A2%E5%99%A8/</guid>
+            <title>题解 洛谷 P5058 [ZJOI2004] 嗅探器</title>
+            <link>http://example.com/2023/08/24/P5058%20[ZJOI2004]%20%E5%97%85%E6%8E%A2%E5%99%A8/</link>
+            <category>割点;Tarjan</category>
+            <pubDate>Thu, 24 Aug 2023 09:15:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P5058 [ZJOI2004] 嗅探器&lt;/h1&gt;
+&lt;h3 id=&#34;简要题意&#34;&gt;简要题意&lt;/h3&gt;
+&lt;p&gt;给定一张图，再给处图中两个点 $x,y$，现在要在图中删去除了 $x,y$ 以外的一个点使得 $x$ 和 $y$ 不再连通，求要删除的点的编号&lt;/p&gt;
+&lt;h3 id=&#34;题目分析&#34;&gt;题目分析&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://oi-wiki.org/graph/cut/&#34;&gt;前置芝士&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;题目要求我们删掉一个点使得给定的两个点不连通，那么其实我们就是要找一个满足要求的割点，如下图标黑的点就是题目给定的两个点：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/23/pPJqc80.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点 $1$ 是一个割点，我们删除点 $1$ 即可使得 $2,4$ 两点不连通，但是并非任意割点都满足要求，比方说下面这张图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/23/pPJqg2V.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点 $3$ 和点 $4$ 都是图中的割点，但是删去 $4$ 并不能使得目标点 $1,7$ 不连通，所以只有点 $3$ 是符合条件的点，那么我们就要去筛选割点中符合要求的点。&lt;/p&gt;
+&lt;p&gt;怎么筛呢？其实我们想一想建立 DFS 树的过程，我们从题中给定的一个点开始搜，那么对于一个符合条件的割点来讲，题中给定的另一个点一定在这个符合条件的割点的子树中。所以在搜的时候加个判断条件就好了。本题因为不能删去根，所以不用考虑根是割点的情况，那么代码也就非常简单：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e6 + 7;
+    int head[N], cnt;
+    struct edge &amp;#123; int to, next; &amp;#125;edge[N];
+    int n, tim, x, y;
+    int dfn[N], low[N];
+    bool vis[N], flag[N];
+
+    inline void add(int u, int v) &amp;#123;
+        edge[++cnt].next = head[u];
+        edge[cnt].to = v;
+        head[u] = cnt;
+    &amp;#125;
+
+    void Tarjan(int u, int fa) &amp;#123;
+        low[u] = dfn[u] = ++tim;
+        vis[u] = true;
+        for (int i = head[u]; i; i = edge[i].next) &amp;#123;
+            int v = edge[i].to;
+            if (!vis[v]) &amp;#123;
+                Tarjan(v, u);
+                low[u] = min(low[u], low[v]);
+                // 这里多加一个u!=x和dfn[y]&amp;gt;=dfn[v]的特判就OK了
+                if (fa != u &amp;amp;&amp;amp; low[v] &amp;gt;= dfn[u] &amp;amp;&amp;amp; u != x &amp;amp;&amp;amp; dfn[y] &amp;gt;= dfn[v]) &amp;#123;
+                    flag[u] = true;
+                &amp;#125;
+            &amp;#125;
+            else if (fa != v) &amp;#123;
+                low[u] = min(low[u], dfn[v]);
+            &amp;#125;
+        &amp;#125;
+    &amp;#125;
+
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        while (cin &amp;gt;&amp;gt; x &amp;gt;&amp;gt; y &amp;amp;&amp;amp; x &amp;amp;&amp;amp; y) &amp;#123;
+            add(x, y); add(y, x);
+        &amp;#125;
+        cin &amp;gt;&amp;gt; x &amp;gt;&amp;gt; y;
+        Tarjan(x, x);
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            if (flag[i]) &amp;#123;
+                cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; &#39;\n&#39;;
+                return 0;
+            &amp;#125;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; &amp;quot;No solution\n&amp;quot;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/21/P9570%20%E3%80%8CNnOI%20R2-T2%E3%80%8DGlaciaxion/</guid>
+            <title>题解 洛谷 P9570 「NnOI R2-T2」Glaciaxion</title>
+            <link>http://example.com/2023/08/21/P9570%20%E3%80%8CNnOI%20R2-T2%E3%80%8DGlaciaxion/</link>
+            <category>构造</category>
+            <pubDate>Mon, 21 Aug 2023 10:23:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;洛谷 P9570 「NnOI R2-T2」Glaciaxion&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个数 $n$ 和 $m$ 表示有从 $1$ ~ $n$ 的正整数和 $m$ 次操作。每次操作给出一个字母 &lt;code&gt;N&lt;/code&gt; 或 &lt;code&gt;Y&lt;/code&gt;，如果给出 &lt;code&gt;N&lt;/code&gt; 说明有一个数字第一次被选中并输出，如果给出 &lt;code&gt;Y&lt;/code&gt; 就要从刚刚选出来的数里再选一个输出出来。现在要求若干输出里字典序最小的序列，如果无解输出 &lt;code&gt;No solution&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;h3 id=&#34;无解情况&#34;&gt;无解情况&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;当给出 &lt;code&gt;N&lt;/code&gt; 的次数超过 $n$ 时不合法，因为每个数第一次出现的次数总和至多为 $n$。&lt;/li&gt;
+&lt;li&gt;当还没有给出 &lt;code&gt;N&lt;/code&gt; 就给出 &lt;code&gt;Y&lt;/code&gt; 时不合法，因为 &lt;code&gt;Y&lt;/code&gt; 不能选出以前没有选出来的数。&lt;/li&gt;
+&lt;li&gt;$n$ 或 $m$ 等于 $0$ 的时候不合法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;构造&#34;&gt;构造&lt;/h3&gt;
+&lt;p&gt;下面的分析基于所有合法条件。我们要求最后输出序列字典序最小，所以我们考虑建立一个从 $1$ 开始的指针，当出现 &lt;code&gt;N&lt;/code&gt; 时输出指针，然后指针移动到下一个数。给出 &lt;code&gt;Y&lt;/code&gt; 前一定给出了 &lt;code&gt;N&lt;/code&gt;，而第一次给出 &lt;code&gt;N&lt;/code&gt; 时我们选出的数一定是 $1$，因为它的字典序最小。而既然已经选出来了，后面每一次 &lt;code&gt;Y&lt;/code&gt; 我们都要在已经选出的数里选一个最小的，那么我们选出来的数必然是 $1$。所以我们只需要在输入 &lt;code&gt;N&lt;/code&gt; 的时候输出递增的那个指针并将其自增，输入 &lt;code&gt;Y&lt;/code&gt; 的时候输出 $1$ 就可以了。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#include &amp;lt;vector&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e6 + 7;
+    int n, m, idx, ncnt, ycnt;
+    // ncnt用来记录N的数量，ycnt记录Y的数量
+    string s;
+    vector&amp;lt;int&amp;gt; ans;// 用来记录答案
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m;
+        cin &amp;gt;&amp;gt; s;
+        if (!n || !m) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;No solution\n&amp;quot;; return 0; &amp;#125;
+        // n或m为0无解
+        for (int i = 0; i &amp;lt; m; ++i) &amp;#123;
+            if (s[i] == &#39;N&#39;) &amp;#123;
+                ++idx;// 指针自增
+                ++ncnt;
+                ans.emplace_back(idx);// 将指针放入答案序列
+            &amp;#125;
+            else if (s[i] == &#39;Y&#39;) &amp;#123;
+                ++ycnt;
+                ans.emplace_back(1);// 输入Y一定输出1
+            &amp;#125;
+            if (ncnt == 0 &amp;amp;&amp;amp; ycnt) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;No solution\n&amp;quot;; return 0; &amp;#125;
+            // 还没输入N就输入了Y无解
+        &amp;#125;
+        if (ncnt &amp;gt; n) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;No solution\n&amp;quot;; return 0; &amp;#125;
+        // 输入N的数量大于n无解
+        for (auto it : ans) &amp;#123; cout &amp;lt;&amp;lt; it &amp;lt;&amp;lt; &#39; &#39;; &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/19/CF1413C%20Perform%20Easily/</guid>
+            <title>题解 CF1413C Perform Easily</title>
+            <link>http://example.com/2023/08/19/CF1413C%20Perform%20Easily/</link>
+            <category>构造</category>
+            <pubDate>Sat, 19 Aug 2023 23:18:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 CF1413C Perform Easily&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个含有 $6$ 个元素的可重集 $a$，一个数 $n$ 和一个含有 $n$ 个数的可重集 $b$，现在要求 $b$ 中每个数和 $a$ 中任意一个数作差使得作差后得到的新的集合 $b$ 中最大的数和最小的数的差最小。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;首先考虑暴力，每个数最后的值都有 $6$ 种可能，所以总可能数有 $6^n$ 种，显然不行。题目中 $n$ 的大小为 $10^5$，所以我们期待一个 $O(n\log n)$ 的做法。我们发现，所有数也只有 $6$ 种可能，想要枚举答案不可能，但我们可以枚举结果。于是我们想到把 $b$ 中每个元素都和 $a$ 中所有元素作差，最后得到 $6n$ 个数放入一个新的数组 $cp$。因为我们要考虑最大和最小的差最小，所以我们需要使 $cp$ 数组中的值变得有序，于是我们对其进行排序。排序后为了查找的时候保证查找的区间内的数必须包含原来 $b$ 中每个数的至少一种差（显然其每个数都有 $6$ 种差），我们要在插入 $cp$ 前给每个数打好标记，标记它来自于哪个数。&lt;/p&gt;
+&lt;p&gt;预处理做完后，我们考虑如何查找答案。因为我们需要一个区间最大值，还需要一个区间最小值，所以我们想到了用双指针来进行查找。我们设左指针为 $lidx$，右指针为 $ridx$。$ridx$ 先走，一直走到与 $lidx$ 间包含了的数包含了原来 $b$ 中每个数的至少一个结果为止。现在开始移动左指针，每移动一次就 $ridx$ 与 $lidx$ 所指的两数之差更新答案。当两指针之间包含的数不能包含原来 $b$ 中每个数的至少一个结果时，就回到第一步重新开始移动 $ridx$，循环一轮即可得到答案。&lt;/p&gt;
+&lt;p&gt;枚举复杂度为 $O(n)$，排序复杂度为 $O(n\log n)$，最后搜索的复杂度为 $O(n)$，所以整个算法的时间复杂度为 $O(n\log n)$，于是我们做完了，下面是代码。&lt;/p&gt;
+&lt;h3 id=&#34;参考代码&#34;&gt;参考代码&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;algorithm&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e6 + 7, INF = 1e9;
+    struct node &amp;#123; int val, id; &amp;#125;cp[N];
+    int n, idx, ans = INF;
+    int a[7], b[N], cnt[N];
+    bool cmp(node x, node y) &amp;#123; return x.val &amp;lt; y.val; &amp;#125;
+    int work()
+    &amp;#123;
+        for (int i = 1; i &amp;lt;= 6; ++i) &amp;#123; cin &amp;gt;&amp;gt; a[i]; &amp;#125;
+        cin &amp;gt;&amp;gt; n;
+        if (n == 1) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;0\n&amp;quot;; return 0; &amp;#125;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; b[i];
+            for (int j = 1; j &amp;lt;= 6; ++j) &amp;#123;
+                cp[++idx] = &amp;#123;b[i] - a[j], i&amp;#125;;
+            &amp;#125;
+            cnt[i] = 0;
+        &amp;#125;// 加标记
+        sort(cp + 1, cp + idx + 1, cmp);
+        int lidx = 1, ridx = 0, ncnt = 0;
+        // cnt数组和ncnt用来维护当前区间包含原来b数组中的数的结果的个数
+        while (ridx &amp;lt; idx) &amp;#123;
+            // 双指针搜索
+            if (!cnt[cp[++ridx].id]) &amp;#123; ++ncnt; &amp;#125;
+            ++cnt[cp[ridx].id];
+            while (lidx &amp;lt; ridx &amp;amp;&amp;amp; cp[ridx].val - cp[lidx].val &amp;gt;= ans) &amp;#123;
+                if (cnt[cp[lidx].id] == 1) &amp;#123; --ncnt; &amp;#125;
+                --cnt[cp[lidx].id];
+                ++lidx;
+            &amp;#125;
+            // 移动左指针到可行方案处
+            while (lidx &amp;lt; ridx &amp;amp;&amp;amp; ncnt == n) &amp;#123;
+                ans = min(ans, cp[ridx].val - cp[lidx].val);
+                if (cnt[cp[lidx].id] == 1) &amp;#123; --ncnt; &amp;#125;
+                --cnt[cp[lidx].id];
+                ++lidx;
+            &amp;#125; 
+            // 移动左指针并不断更新答案
+        &amp;#125;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/BNDSOJ%201263%20%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</guid>
+            <title>题解 BNDS OJ 1263 表达式求值</title>
+            <link>http://example.com/2023/08/18/BNDSOJ%201263%20%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</link>
+            <category>栈</category>
+            <pubDate>Fri, 18 Aug 2023 17:06:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 BNDS OJ 1263 表达式求值&lt;/h1&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;输入一个表达式，包括 &lt;code&gt;+&lt;/code&gt;，&lt;code&gt;-&lt;/code&gt;，&lt;code&gt;*&lt;/code&gt;，&lt;code&gt;/&lt;/code&gt;，&lt;code&gt;(&lt;/code&gt;，&lt;code&gt;)&lt;/code&gt;。求出表达式的值，保留两位小数（不知道你谷有没有这道题）。&lt;/p&gt;
+&lt;p&gt;提供一组样例：&lt;/p&gt;
+&lt;p&gt;样例输入：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;9-(6+3*5)/3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;样例输出：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;2.00
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;策略分析：&#34;&gt;策略分析：&lt;/h4&gt;
+&lt;p&gt;这不是简单的数据结构入门题，我们只需要拿两个栈，一个存数字一个存运算符，碰到后括号就把它到前括号里的值全部算出来。因为在这6个运算符中，除了括号其他均是二元运算符，所以符号栈栈顶运算符（除了括号）一定匹配数字栈的头两个数字	，按照运算优先级取出来算就可以了。运算优先级我们可以用一个 $ \operatorname{map} $ 来处理，具体细节见代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#include &amp;lt;unordered_map&amp;gt;
+#include &amp;lt;stack&amp;gt;
+#include &amp;lt;iomanip&amp;gt;
+#define LD long double
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    unordered_map&amp;lt;char, int&amp;gt; pri;
+    stack&amp;lt;LD&amp;gt; dig;
+    stack&amp;lt;char&amp;gt; ope;
+    string s;
+    void calcu() &amp;#123;// 出栈计算
+        LD a = dig.top(); dig.pop();
+        LD b = dig.top(); dig.pop();
+        char opt = ope.top(); ope.pop();
+        LD res = 0;
+        if (opt == &#39;+&#39;) &amp;#123; res = b + a; &amp;#125;
+        if (opt == &#39;-&#39;) &amp;#123; res = b - a; &amp;#125;
+        if (opt == &#39;*&#39;) &amp;#123; res = b * a; &amp;#125;
+        if (opt == &#39;/&#39;) &amp;#123; res = b / a; &amp;#125;
+        dig.push(res);// 算完的结果塞回数字栈
+    &amp;#125;
+    int work()
+    &amp;#123;
+        pri[&#39;+&#39;] = pri[&#39;-&#39;] = 1;
+        pri[&#39;*&#39;] = pri[&#39;/&#39;] = 2;
+        cin &amp;gt;&amp;gt; s;
+        int len = s.length();
+        for (int i = 0; i &amp;lt; len; ++i) &amp;#123;
+            if (isdigit(s[i])) &amp;#123;// 遇到数字就存进栈里
+                int x = 0, j = i;
+                while (j &amp;lt; len &amp;amp;&amp;amp; isdigit(s[j])) &amp;#123;
+                    x = x * 10 + s[j] - &#39;0&#39;;
+                    j++;
+                &amp;#125;
+                dig.push(x);
+                i = j - 1;
+            &amp;#125;
+            else if (s[i] == &#39;(&#39;) &amp;#123; ope.push(s[i]); &amp;#125;// 左括号进栈
+            else if (s[i] == &#39;)&#39;) &amp;#123;// 遇到右括号就一直向前算到上一个左括号
+                while (ope.top() != &#39;(&#39;) &amp;#123; calcu(); &amp;#125;
+                ope.pop();
+            &amp;#125;
+            else &amp;#123;// 遇到运算符直接按优先级进行计算
+                while (ope.size() &amp;amp;&amp;amp; pri[ope.top()] &amp;gt;= pri[s[i]]) &amp;#123; calcu(); &amp;#125;
+                ope.push(s[i]); 
+            &amp;#125;
+        &amp;#125;
+        while (ope.size()) &amp;#123; calcu(); &amp;#125;// 完成剩余计算
+        cout &amp;lt;&amp;lt; fixed &amp;lt;&amp;lt; setprecision(2) &amp;lt;&amp;lt; dig.top() &amp;lt;&amp;lt; &#39;\n&#39;;// 最后的结果就是数字栈栈顶元素，保留两位输出即可
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/</guid>
+            <title>题解 洛谷 P1257/P1429/P7883 平面最近点对</title>
+            <link>http://example.com/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/</link>
+            <category>分治</category>
+            <pubDate>Fri, 18 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 洛谷 P1257/P1429/P7883 平面最近点对&lt;/h1&gt;
+&lt;h2 id=&#34;本文主要介绍分治法&#34;&gt;本文主要介绍分治法&lt;/h2&gt;
+&lt;h3 id=&#34;P1257&#34;&gt;P1257&lt;/h3&gt;
+&lt;p&gt;因为数据范围太小从而可以$n^2$水过，所以只评了个橙，那么直接$n^2$做就可以了&lt;/p&gt;
+&lt;h3 id=&#34;P1429-P7883&#34;&gt;P1429/P7883&lt;/h3&gt;
+&lt;p&gt;这两道题的数据范围都在$10^5$，所以我们期望的时间复杂度是$O(nlogn)$，这时候我们就不要充分发扬人类智慧了（，果断使用分治&lt;/p&gt;
+&lt;h3 id=&#34;分治策略&#34;&gt;分治策略&lt;/h3&gt;
+&lt;p&gt;考虑将这些点划分成若干区间进行比较，因为点是乱序的，所以我们先对所有点按照$x$坐标从小到大进行排序，排好序以后从中间序号的点来二分整个$xOy$系，递归二分若干次后，我们只需要对三种情况的点进行比较就可以了&lt;/p&gt;
+&lt;p&gt;1.两个点都在$mid$左边&lt;/p&gt;
+&lt;p&gt;2.两个点都在$mid$右边&lt;/p&gt;
+&lt;p&gt;3.一个在左边，一个在右边&lt;/p&gt;
+&lt;p&gt;诶！我们发现这种对比方式是不是在哪里见过呀，没错，就是逆序对！&lt;s&gt;那么这个题可以说和逆序对没有什么关系&lt;/s&gt;。但是我们在分治的时候采取的策略是有相似之处的，前两种情况只需要用最普通的递归就可以轻松解决，像这样：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;dis = min(solve(l,mid), solve(mid + 1, r));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在实现的时候我们可以发现我们先处理出来了在各自一边的最近点对的距离$dis$,那么接下来我们其实就是要把跨区间的点对的$dis$和当前的$dis$比较然后取$min$，所以我们把距离中线$mid$水平距离小于$dis$的点都取出来扔进一个容器里（你看这个数组它就很好用），很容易证明水平距离大于$dis$的点不可能满足条件（直角三角形斜边长大于直角边总会用吧）&lt;/p&gt;
+&lt;p&gt;$Well $ $Done!$ 我们离成功只剩一步之遥&lt;/p&gt;
+&lt;p&gt;将这些点取出来以后，我们先对这些点按照$y$进行排序，然后枚举这些点，分别以每个点为圆心，半径为$dis$画圆，然后把圆内的点与圆心的距离和$dis$比较取较小的即可。请注意：这里的$dis$是实时更新的，所以圆的半径在不断缩小或者不变。&lt;/p&gt;
+&lt;p&gt;于是这道题就做完了，下面是$P1429$的$AC$代码，$P7883$只要在它的基础上把$long$ $double$改成$long$ $long$即可&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;iomanip&amp;gt;
+#include &amp;lt;cmath&amp;gt;
+#include &amp;lt;algorithm&amp;gt;
+#define LD long double
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 2e5 + 7;
+    const LD INF = 1e18;
+    struct node &amp;#123; LD x, y; &amp;#125;pt[N];
+    int que[N];
+    int n;
+    bool cmp1 (node a, node b) &amp;#123; return a.x &amp;lt; b.x; &amp;#125;
+    bool cmp2 (int a, int b) &amp;#123; return pt[a].y &amp;lt; pt[b].y; &amp;#125;
+    LD getlen(node a, node b) &amp;#123; return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y); &amp;#125;
+    LD solve(int l, int r)  &amp;#123;
+        if (l == r) &amp;#123; return INF; &amp;#125;
+        if (l == r - 1) &amp;#123; return getlen(pt[l], pt[r]); &amp;#125;
+        int mid = l + ((r - l) &amp;gt;&amp;gt; 1);
+        LD dis = min(solve(l, mid), solve(mid + 1, r));
+        int idx = 0;
+        for (int i = l; i &amp;lt;= r; ++i) &amp;#123;
+            if ((pt[mid].x - pt[i].x) * (pt[mid].x - pt[i].x) &amp;lt; dis) &amp;#123;
+                que[++idx] = i;
+            &amp;#125;
+        &amp;#125;
+        sort(que + 1, que + idx + 1, cmp2);
+        for (int i = 1; i &amp;lt;= idx; ++i) &amp;#123;
+            for (int j = i + 1; j &amp;lt;= idx &amp;amp;&amp;amp; ((pt[que[i]].y - pt[que[j]].y) * (pt[que[i]].y - pt[que[j]].y)) &amp;lt; dis; ++j) &amp;#123;
+                dis = min(dis, getlen(pt[que[i]], pt[que[j]]));
+            &amp;#125;
+        &amp;#125;
+        return dis;
+    &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; cin &amp;gt;&amp;gt; pt[i].x &amp;gt;&amp;gt; pt[i].y; &amp;#125;
+        sort(pt + 1, pt + n + 1, cmp1);
+        cout &amp;lt;&amp;lt; fixed &amp;lt;&amp;lt; setprecision(4) &amp;lt;&amp;lt; sqrt(solve(1, n)) &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/P1168%20%E4%B8%AD%E4%BD%8D%E6%95%B0/</guid>
+            <title>题解 洛谷 P1168 中位数</title>
+            <link>http://example.com/2023/08/18/P1168%20%E4%B8%AD%E4%BD%8D%E6%95%B0/</link>
+            <category>对顶堆;数据结构</category>
+            <pubDate>Fri, 18 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 洛谷 P1168 中位数&lt;/h1&gt;
+&lt;p&gt;由于这道题目比较水，所以机房中诞生了四种做法，分别是权值线段树、堆、二分以及 $\operatorname{multiset}$。&lt;/p&gt;
+&lt;h3 id=&#34;这里主要介绍本题的堆解法&#34;&gt;这里主要介绍本题的堆解法&lt;/h3&gt;
+&lt;p&gt;通过读题我们可以轻易发现，每两次插入数据就需要进行一次访问，且期间必须维护当前访问过的所有元素组成的数列具有单调性 。&lt;/p&gt;
+&lt;h4 id=&#34;问题一：如何维护数列的单调性&#34;&gt;问题一：如何维护数列的单调性&lt;/h4&gt;
+&lt;p&gt;于是我们很容易想到可以使用优先队列对其插入的数字进行动态排序来维护其单调性。如果你不知道什么是优先队列，那么不妨先通过下面的传送门去看一看优先队列的用法：&lt;br&gt;
+&lt;a href=&#34;https://blog.csdn.net/weixin_36888577/article/details/79937886?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167776821716800184138808%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;amp;request_id=167776821716800184138808&amp;amp;biz_id=0&amp;amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-79937886-null-null.142%5Ev73%5Epc_search_v2,201%5Ev4%5Eadd_ask,239%5Ev2%5Einsert_chatgpt&amp;amp;utm_term=%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97&amp;amp;spm=1018.2226.3001.4187&#34;&gt;点我&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;于是你现在明白了什么是优先队列，我们只需要在维护好的单调队列里取出中位数就可以了。所以此时你发现，由于单调队列是一个队列，想要访问中间的元素，就只能把它前面的元素全部弹出来，这样弹出一遍插入一遍甚至不如每次 sort 时间效率高，于是问题来了。&lt;/p&gt;
+&lt;h4 id=&#34;问题二：如何快速地在每次访问中提取中位数&#34;&gt;问题二：如何快速地在每次访问中提取中位数&lt;/h4&gt;
+&lt;p&gt;既然我们一定需要把队列分成两段，那么我们直接定义两个优先队列就可以完美地解决问题。我们将前奇数个（这里假设为前 $\mathit{K}$  个）数列切分后扔进左队列、右队列和中位数三种位置，那么左边的队列维护第 $ 1 $ ~ $\left[\frac{K}{2}\right]$ 个元素，右边的队列维护第 $(\left[\frac{K}{2}\right]+2)$ ~ $K$ 个元素，第$(\left[\frac{K}{2}\right]+1)$ 个元素也就是剩下的那个元素就是中位数，将其定义为 mid 。左边的队列从大到小，使用大根堆，右边的队列从小到大，使用小根堆，定义如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;typedef long long LL;
+priority_queue&amp;lt;LL,vector&amp;lt;LL&amp;gt;,greater&amp;lt;LL&amp;gt; &amp;gt; Right;
+priority_queue&amp;lt;LL,vector&amp;lt;LL&amp;gt;,less&amp;lt;LL&amp;gt; &amp;gt; Left;
+LL mid;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;接下来在每个奇数次插入时，如果插入的数比 mid 小，就塞进左队列，如果比 mid 大，就塞进右队列。&lt;strong&gt;需要注意的是：为了确保 mid 就是中位数，必须在每次访问时对两个队列内的元素个数进行平衡！&lt;/strong&gt; 所以这是最后一个问题。&lt;/p&gt;
+&lt;h4 id=&#34;问题三：平衡两个队列内的元素个数&#34;&gt;问题三：平衡两个队列内的元素个数&lt;/h4&gt;
+&lt;p&gt;我们不妨设其中一个队列元素个数为 $x$ ，另一个队列元素个数为 $y$，设 $x&amp;gt;y$ ，则从 $x$ 队列中转移到 $y$ 队列中的元素个数为 $(\frac{x-y}{2}-1)$ 个，最后只需要把 mid 插入到 $y$ 中，再将 $x$ 的队头元素弹出来更新为新的 mid 即可。&lt;strong&gt;注意：这一步操作必须先进行当前步骤的插入再进行元素个数平衡&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;至此，我们已经解决了这个题目的所有小问题，下面是AC代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;iostream&amp;gt;
+#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;vector&amp;gt;
+#include&amp;lt;queue&amp;gt;
+using namespace std;
+
+namespace SHAWN&amp;#123;
+    //定义部分不解释
+	typedef long long LL;
+	priority_queue&amp;lt;LL,vector&amp;lt;LL&amp;gt;,greater&amp;lt;LL&amp;gt; &amp;gt; Right;
+	priority_queue&amp;lt;LL,vector&amp;lt;LL&amp;gt;,less&amp;lt;LL&amp;gt; &amp;gt; Left;
+	LL n,mid=0;
+
+	int main()
+	&amp;#123;
+		cin&amp;gt;&amp;gt;n;//读入n并进行n次插入
+		for(LL i=1,x;i&amp;lt;=n;i++)&amp;#123;
+			cin&amp;gt;&amp;gt;x;
+			if(i==1)&amp;#123;//i=1的情况边界易出错，所以做一个特判
+				mid=x;
+				cout&amp;lt;&amp;lt;mid&amp;lt;&amp;lt;&amp;quot;\n&amp;quot;;
+				continue;
+			&amp;#125;
+			if(x&amp;lt;=mid) Left.push(x);
+			else if(x&amp;gt;mid) Right.push(x);
+			if(i&amp;amp;1)&amp;#123;//当插入次数为奇数时进行一次平衡和查询
+                //定义左右队列的大小
+				LL llen=Left.size(),rlen=Right.size();
+				if(llen&amp;lt;rlen)&amp;#123;//如果左队列个数比右队列个数少
+					Left.push(mid);//将中位数进行转移
+					LL cha=(rlen-llen)/2;//计算转移数量
+					for(int j=1;i&amp;lt;cha;j++)&amp;#123;//循环进行转移
+						LL tmp=Right.top();
+						Left.push(tmp);
+						Right.pop();
+					&amp;#125;
+					mid=Right.top();//更新中位数
+					Right.pop();
+				&amp;#125;
+				else if(llen&amp;gt;rlen)&amp;#123;//如果右队列个数比左队列个数少
+					Right.push(mid);//将中位数进行转移
+					LL cha=(llen-rlen)/2;//计算转移数量
+					for(int j=1;i&amp;lt;cha;j++)&amp;#123;//循环进行转移
+						LL tmp=Left.top();
+						Right.push(tmp);
+						Left.pop();
+					&amp;#125;
+					mid=Left.top();//更新中位数
+					Left.pop();
+				&amp;#125;
+				cout&amp;lt;&amp;lt;mid&amp;lt;&amp;lt;&amp;quot;\n&amp;quot;;//操作完成后输出中位数
+			&amp;#125;
+			else continue;//插入次数为偶数次时直接跳过平衡过程
+		&amp;#125;
+		return 0;
+	&amp;#125;
+&amp;#125;
+
+int main()&amp;#123;
+	ios::sync_with_stdio(false);
+	cin.tie(0);cout.tie(0);
+	return SHAWN::main();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;以上，如果有不对的地方，还请各位大佬指正！&lt;/p&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/P1438%20%E6%97%A0%E8%81%8A%E7%9A%84%E6%95%B0%E5%88%97/</guid>
+            <title>题解 洛谷 P1438 无聊的数列</title>
+            <link>http://example.com/2023/08/18/P1438%20%E6%97%A0%E8%81%8A%E7%9A%84%E6%95%B0%E5%88%97/</link>
+            <category>线段树;数据结构</category>
+            <pubDate>Fri, 18 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P1438 无聊的数列&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个序列 $a$，要求进行两种操作。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于区间 $[l,r]$ 对应加上一个长为 $r - l +1$，首项为 $K$，公差为 $D$ 的等差数列；&lt;/li&gt;
+&lt;li&gt;查询第 $p$ 个数的值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;题目要求将一段等差数列加到一段区间上去。我们一眼丁真想到了线段树，但是对于加的不是同一个值的情况，朴素的做法只能进行单点修改，如果这样单点改下去再单点查，和直接在数组上模拟没有任何区别，我们写线段树不光要多递归几层还很废空间。&lt;/p&gt;
+&lt;p&gt;遇到这种一眼就是线段树却不知道如何维护的题，我们就需要重新再回去审题来寻找操作的&lt;strong&gt;特殊性质&lt;/strong&gt;。我们发现这道题的特殊性质就是等差数列。那么等差数列有什么性质呢？&lt;s&gt;等差数列等差&lt;/s&gt;。虽然说这是一句废话，但是却恰恰揭示了这道题的关键，&lt;strong&gt;等差数列的差分序列中的值除了开头结尾以外完全相同&lt;/strong&gt;。我们发现，对于一个从 $l$ 位置开始到 $r$ 位置结束的公差为 $d$ 的等差数列的差分序列有如下性质：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于位置 $l$ ，它的值一定等于等差数列的首项；&lt;/li&gt;
+&lt;li&gt;对于位置区间 $[l + 1, r]$ 内的每个位置，它的值一定等于公差 $d$；&lt;/li&gt;
+&lt;li&gt;对于位置 $r + 1$，它的值一定等于等差数列的末项。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;有了这三个性质后，我们就可以把题目变成对原序列的差分序列进行一次区间加和两次单点修改，时间复杂度就大大缩减了。而单点求值其实就是求差分序列的前缀和，这样我们就可以做了，但是有如下细节需要注意：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由于差分序列要修改 $r + 1$ 位置，所以不难发现我们建树的区间不是 $[1,n]$ 而是 $[1, n + 1]$；&lt;/li&gt;
+&lt;li&gt;题目给的数据范围很有迷惑性，容易给人造成不用开 &lt;code&gt;long long&lt;/code&gt; 的假象，然而如果不开就会 &lt;code&gt;WA on 1st&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;题目给的修改区间存在数据使得 $l=r$，此时我们 &lt;code&gt;update(1, l + 1, r, d);&lt;/code&gt; 这句就会 RE，需要特判。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+#define ls ro &amp;lt;&amp;lt; 1
+#define rs ro &amp;lt;&amp;lt; 1 | 1
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e5 + 7;
+    struct tree &amp;#123; int l, r; LL sum, tag; &amp;#125;tree[N &amp;lt;&amp;lt; 2];
+    int n, m;
+    LL a[N];
+    void pushup(int ro) &amp;#123; tree[ro].sum = tree[ls].sum + tree[rs].sum; &amp;#125;
+    void build(int ro, int l, int r) &amp;#123;
+        tree[ro].l = l; tree[ro].r = r;
+        tree[ro].tag = 0;
+        if (l &amp;gt;= r) &amp;#123;
+            tree[ro].sum = a[l] - a[l - 1];
+            return;
+        &amp;#125;
+        int mid = l + ((r - l) &amp;gt;&amp;gt; 1);
+        build(ls, l, mid); build(rs, mid + 1, r);
+        pushup(ro);
+    &amp;#125;
+    void pushdown(int ro) &amp;#123;
+        if (tree[ro].tag) &amp;#123;
+            tree[ls].sum += (tree[ls].r - tree[ls].l + 1) * tree[ro].tag;
+            tree[rs].sum += (tree[rs].r - tree[rs].l + 1) * tree[ro].tag;
+            tree[ls].tag += tree[ro].tag;
+            tree[rs].tag += tree[ro].tag;
+            tree[ro].tag = 0;
+        &amp;#125;
+    &amp;#125;
+    void update(int ro, int l, int r, LL x) &amp;#123;
+        int lt = tree[ro].l, rt = tree[ro].r;
+        if (l &amp;lt;= lt &amp;amp;&amp;amp; r &amp;gt;= rt) &amp;#123;
+            tree[ro].sum += (rt - lt + 1) * x;
+            tree[ro].tag += x;
+            return;
+        &amp;#125;
+        pushdown(ro);
+        int mid = lt + ((rt - lt) &amp;gt;&amp;gt; 1);
+        if (l &amp;lt;= mid) &amp;#123; update(ls, l, r, x); &amp;#125;
+        if (r &amp;gt; mid) &amp;#123; update(rs, l, r, x); &amp;#125;
+        pushup(ro);
+    &amp;#125;
+    LL getsum(int ro, int l, int r) &amp;#123;
+        int lt = tree[ro].l, rt = tree[ro].r;
+        if (l &amp;lt;= lt &amp;amp;&amp;amp; r &amp;gt;= rt) &amp;#123; return tree[ro].sum; &amp;#125;
+        pushdown(ro);
+        int mid = lt + ((rt - lt) &amp;gt;&amp;gt; 1); LL res = 0;
+        if (l &amp;lt;= mid) &amp;#123; res += getsum(ls, l, r); &amp;#125;
+        if (r &amp;gt; mid) &amp;#123; res += getsum(rs, l, r); &amp;#125;
+        return res;
+    &amp;#125;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; cin &amp;gt;&amp;gt; a[i]; &amp;#125;
+        build(1, 1, n + 1);
+        while (m--) &amp;#123;
+            int opt; cin &amp;gt;&amp;gt; opt;
+            if (opt == 1) &amp;#123; 
+                int l, r; LL k, d; cin &amp;gt;&amp;gt; l &amp;gt;&amp;gt; r &amp;gt;&amp;gt; k &amp;gt;&amp;gt; d;
+                if (l != r) &amp;#123;
+                    update(1, l, l, k);
+                    update(1, l + 1, r, d);
+                    update(1, r + 1, r + 1, -((r - l) * d + k));
+                &amp;#125;
+                else &amp;#123; 
+                    update(1, l, l, k); 
+                    update(1, r + 1, r + 1, -k);
+                &amp;#125;
+            &amp;#125;
+            else if (opt == 2) &amp;#123;
+                int p; cin &amp;gt;&amp;gt; p;
+                cout &amp;lt;&amp;lt; getsum(1, 1, p) &amp;lt;&amp;lt; &#39;\n&#39;;
+            &amp;#125;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/UVA11149%20Power%20of%20Matrix/</guid>
+            <title>题解 UVA11149 Power of Matrix</title>
+            <link>http://example.com/2023/08/18/UVA11149%20Power%20of%20Matrix/</link>
+            <category>矩阵乘法;倍增</category>
+            <pubDate>Fri, 18 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 UVA11149 Power of Matrix&lt;/h1&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;给定一个 $n \times n$ 的矩阵 $A$ 和一个数 $k$，求 $\sum_{i = 1}^{k}A^i $。&lt;/p&gt;
+&lt;h3 id=&#34;法一：暴力求解，单次时间复杂度-O-n-3k&#34;&gt;法一：暴力求解，单次时间复杂度 $O(n^3k)$&lt;/h3&gt;
+&lt;h3 id=&#34;法二：分治，单次时间复杂度-O-n-3log-2k&#34;&gt;法二：分治，单次时间复杂度 $O(n^3log^2k)$&lt;/h3&gt;
+&lt;p&gt;我们可以按照分治的定义照猫画虎，将原式变成这样：&lt;/p&gt;
+$$\displaylines{A+A^2+A^3+A^4+\ldots+A^K = (A+A^2+A^3+\ldots+A^{\frac{k}{2}})+A^{\frac{k}{2}}(A+A^2+A^3+\ldots+A^{\frac{k}{2}})
+}$$&lt;p&gt;然后递归处理即可，分治部分的代码大概长这样：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;mat solve(mat bas, LL pos) &amp;#123; \\bas是原矩阵，pos代表当前k的大小
+    if (pos == 1) &amp;#123; return bas; &amp;#125;
+    mat s; clear(s);
+    for (int i = 0; i &amp;lt; n; ++i) &amp;#123; s.m[i][i] = 1; &amp;#125;
+    s = (s + qpow(bas, pos &amp;gt;&amp;gt; 1)) * solve(bas, pos &amp;gt;&amp;gt; 1);
+    if (pos &amp;amp; 1) &amp;#123; s = s + qpow(bas, pos); &amp;#125;
+    return s;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;于是我们惊喜的发现，这种做法又慢又不稳定，所以我们考虑法三。&lt;/p&gt;
+&lt;h3 id=&#34;法三：倍增，单次时间复杂度-O-n-3logk&#34;&gt;法三：倍增，单次时间复杂度 $O(n^3logk)$&lt;/h3&gt;
+&lt;p&gt;我们观察要求的这个式子，发现 $i$ 要枚举到 $k$ 非常慢，那么我们就想办法优化这个枚举的过程，也就是对 $i$ 进行倍增，则有：&lt;/p&gt;
+$$\displaylines{\sum_{i=0}^{log_2k} A^{2^i}(\sum_{j=1}^{2^i} A^j)
+}$$&lt;p&gt;我们显然不能每次都从头到尾加一遍，所以我们用两个数组 $f$ 和 $s$对这个式子进行递推。&lt;/p&gt;
+$$\displaylines{f_i=A^{2^i},s_i=\sum_{j=1}^{2^i}A^j
+}$$&lt;p&gt;不难发现在递推 $f_i$ 时只要每次把 $f_{i-1}$ 平方就可以了，而 $s_i$ 略微复杂一些，求它其实很像刚刚分治的做法，即 $s_i=s_{i-1}+f_{i-1} \times s_{i-1}$。&lt;/p&gt;
+&lt;p&gt;如果题目高速我们 $k$ 保证是 2 的若干次幂，那么这个题已经做完了，但很遗憾我们没有这个条件，所以还要想办法处理剩余的部分。&lt;strong&gt;本过程较为复杂，建议多看几遍。&lt;/strong&gt; 我们知道整数的一个重要性质就是可以将其拆解为若干 2 的幂之和，假设我们的 $i$ 最后枚举到了 $m$ 使得 $2^m &amp;gt; k$ 且 $2^{m-1} &amp;lt; k$，那么此时我们就想要拆解 $k-2^{m-1}$ 这一部分，那么显然我们最简单的方法是从 $m-1$ 开始向下枚举，设循环变量为 $i$，当枚举到一个 $i$ 使得 $2^{m-1}+2^i&amp;lt;k$ 的时候，就从刚刚处理出来的两个数组中取出第 $i$ 项加到答案里就可以了。这样枚举到 $s^{m-1}+2^i=k$ 时说明我们已经完成对答案的处理，输出答案就可以了。&lt;/p&gt;
+&lt;p&gt;下面是参考代码（倍增过程在 $\operatorname{solve}$ 函数部分）：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#define clear(q) memset(q.m, 0, sizeof(q.m))
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    LL n, k;
+    const int N = 41, M = 64, mod = 10;
+    struct mat &amp;#123; LL m[N][N]; &amp;#125;;
+    mat f[M], s[M];
+    mat operator* (const mat &amp;amp;x, const mat &amp;amp;y) &amp;#123;
+        mat ans;
+        clear(ans);
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            for (int k = 0; k &amp;lt; n; ++k) &amp;#123;
+                if (x.m[i][k]) &amp;#123;
+                    for (int j = 0; j &amp;lt; n; ++j) &amp;#123;
+                        ans.m[i][j] = (ans.m[i][j] % mod + (x.m[i][k] * y.m[k][j]) % mod) % mod;
+                    &amp;#125;
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        return ans;
+    &amp;#125;
+    mat operator+ (const mat &amp;amp;x, const mat &amp;amp;y) &amp;#123;
+        mat ans;
+        clear(ans);
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            for (int j = 0; j &amp;lt; n; ++j) &amp;#123;
+                ans.m[i][j] = (x.m[i][j] + y.m[i][j]) % mod;
+            &amp;#125;
+        &amp;#125;
+        return ans;
+    &amp;#125;
+    mat qpow(mat a, LL b) &amp;#123;
+        mat z;
+        clear(z);
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123; z.m[i][i] = 1; &amp;#125;
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            if (b &amp;amp; 1) &amp;#123; z = z * a; &amp;#125;
+            a = a * a; b &amp;gt;&amp;gt;= 1;
+        &amp;#125;
+        return z;
+    &amp;#125;
+    void output(mat o) &amp;#123;
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            for (int j = 0; j &amp;lt; n; ++j) &amp;#123;
+                cout &amp;lt;&amp;lt; o.m[i][j] % mod;
+                if (j != n - 1) &amp;#123; cout &amp;lt;&amp;lt; &#39; &#39;; &amp;#125;
+            &amp;#125;
+            cout &amp;lt;&amp;lt; &#39;\n&#39;; 
+        &amp;#125; 
+        cout &amp;lt;&amp;lt; &#39;\n&#39;;
+    &amp;#125;
+    void solve() &amp;#123;
+        LL pos = 2, p = 1; // pos用来枚举2的次幂，p用来枚举2的幂次，pos的指数即为p，二者同加同减
+        while (pos &amp;lt;= k) &amp;#123;
+            f[p] = f[p - 1] * f[p - 1];
+            s[p] = s[p - 1] + s[p - 1] * f[p - 1];
+            pos &amp;lt;&amp;lt;= 1; ++p;
+        &amp;#125;
+        pos &amp;gt;&amp;gt;= 1; --p; // 第一次枚举完后肯定会超出k的范围，所以取上一次枚举到的幂
+        LL posback = pos; // posback表示拆分剩余的数时需要用到的2的次幂
+        mat po = f[p], ans = s[p]; // po表示当前已经枚举到的幂次，ans为答案，初始值为第一次枚举时枚举到最大的值
+        for (int i = p; i &amp;gt;= 0; --i) &amp;#123;
+            if (pos + posback &amp;lt;= k) &amp;#123; 
+                ans = ans + po * s[i]; // 加到答案里
+                posback += pos;
+                po = po * f[i];
+            &amp;#125;
+            pos &amp;gt;&amp;gt;= 1; // pos的幂次要和p同步减一
+        &amp;#125;
+        output(ans); // 处理完输出
+    &amp;#125;
+    int work()
+    &amp;#123;
+        while (cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k &amp;amp;&amp;amp; n &amp;amp;&amp;amp; k) &amp;#123;
+            for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+                for (int j = 0; j &amp;lt; n; ++j) &amp;#123;
+                    cin &amp;gt;&amp;gt; s[0].m[i][j];
+                    f[0].m[i][j] = s[0].m[i][j] = s[0].m[i][j] % mod; 
+                &amp;#125;
+            &amp;#125;
+            solve();
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;ps. 特别提醒，UVa要注意输入和输出格式&lt;/strong&gt;&lt;/p&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/</guid>
+            <title>题解 洛谷 U334987 营救千泷の小翼龙</title>
+            <link>http://example.com/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/</link>
+            <category>数学</category>
+            <pubDate>Fri, 18 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;U334987 营救千泷の小翼龙&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一个数 $n$ 和 $v$，求 $v \times \sum_{i=1}^n i^3 \bmod 998244353$。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;本题是一道纯纯诈骗题，我们打表或者运用数学归纳法都可以得到如下结论：&lt;/p&gt;
+$$\displaylines{\sum_{i=1}^n i^3 = (\sum_{i=1}^ni)^2 = (\frac{n + n^2}{2})
+}$$&lt;p&gt;于是我们就可以直接带进去 $O(1)$ 算了，于是我们做完了，写代码时请注意取模。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int mod = 998244353;
+    LL n, v, ans;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; v;
+        n %= mod; v %= mod;
+        ans = (1 + n) * n / 2 % mod;
+        ans = ((ans * ans) % mod * v) % mod;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/U327217%20%E5%AF%BB%E6%89%BE%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/</guid>
+            <title>题解 洛谷 U327217 寻找千泷の小翼龙</title>
+            <link>http://example.com/2023/08/18/U327217%20%E5%AF%BB%E6%89%BE%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/</link>
+            <category>矩阵加速;动态规划</category>
+            <pubDate>Fri, 18 Aug 2023 17:04:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 洛谷 U327217 寻找千泷の小翼龙&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.luogu.com.cn/problem/U327217&#34;&gt;本题题面&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;原题（本题由该题数据加强而来）：&#34;&gt;原题（本题由该题数据加强而来）：&lt;/h4&gt;
+&lt;h3 id=&#34;USACO-Training-6-1-1-Postal-Vans&#34;&gt;USACO Training 6.1.1 Postal Vans&lt;/h3&gt;
+&lt;p&gt;Tiring of their idyllic fields, the cows have moved to a new suburb. The suburb is a rectangular grid of streets with a post office at its Northwest corner. It has four avenues running East-West and $n(1\le n\le 10^{18})$ streets running North-South.&lt;/p&gt;
+&lt;p&gt;For example, the following diagram shows such a suburb with $n=5$ streets, with the avenues depicted as horizontal lines, and the post office as a dark blob at the top-left corner:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://img1.imgtp.com/2023/08/14/HuR5aj47.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Each day the postal van leaves the post office, drives around the suburb and returns to the post office, passing exactly once through every intersection (including those on borders or corners). The executives from the post company want to know how many distinct routes can be established for the postal van (of course, the route direction is significant in this count).&lt;/p&gt;
+&lt;p&gt;For example, the following diagrams show two such routes for the above suburb:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://img1.imgtp.com/2023/08/14/cqJ1rEzT.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;As another example, the following diagrams show all the four possible routes for a suburb with $n=3$ streets:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://img1.imgtp.com/2023/08/14/tUwsNA4a.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Write a program that will determine the number of such distinct routes given the number of streets.&lt;/p&gt;
+&lt;p&gt;INPUT FORMAT&lt;/p&gt;
+&lt;p&gt;Line 1: Two integers, n, p&lt;/p&gt;
+&lt;p&gt;SAMPLE INPUT：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;4 32767
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;OUTPUT FORMAT&lt;/p&gt;
+&lt;p&gt;Line 1: A single integer that tells how many possible distinct routes corresponding to the number of streets given in the input, mod p;&lt;/p&gt;
+&lt;p&gt;SAMPLE OUTPUT:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;12
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;给定一个$4\times n$的格子（按照格点计数），从左上角出发沿格子遍历所有格点后再返回起点，要求每个点只遍历一次，计算合法方案的总数 $mod$ $p$ 的值&lt;/p&gt;
+&lt;h4 id=&#34;策略分析：&#34;&gt;策略分析：&lt;/h4&gt;
+&lt;p&gt;看到方案数，我们合理地想到了动态规划，而看到数据范围和动态规划，我们合理地想到了矩阵加速。设 $f_i$ 为前 $i$ 列中第 $i$ 列中总的方案数。大家小时候应该都玩过拼管子吧，就那种各种各样形状的管子可以组合成不同的形状，那么本题就是要用类似的方法。&lt;/p&gt;
+&lt;p&gt;到达南北方向 $1,2$ 路口的方案只有 $2$ 种，我们将管子如下摆放：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/eu2m5la4.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/0c03xatj.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;到达南北方向 $1,4$ 路口方案有 $7$ 种，但最后两种等价算作一种：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/ien5q644.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/zdtegbg0.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/w7t6gcu7.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/8i80emnk.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/qu3xspnd.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/2e98lwsj.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/r44dhsqm.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/cidfxurb.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;由此我们可以推出状态转移方程，即：&lt;/p&gt;
+$$\displaylines{f_i=2f_{i-1}+2f_{i-2}-2f_{i-3}+f_{i-4}
+}$$&lt;p&gt;对于这种方法和递推方程正确性的证明参见&lt;a href=&#34;http://blog.csdn.net/jiangshibiao/article/details/21446033&#34;&gt;阿蒋大佬的blog&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;得到了状态转移方程我们就可以得到转移矩阵 $M$ 了,&lt;/p&gt;
+$$\displaylines{M=\begin{vmatrix}
+  2&amp;amp;  2&amp;amp;  -2&amp;amp; 1\\
+  1&amp;amp;  0&amp;amp;  0&amp;amp; 0\\
+  0&amp;amp;  1&amp;amp;  0&amp;amp; 0\\
+  0&amp;amp;  0&amp;amp;  1&amp;amp; 0
+\end{vmatrix}}$$&lt;p&gt;我们充分发扬人类智慧，通过大脑和手求得 $f_1=0,f_2=2,f_3=4,f_4=12$&lt;/p&gt;
+&lt;p&gt;剩余部分显然没有难度了，直接矩阵加速就可以了，于是我们做完了，下面是 $AC$ 代码&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#define clear(q) memset(q.m, 0, sizeof(q.m))
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    LL n, p;
+    struct mat &amp;#123; LL m[4][4]; &amp;#125;;
+    mat operator* (const mat &amp;amp;x, const mat &amp;amp;y) &amp;#123;
+        mat ans;
+        clear(ans);
+        for (int i = 0; i &amp;lt; 4; ++i) &amp;#123;
+            for (int k = 0; k &amp;lt; 4; ++k) &amp;#123;
+                if (x.m[i][k]) &amp;#123;
+                    for (int j = 0; j &amp;lt; 4; ++j) &amp;#123;
+                        ans.m[i][j] = ((ans.m[i][j] + (x.m[i][k] * y.m[k][j])) % p + p) % p; 
+                    &amp;#125;
+                &amp;#125;
+            &amp;#125;
+        &amp;#125; 
+        return ans;
+    &amp;#125;
+    mat qpow(mat a, LL b) &amp;#123;
+        mat z;
+        clear(z);
+        for (int i = 0; i &amp;lt; 4; ++i) &amp;#123; z.m[i][i] = 1; &amp;#125;
+        while (b) &amp;#123;
+            if (b &amp;amp; 1) &amp;#123; z = z * a; &amp;#125;
+            a = a * a; b &amp;gt;&amp;gt;= 1;
+        &amp;#125;
+        return z;
+    &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; p;
+        if (n &amp;lt;= 4) &amp;#123;
+            switch (n) &amp;#123;
+                case 1 : cout &amp;lt;&amp;lt; &amp;quot;0\n&amp;quot;; break;
+                case 2 : cout &amp;lt;&amp;lt; &amp;quot;2\n&amp;quot;; break;
+                case 3 : cout &amp;lt;&amp;lt; &amp;quot;4\n&amp;quot;; break;
+                case 4 : cout &amp;lt;&amp;lt; &amp;quot;12\n&amp;quot;; break;
+                default : break;
+            &amp;#125;
+            return 0;
+        &amp;#125;
+        mat a;
+        clear(a);
+        a.m[0][0] = 2; a.m[0][1] = 2; a.m[0][2] = -2; a.m[0][3] = 1;
+        a.m[1][0] = 1; a.m[2][1] = 1; a.m[3][2] = 1;
+        mat z = qpow(a, n - 4);
+        LL ans = ((z.m[0][0] * 12 + z.m[0][1] * 4 + z.m[0][2] * 2) % p + p) % p;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/AT_arc132_a%20Permutation%20Grid/</guid>
+            <title>题解 AT_arc132_a Permutation Grid</title>
+            <link>http://example.com/2023/08/18/AT_arc132_a%20Permutation%20Grid/</link>
+            <category>构造</category>
+            <pubDate>Fri, 18 Aug 2023 17:03:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解  AT_arc132_a Permutation Grid&lt;/h1&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;给定两个数列 $R$ 和 $C$ ，$R$ 和 $C$ 内均有 $n$ 个元素，要求根据 $R$ 和 $C$ 对一个 $n\times n$ 的矩阵进行染色，使得第 $i$ 行有 $R_i$ 个黑色块，第 $j$ 列有 $C_j$ 个黑色块。&lt;strong&gt;最后，$R$ 和 $C$ 均为 $1-n$ 的一个排列。&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&#34;反思分析：&#34;&gt;&lt;s&gt;反思&lt;/s&gt;分析：&lt;/h4&gt;
+&lt;p&gt;&lt;s&gt;有个伸臂和一个神犇在赛时没有看到最后一个条件导致两个人想出了各种各样复杂又奇葩的做法，我不说是谁&lt;/s&gt;&lt;/p&gt;
+&lt;p&gt;有了排列那这不成水题了，我们以样例为例（这什么话）把它按顺序重新排列一下，就会变成这样（我们用$W$表示白色，$B$表示黑色）：&lt;/p&gt;
+&lt;p&gt;$R=5,2,3,4,1\Rightarrow R=1,2,3,4,5$&lt;/p&gt;
+&lt;p&gt;$C=4,2,3,1,5\Rightarrow C=1,2,3,4,5$&lt;/p&gt;
+&lt;p&gt;$
+\begin{matrix}
+   &amp;amp; 1&amp;amp;  2&amp;amp;  3&amp;amp;  4&amp;amp; 5&amp;amp;\\
+  1&amp;amp;  W&amp;amp;  W&amp;amp;  W&amp;amp;  W&amp;amp; B\\
+  2&amp;amp;  W&amp;amp;  W&amp;amp;  W&amp;amp;  B&amp;amp; B\\
+  3&amp;amp;  W&amp;amp;  W&amp;amp;  B&amp;amp;  B&amp;amp; B\\
+  4&amp;amp;  W&amp;amp;  B&amp;amp;  B&amp;amp;  B&amp;amp; B\\
+  5&amp;amp;  B&amp;amp;  B&amp;amp;  B&amp;amp;  B&amp;amp; B
+\end{matrix}
+$&lt;/p&gt;
+&lt;p&gt;我们稍加观察，然后&lt;strong&gt;惊奇地&lt;/strong&gt;发现，坐标为$x,y$的块是黑色当且仅当$R_x+C_y&amp;gt;n$，然后我们恢复原序列&lt;br&gt;
+$
+\begin{matrix}
+   &amp;amp; 4&amp;amp;  2&amp;amp;  3&amp;amp;  1&amp;amp; 5&amp;amp;\\
+  5&amp;amp;  B&amp;amp;  B&amp;amp;  B&amp;amp;  B&amp;amp; B\\
+  2&amp;amp;  B&amp;amp;  W&amp;amp;  W&amp;amp;  W&amp;amp; B\\
+  3&amp;amp;  B&amp;amp;  W&amp;amp;  B&amp;amp;  W&amp;amp; B\\
+  4&amp;amp;  B&amp;amp;  B&amp;amp;  B&amp;amp;  W&amp;amp; B\\
+  1&amp;amp;  W&amp;amp;  W&amp;amp;  W&amp;amp;  W&amp;amp; B
+\end{matrix}
+$&lt;br&gt;
+发现这个性质仍然存在！&lt;/p&gt;
+&lt;p&gt;我们可以通过简单地平移来证明这种做法的正确性，而代码也就相应的非常好写了：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e5 + 7;
+    int r[N],c[N];
+    int n, q;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; cin &amp;gt;&amp;gt; r[i]; &amp;#125;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; cin &amp;gt;&amp;gt; c[i]; &amp;#125;
+        cin &amp;gt;&amp;gt; q;
+        for (int i = 1, x, y; i &amp;lt;= q; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; x &amp;gt;&amp;gt; y;
+            if (r[x] + c[y] &amp;gt; n) &amp;#123; cout &amp;lt;&amp;lt; &#39;#&#39;; &amp;#125;
+            else &amp;#123; cout &amp;lt;&amp;lt; &#39;.&#39;; &amp;#125;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/P1045%20[NOIP2003%20%E6%99%AE%E5%8F%8A%E7%BB%84]%20%E9%BA%A6%E6%A3%AE%E6%95%B0/</guid>
+            <title>题解 洛谷 P1045 [NOIP2003 普及组] 麦森数</title>
+            <link>http://example.com/2023/08/18/P1045%20[NOIP2003%20%E6%99%AE%E5%8F%8A%E7%BB%84]%20%E9%BA%A6%E6%A3%AE%E6%95%B0/</link>
+            <category>二进制;高精度</category>
+            <pubDate>Fri, 18 Aug 2023 17:00:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 洛谷 P1045 [NOIP2003 普及组] 麦森数&lt;/h1&gt;
+&lt;h3 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h3&gt;
+&lt;p&gt;给定一个数$p$，求$2^p$-1的位数和后500位的值，其中$p\in [1\times10^3,3.1\times10^6]$。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析：&#34;&gt;策略分析：&lt;/h2&gt;
+&lt;p&gt;我们可以将这个问题分为两步来处理，第一步求出位数，第二步求后$500$位&lt;/p&gt;
+&lt;h3 id=&#34;求出位数：&#34;&gt;求出位数：&lt;/h3&gt;
+&lt;p&gt;首先有一个非常平凡的结论：$10^k$的位数为$k+1$。那么一个$10^k$的数的位数也等于$lg10^k$，设$n =2^p$，因为不存在最后一位为$0$的$2^p$的数，所以$2^p-1$的位数一定与$2^p$的位数相同。我们希望能够将$10^k$所具有的性质应用在$2^p$中，设$10^m=2$，那么$lg2=m$，所以$10^{lg2}=2$，所以$n=2^p=(10^{lg2})^p=10^{(lg2)·p}$，那么$n$的位数就等于$10^{(lg2)·p}$的位数，即$(lg2)·p+1$，那这不就简单多了，直接$cmath$库里随便一搞就出来了&lt;/p&gt;
+&lt;h3 id=&#34;求后500位的值：&#34;&gt;求后500位的值：&lt;/h3&gt;
+&lt;p&gt;我们发现一个朴素的高精度乘法的时间复杂度是$O(n^2)$，那么就寄了，所以我们要用&lt;strong&gt;超级快速的高精乘法&lt;/strong&gt;，C++里什么样的数据类型存的数最大呢？~~（谁刚说__$int128$拉出去枪毙$5$分钟）~~显然我们要用$unsigned$  $long$  $long$来存储这500位，那么我们就要尽量挑战它的极限，一次乘$2^{60}$ &lt;s&gt;（讨厌没有边界感的$ull$）&lt;/s&gt;，这样我们就可以在更短的时间内完成计算&lt;/p&gt;
+&lt;h3 id=&#34;AC代码：&#34;&gt;AC代码：&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;cmath&amp;gt;
+#define ULL unsigned long long
+using namespace std;
+
+namespace Rick &amp;#123; int work() &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;Never gonna give you up, never gonna let you down~\n&amp;quot;; &amp;#125; &amp;#125;
+namespace SHAWN &amp;#123;
+    const int N = 507;
+    ULL t[N] = &amp;#123; 1 &amp;#125;;
+    int p;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; p;
+        cout &amp;lt;&amp;lt; (int)(log10(2) * p) + 1 &amp;lt;&amp;lt; &#39;\n&#39;;
+        for (; p &amp;gt; 0; p -= 60) &amp;#123;
+            ULL jin = 0;
+            for (int i = 0; i &amp;lt; 500; ++i) &amp;#123;
+                if (p &amp;gt; 60) &amp;#123; t[i] &amp;lt;&amp;lt;= 60; &amp;#125;
+                else &amp;#123; t[i] &amp;lt;&amp;lt;= p; &amp;#125;
+                t[i] += jin; jin = t[i] / 10; t[i] %= 10;
+            &amp;#125;
+        &amp;#125;
+        t[0] -= 1; 
+        // 最开始为了让乘法有值我们设成了1，所以一通操作后要减1
+        for (int i = 499; i &amp;gt;= 0; --i) &amp;#123;
+            cout &amp;lt;&amp;lt; t[i];
+            if (! (i % 50)) &amp;#123; cout &amp;lt;&amp;lt; &#39;\n&#39;; &amp;#125;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    // return SHAWN :: work();
+    return Rick :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/BNDSOJ%201575%20%E5%93%88%E5%A4%AB%E6%9B%BC/</guid>
+            <title>题解 BNDS OJ 1575 哈夫曼</title>
+            <link>http://example.com/2023/08/18/BNDSOJ%201575%20%E5%93%88%E5%A4%AB%E6%9B%BC/</link>
+            <category>哈夫曼树;哈夫曼编码</category>
+            <pubDate>Fri, 18 Aug 2023 16:57:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 BNDS OJ 1575 哈夫曼&lt;/h1&gt;
+&lt;h4 id=&#34;前置芝士：&#34;&gt;前置芝士：&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://oi-wiki.org/ds/huffman-tree/&#34;&gt;哈夫曼树&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;给定一个仅包含小写字母的字符序列，要求输出这个序列的哈夫曼编码&lt;/p&gt;
+&lt;h4 id=&#34;分析-求解：&#34;&gt;分析/求解：&lt;/h4&gt;
+&lt;p&gt;哈夫曼建树时要求每次配对权值最小的两个儿子，它们配对所产生的父亲也要重新与其它的树进行比较，所以我们很容易可以想到通过优先队列来维护当前所有的树，具体细节见代码&lt;/p&gt;
+&lt;h4 id=&#34;AC代码：&#34;&gt;AC代码：&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;queue&amp;gt;
+#include &amp;lt;vector&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e6 + 7;
+    struct node &amp;#123; int ma,val,fa,l,r,pos; &amp;#125;;
+    // ma,val,fa,l,r,pos分别表示当前节点对应的字母，出现的数量，父节点编号，左右儿子编号，当前节点编号
+    struct cmp&amp;#123;
+        bool operator()(const node&amp;amp;a, const node&amp;amp;b)const&amp;#123;
+            if(a.val != b.val) &amp;#123; return a.val &amp;gt; b.val; &amp;#125;
+            else &amp;#123; return a.ma &amp;gt; b.ma; &amp;#125;
+        &amp;#125;
+    &amp;#125;;// 重载函数调用运算符
+    priority_queue&amp;lt;node,vector&amp;lt;node&amp;gt;,cmp&amp;gt; q; 
+    // 用优先队列来维护森林
+    string s;
+    node tree[N];
+    // tree[]维护整棵哈夫曼树
+    vector&amp;lt;int&amp;gt; haff[30];
+    // haff[]维护每个字母对应的哈夫曼编码
+    int used[30];
+    // used[]维护每个字母出现的次数
+    int n, m, idx;
+    void build() &amp;#123;
+        while (q.size() &amp;gt;= 2) &amp;#123; // 森林中还有元素时持续配对
+            node x = q.top(); q.pop();
+            node y = q.top(); q.pop();
+            // 取出堆顶两个元素配对
+            if (!x.pos) &amp;#123; tree[++idx] = x; tree[idx].pos = x.pos = idx; &amp;#125;
+            if (!y.pos) &amp;#123; tree[++idx] = y; tree[idx].pos = y.pos = idx; &amp;#125;
+            // 如果取出的点没有在树中则新建一个树上节点
+            node z = &amp;#123;-1,(x.val+y.val), -1, x.pos, y.pos, ++idx&amp;#125;;
+            tree[x.pos].fa = tree[y.pos].fa = idx;
+            q.push(z); tree[idx] = z;
+            // 建立这两个节点的父亲并扔进森林
+        &amp;#125;
+    &amp;#125;
+    void solve() &amp;#123;
+        for (int i = 1; i &amp;lt;= idx; ++i) &amp;#123;
+            // 遍历树上节点找到最原始的代表单独字符的节点
+            if (tree[i].ma != -1) &amp;#123;
+                int now = i;
+                while (tree[now].fa != -1) &amp;#123;
+                    if (now == tree[tree[now].fa].l) &amp;#123; haff[tree[i].ma].push_back(0); &amp;#125;
+                    else &amp;#123; haff[tree[i].ma].push_back(1); &amp;#125;
+                    now = tree[now].fa;
+                    // 向上搜索找根来获取编码
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        for (int i = 1; i &amp;lt;= 27; ++i) &amp;#123;
+            if (haff[i].size()) &amp;#123;
+                for(int j = haff[i].size()-1; j &amp;gt;= 0; --j) &amp;#123; cout &amp;lt;&amp;lt; haff[i][j]; &amp;#125;
+                // 由于获取编码时是反向获取的，所以倒序输出
+                cout &amp;lt;&amp;lt; &#39;\n&#39;;
+            &amp;#125;
+        &amp;#125;
+        for (int i = 0; i &amp;lt;= n; ++i) &amp;#123;
+            int a = s[i] - &#39;a&#39; + 1;
+            for(int j = haff[a].size()-1; j &amp;gt;= 0; --j) &amp;#123; cout &amp;lt;&amp;lt; haff[a][j]; &amp;#125;
+            // 查询并输出整个字符串的哈夫曼编码
+        &amp;#125;
+    &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m &amp;gt;&amp;gt; s;
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123; used[s[i] - &#39;a&#39; + 1]++; &amp;#125;
+        // 统计每个字母出现的次数
+        for (int i = 1; i &amp;lt;=26; ++i) &amp;#123; 
+            if (used[i]) &amp;#123; // 如果存在当前字母
+                q.push(&amp;#123;i,used[i],0,-1,-1,0&amp;#125;); 
+                // 将该节点作为一个子树插入森林
+            &amp;#125;
+        &amp;#125;
+        build(); // 建树
+        solve(); // 求霍夫曼编码
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/CF1413D%20Shurikens/</guid>
+            <title>题解 CF1413D Shurikens</title>
+            <link>http://example.com/2023/08/18/CF1413D%20Shurikens/</link>
+            <category>构造</category>
+            <pubDate>Fri, 18 Aug 2023 11:15:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 CF1413D Shurikens&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个 $n$ 和 $2n$ 个操作，第一种操作 “+” 表示从 $1$ ~ $n$ 中选择一个数插入序列，第二种操作 &amp;quot; - $x$&amp;quot; 表示从当前序列中删除 $x$ 且 $x$ 为当前序列里的最小值，根据给出的操作来推断将数插入序列的合法顺序。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;h3 id=&#34;不合法情况&#34;&gt;不合法情况&lt;/h3&gt;
+&lt;p&gt;不合法的情况有两种。第一种是当在连续取出的两个值中，后取出的值比前取出的值小，因为每次必须取出序列里最小的值，所以这种情况显然是不符合要求的。第二种情况是取出的操作数比放入的操作数多，这样显然也是不合法的。&lt;/p&gt;
+&lt;h3 id=&#34;如何处理合法情况&#34;&gt;如何处理合法情况&lt;/h3&gt;
+&lt;p&gt;我们看到这种有进有出的结构能够想到什么，怎么才能反转操作呢？我们很自然地想到可以用栈来实现。我们倒着进行操作，遇到取数操作就把取出来的数压入栈 $s$，遇到插入操作就把 $s$ 栈顶元素弹出来塞进另一个栈 $ans$ 里，最后把 $ans$ 里的元素依次弹出就是答案所要的序列了。按照刚刚讨论过的不合法情况，当 $s$ 中入栈元素比栈顶元素大则不合法，如果需要弹出时栈 $s$ 为空则不合法。&lt;/p&gt;
+&lt;h3 id=&#34;正确性证明&#34;&gt;正确性证明&lt;/h3&gt;
+&lt;p&gt;因为每次都要取序列中的最小值，所以后出来的元素一定是更大的，我们就默认它插入得更早。而倒序插入的时候保证了小的元素一定后进栈，所以也不会出现弹出一个数时它还没插入的情况。当 $s$ 入栈元素大于栈顶元素，就相当于操作时取出的值不是最小值；而当弹栈时栈空了，就说明插入的数量少于取出的数量，刚好就对应上了上面分析的不合法情况。由此就可以判断出其正确性。&lt;/p&gt;
+&lt;h2 id=&#34;实现&#34;&gt;实现&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;stack&amp;gt;
+#include &amp;lt;vector&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    stack&amp;lt;int&amp;gt; s;
+    stack&amp;lt;int&amp;gt; ans;
+    vector&amp;lt;int&amp;gt; opt;// 记录操作
+    int n;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= 2 * n; ++i) &amp;#123;
+            char op; int x;
+            cin &amp;gt;&amp;gt; op;
+            if (op == &#39;+&#39;) &amp;#123; opt.emplace_back(0); &amp;#125;
+            else if(op == &#39;-&#39;) &amp;#123; cin &amp;gt;&amp;gt; x; opt.emplace_back(x); &amp;#125;
+        &amp;#125;
+        for (int i = opt.size() - 1; i &amp;gt;= 0; --i) &amp;#123;
+            // 倒着复现操作
+            if (!opt[i]) &amp;#123;
+                if (s.empty()) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;NO\n&amp;quot;; return 0; &amp;#125;
+                // 插入的数量少于取出的数量
+                else &amp;#123; ans.push(s.top()); s.pop(); &amp;#125;
+            &amp;#125;
+            else &amp;#123;
+                if (s.size() &amp;amp;&amp;amp; opt[i] &amp;gt; s.top()) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;NO\n&amp;quot;; return 0; &amp;#125;
+                // 操作时取出的值不是最小值
+                else &amp;#123; s.push(opt[i]); &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; &amp;quot;YES\n&amp;quot;; 
+        while (!ans.empty()) &amp;#123; cout &amp;lt;&amp;lt; ans.top() &amp;lt;&amp;lt; &#39; &#39;; ans.pop(); &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/CF958E1%20Guard%20Duty%20(easy)/</guid>
+            <title>题解 洛谷 CF958E1 Guard Duty (easy)</title>
+            <link>http://example.com/2023/08/18/CF958E1%20Guard%20Duty%20(easy)/</link>
+            <category>平面几何</category>
+            <pubDate>Fri, 18 Aug 2023 11:15:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 CF958E1 Guard Duty (easy)&lt;/h1&gt;
+&lt;h2 id=&#34;这是一道诈骗题&#34;&gt;这是一道诈骗题&lt;/h2&gt;
+&lt;h3 id=&#34;简要题意&#34;&gt;简要题意&lt;/h3&gt;
+&lt;p&gt;给你 $n$ 个 $R$ 点和 $m$ 个 $B$ 点，现在给你这些点的坐标，问能否在这两类点间连线来构造出一种情况使得一个线段两边分别是 $R$ 和 $B$。&lt;/p&gt;
+&lt;h3 id=&#34;策略分析&#34;&gt;策略分析&lt;/h3&gt;
+&lt;h4 id=&#34;不合法情况&#34;&gt;不合法情况&lt;/h4&gt;
+&lt;p&gt;当 $n\ne m$ 时，我们顺次连接 $R$ 和 $B$，先不考虑相交不相交，发现连到最后要么 $R$ 和 $R$ 相连，要么 $B$ 和 $B$ 相连，一定不合法。&lt;/p&gt;
+&lt;h4 id=&#34;合法情况&#34;&gt;合法情况&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;当 $n=m$ 时，答案一定合法&lt;/strong&gt;&lt;/p&gt;
+&lt;h5 id=&#34;正确性证明&#34;&gt;正确性证明&lt;/h5&gt;
+&lt;p&gt;我们设有点 $R_1,R_2,B_1,B_2$，那么我们加上边 $(R_1,B_1),(R_2,B_1),(R_1,B_2)$，发现相交了，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/22/pPJ85D0.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但我们发现，当这种相交情况出现时，我们只需要改连边 $(R_1,B_1),(R_2,B_1),(R_2,B_2)$，就一定能变成不相交的情况，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s1.ax1x.com/2023/08/22/pPJ84uq.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;于是我们做完了，下面是AC代码&lt;/p&gt;
+&lt;h3 id=&#34;参考代码&#34;&gt;参考代码&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    int n, m;
+    int work()
+    &amp;#123;   
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m;
+        n == m ? cout &amp;lt;&amp;lt; &amp;quot;Yes\n&amp;quot; : cout &amp;lt;&amp;lt; &amp;quot;No\n&amp;quot;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/P3514%20[POI2011]%20LIZ-Lollipop/</guid>
+            <title>题解 洛谷 P3514 [POI2011] LIZ-Lollipop</title>
+            <link>http://example.com/2023/08/18/P3514%20[POI2011]%20LIZ-Lollipop/</link>
+            <category>构造</category>
+            <pubDate>Fri, 18 Aug 2023 11:15:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P3514 [POI2011] LIZ-Lollipop&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个只有 $1$ 和 $2$ 的序列，给出 $m$ 次询问，每次询问给出一个数 $k$，查询序列中有没有一个子串和为 $k$，如果有则输出区间两端点，如果没有输出 &lt;code&gt;NIE&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;本题最重要的条件就是该序列中只含有 $1$ 和 $2$，因为这个条件，我们就可以得到下面这个性质：&lt;strong&gt;若 $k$ 可以被表示，则 $k-2$ 也一定可以被表示&lt;/strong&gt;。这个性质很容易被证明。我们很容易发现，一个区间的两端点有三种情况，全为 $1$，全为 $2$ 以及一边 $1$ 一边 $2$。那么当两边存在 $2$ 时，只需要减掉这个 $2$ 即可；如果是两个 $1$，那么把这两个 $1$ 一起减掉即可。&lt;/p&gt;
+&lt;p&gt;现在我们知道了上面这个性质，开始考虑非法情况。既然 $k-2$ 可以被表示，那么我们只需要找到最大的 $k$ 就可以了。如果给出的 $k$ 比我们能找到的最大的数还大，那么这个数是不合法的。&lt;/p&gt;
+&lt;p&gt;考虑完非法情况以后，我们来考虑如何求解。我们发现，一个数减去 $2$ 后奇偶性不变，也就是说如果 $k$ 是奇数，那么我们将永远无法得到偶数，反之亦然，所以这要求我们分类讨论，分别求出最大的奇数和最大的偶数。因为题目告诉我们序列长度 $n \le 10^6$，也就是说能够被表示出来的数最多有 $2 \times 10^6$ 种。我们可以提前将这些数的左右区间都预处理出来，然后 $O(1)$ 查询即可。处理这些数的方法是将最大的奇数和偶数分别缩减，每次缩减 $2$ 并记下左右区间，按照最开始分析的性质来移动左右指针，知道两指针相遇为止。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e6 + 7;
+    int a[N];
+    int n, m, jmax, omax, sum;
+    struct node &amp;#123; int l, r; &amp;#125;b[N &amp;lt;&amp;lt; 1];
+    
+    inline void _init() &amp;#123;
+        int jlidx, jridx, olidx, oridx, tmp1, tmp2, tag1, tag2;
+        jlidx = olidx = 1; jridx = oridx = n; tmp1 = tmp2 = 0;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            tmp1 += a[i];
+            if (a[i] == 1) &amp;#123; tag1 = i + 1; break; &amp;#125;
+        &amp;#125;
+        for (int  i = n; i &amp;gt;= 1; --i) &amp;#123;
+            tmp2 += a[i];
+            if (a[i] == 1) &amp;#123; tag2 = i - 1; break; &amp;#125;
+        &amp;#125;
+        if (sum % 2) &amp;#123;
+            jmax = sum;
+            if (tmp1 &amp;lt; tmp2) &amp;#123;
+                omax = sum - tmp1;
+                olidx = tag1;
+            &amp;#125;
+            else &amp;#123;
+                omax = sum - tmp2;
+                oridx = tag2;
+            &amp;#125;
+        &amp;#125;
+        else &amp;#123;
+            omax = sum;
+            if (tmp1 &amp;lt; tmp2) &amp;#123;
+                jmax = sum - tmp1;
+                jlidx = tag1; 
+            &amp;#125;
+            else &amp;#123;
+                jmax = sum - tmp2;
+                jridx = tag2;
+            &amp;#125;
+        &amp;#125;
+        
+        //----以上处理最大的奇数和偶数以及其左右端点----
+        //----以下分别缩减奇偶数得到所有数的左右端点----
+        
+        int otmp = omax, jtmp = jmax;
+        b[omax] = &amp;#123;olidx, oridx&amp;#125;;
+        b[jmax] = &amp;#123;jlidx, jridx&amp;#125;; 
+        while (olidx &amp;lt; oridx &amp;amp;&amp;amp; otmp &amp;gt; 0) &amp;#123;
+            otmp -= 2;
+            if (a[olidx] == 1) &amp;#123;
+                if (a[oridx] == 1) &amp;#123; b[otmp] = &amp;#123;++olidx, --oridx&amp;#125;; &amp;#125;
+                else if (a[oridx] == 2) &amp;#123; b[otmp] = &amp;#123;olidx, --oridx&amp;#125;; &amp;#125;
+            &amp;#125;
+            else if (a[olidx] == 2) &amp;#123; b[otmp] = &amp;#123;++olidx, oridx&amp;#125;; &amp;#125;
+        &amp;#125;
+        while (jlidx &amp;lt; jridx &amp;amp;&amp;amp; jtmp &amp;gt; 0) &amp;#123;
+            jtmp -= 2;
+            if (a[jlidx] == 1) &amp;#123;
+                if (a[jridx] == 1) &amp;#123; b[jtmp] = &amp;#123;++jlidx, --jridx&amp;#125;; &amp;#125;
+                else if (a[jridx] == 2) &amp;#123; b[jtmp] = &amp;#123;jlidx, --jridx&amp;#125;; &amp;#125;
+            &amp;#125;
+            else if (a[jlidx] == 2) &amp;#123; b[jtmp] = &amp;#123;++jlidx, jridx&amp;#125;; &amp;#125;
+        &amp;#125;
+        return;
+    &amp;#125;
+    
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123;
+            char c; cin &amp;gt;&amp;gt; c;
+            if (c == &#39;T&#39;) &amp;#123; a[i] = 2; &amp;#125;
+            else if (c == &#39;W&#39;) &amp;#123; a[i] = 1; &amp;#125;
+            sum += a[i];
+        &amp;#125;
+        _init();
+        while (m--) &amp;#123;
+            int sar; cin &amp;gt;&amp;gt; sar;
+            if (sar % 2 &amp;amp;&amp;amp; sar &amp;gt; jmax) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;NIE\n&amp;quot;; continue; &amp;#125;
+            else if (!(sar % 2) &amp;amp;&amp;amp; sar &amp;gt; omax) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;NIE\n&amp;quot;; continue; &amp;#125;
+            cout &amp;lt;&amp;lt; b[sar].l &amp;lt;&amp;lt; &#39; &#39; &amp;lt;&amp;lt; b[sar].r &amp;lt;&amp;lt; &#39;\n&#39;;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
  ]]></description>
         </item>
     </channel>

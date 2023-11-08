@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>NERV - SN • Posts by &#34;容斥;根号分治&#34; tag</title>
+        <link>http://example.com</link>
+        <description></description>
+        <language>zh-cn</language>
+        <pubDate>Tue, 29 Aug 2023 17:05:00 +0800</pubDate>
+        <lastBuildDate>Tue, 29 Aug 2023 17:05:00 +0800</lastBuildDate>
+        <category>OIer 日记</category>
+        <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/29/P9118%20[%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023]%20%E5%B9%82%E6%AC%A1/</guid>
+            <title>题解 洛谷 P9118 [春季测试 2023] 幂次</title>
+            <link>http://example.com/2023/08/29/P9118%20[%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023]%20%E5%B9%82%E6%AC%A1/</link>
+            <category>容斥;根号分治</category>
+            <pubDate>Tue, 29 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P9118 [春季测试 2023] 幂次&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定两个参数 $n,k$，问在区间 $[1,n]$ 中有多少正整数 $x$ 满足 $x = a^p$，其中 $p \ge k$。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;前置芝士&lt;/strong&gt;：区间 $[1,n]$ 中完全平方数有 $\left \lfloor \sqrt{n}  \right \rfloor $ 个，这个结论用整除分块很容易就可以证出来。&lt;/p&gt;
+&lt;p&gt;有了这个结论，我们就已经处理完了这个题中 $k=2$ 的情况了，我们来分析剩下的情况。&lt;/p&gt;
+&lt;p&gt;当 $k=1$ 时，显然区间内每个数都可以表示为 $a^1$，所以答案就是 $n$。&lt;/p&gt;
+&lt;p&gt;当 $k \ge 3$ 时，底数为 $1$ 的情况就直接跳过，我们发现现在底数最小是 $2$，而我们单次计算最大的可能次数就是 $\log_2 n$，本题中 $n \le 10^{18}$，所以单次最多计算次数为 $\left \lceil \log_2 10^{18} \right \rceil = 60$。所以我们直接暴力枚举就可以了。平方不需要枚举直接用我们的结论，我们从 $\left \lfloor \sqrt[3]{n}   \right \rfloor $ 开始枚举即可，枚举到的数标记一下，下次如果标记过则计数器不操作，碰到完全平方数记一下最后把多算的这一次减掉就行。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;cmath&amp;gt;
+#include &amp;lt;map&amp;gt;
+#define LL unsigned long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    LL n, k, bcnt, ans, tmp, p;
+    //tmp表示底数，p表示幂次，ans是答案，bcnt是重复计算的完全平方数
+    map&amp;lt;LL, bool&amp;gt; m;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k;
+        LL bk = sqrtl(n);
+        // bk是[1,n]中完全平方数的数量
+        for (LL i = 2; i * i * i &amp;lt;= n; ++i) &amp;#123;
+            // 从三次根号下n开始枚举
+            tmp = i * i; p = 2;
+            while (tmp &amp;lt;= n/i) &amp;#123;
+                tmp *= i; ++p;
+                if (m[tmp] || p &amp;lt; k) &amp;#123; continue; &amp;#125;
+                LL k = sqrtl(tmp);
+                if (k * k == tmp) &amp;#123; ++bcnt; &amp;#125;
+                m[tmp] = true; ++ans;
+            &amp;#125;
+        &amp;#125;
+        if (k == 1) &amp;#123; cout &amp;lt;&amp;lt; n &amp;lt;&amp;lt; &#39;\n&#39;; &amp;#125;
+        else if (k == 2) &amp;#123; cout &amp;lt;&amp;lt; ans - bcnt + bk &amp;lt;&amp;lt; &#39;\n&#39;; &amp;#125;
+        else if (k &amp;gt;= 3) &amp;#123; cout &amp;lt;&amp;lt; ans + 1 &amp;lt;&amp;lt; &#39;\n&#39;;&amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;特别提醒&#34;&gt;特别提醒&lt;/h2&gt;
+&lt;p&gt;本题中要注意的是，开根的时候要用 &lt;code&gt;sqrtl()&lt;/code&gt; 而不是 &lt;code&gt;sqrt()&lt;/code&gt;，因为我们计算的对象和答案都是长长整型，用 &lt;code&gt;sqrt()&lt;/code&gt; 可能会出错。&lt;/p&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

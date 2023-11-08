@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 洛谷 P5058 [ZJOI2004] 嗅探器 | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 洛谷 P5058 [ZJOI2004] 嗅探器</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/24
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%89%B2%E7%82%B9-Tarjan/" style="color: #ff7d73">割点;Tarjan</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>P5058 [ZJOI2004] 嗅探器</h1>
+<h3 id="简要题意">简要题意</h3>
+<p>给定一张图，再给处图中两个点 $x,y$，现在要在图中删去除了 $x,y$ 以外的一个点使得 $x$ 和 $y$ 不再连通，求要删除的点的编号</p>
+<h3 id="题目分析">题目分析</h3>
+<p><a target="_blank" rel="noopener" href="https://oi-wiki.org/graph/cut/">前置芝士</a></p>
+<p>题目要求我们删掉一个点使得给定的两个点不连通，那么其实我们就是要找一个满足要求的割点，如下图标黑的点就是题目给定的两个点：</p>
+<p><img src="https://s1.ax1x.com/2023/08/23/pPJqc80.png" alt=""></p>
+<p>点 $1$ 是一个割点，我们删除点 $1$ 即可使得 $2,4$ 两点不连通，但是并非任意割点都满足要求，比方说下面这张图：</p>
+<p><img src="https://s1.ax1x.com/2023/08/23/pPJqg2V.png" alt=""></p>
+<p>点 $3$ 和点 $4$ 都是图中的割点，但是删去 $4$ 并不能使得目标点 $1,7$ 不连通，所以只有点 $3$ 是符合条件的点，那么我们就要去筛选割点中符合要求的点。</p>
+<p>怎么筛呢？其实我们想一想建立 DFS 树的过程，我们从题中给定的一个点开始搜，那么对于一个符合条件的割点来讲，题中给定的另一个点一定在这个符合条件的割点的子树中。所以在搜的时候加个判断条件就好了。本题因为不能删去根，所以不用考虑根是割点的情况，那么代码也就非常简单：</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+
+namespace SHAWN &#123;
+    const int N = 1e6 + 7;
+    int head[N], cnt;
+    struct edge &#123; int to, next; &#125;edge[N];
+    int n, tim, x, y;
+    int dfn[N], low[N];
+    bool vis[N], flag[N];
+
+    inline void add(int u, int v) &#123;
+        edge[++cnt].next = head[u];
+        edge[cnt].to = v;
+        head[u] = cnt;
+    &#125;
+
+    void Tarjan(int u, int fa) &#123;
+        low[u] = dfn[u] = ++tim;
+        vis[u] = true;
+        for (int i = head[u]; i; i = edge[i].next) &#123;
+            int v = edge[i].to;
+            if (!vis[v]) &#123;
+                Tarjan(v, u);
+                low[u] = min(low[u], low[v]);
+                // 这里多加一个u!=x和dfn[y]&gt;=dfn[v]的特判就OK了
+                if (fa != u &amp;&amp; low[v] &gt;= dfn[u] &amp;&amp; u != x &amp;&amp; dfn[y] &gt;= dfn[v]) &#123;
+                    flag[u] = true;
+                &#125;
+            &#125;
+            else if (fa != v) &#123;
+                low[u] = min(low[u], dfn[v]);
+            &#125;
+        &#125;
+    &#125;
+
+    int work()
+    &#123;
+        cin &gt;&gt; n;
+        while (cin &gt;&gt; x &gt;&gt; y &amp;&amp; x &amp;&amp; y) &#123;
+            add(x, y); add(y, x);
+        &#125;
+        cin &gt;&gt; x &gt;&gt; y;
+        Tarjan(x, x);
+        for (int i = 1; i &lt;= n; ++i) &#123;
+            if (flag[i]) &#123;
+                cout &lt;&lt; i &lt;&lt; '\n';
+                return 0;
+            &#125;
+        &#125;
+        cout &lt;&lt; &quot;No solution\n&quot;;
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

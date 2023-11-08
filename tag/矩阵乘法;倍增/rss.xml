@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>NERV - SN • Posts by &#34;矩阵乘法;倍增&#34; tag</title>
+        <link>http://example.com</link>
+        <description></description>
+        <language>zh-cn</language>
+        <pubDate>Fri, 18 Aug 2023 17:05:00 +0800</pubDate>
+        <lastBuildDate>Fri, 18 Aug 2023 17:05:00 +0800</lastBuildDate>
+        <category>OIer 日记</category>
+        <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/18/UVA11149%20Power%20of%20Matrix/</guid>
+            <title>题解 UVA11149 Power of Matrix</title>
+            <link>http://example.com/2023/08/18/UVA11149%20Power%20of%20Matrix/</link>
+            <category>矩阵乘法;倍增</category>
+            <pubDate>Fri, 18 Aug 2023 17:05:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;题解 UVA11149 Power of Matrix&lt;/h1&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;给定一个 $n \times n$ 的矩阵 $A$ 和一个数 $k$，求 $\sum_{i = 1}^{k}A^i $。&lt;/p&gt;
+&lt;h3 id=&#34;法一：暴力求解，单次时间复杂度-O-n-3k&#34;&gt;法一：暴力求解，单次时间复杂度 $O(n^3k)$&lt;/h3&gt;
+&lt;h3 id=&#34;法二：分治，单次时间复杂度-O-n-3log-2k&#34;&gt;法二：分治，单次时间复杂度 $O(n^3log^2k)$&lt;/h3&gt;
+&lt;p&gt;我们可以按照分治的定义照猫画虎，将原式变成这样：&lt;/p&gt;
+$$\displaylines{A+A^2+A^3+A^4+\ldots+A^K = (A+A^2+A^3+\ldots+A^{\frac{k}{2}})+A^{\frac{k}{2}}(A+A^2+A^3+\ldots+A^{\frac{k}{2}})
+}$$&lt;p&gt;然后递归处理即可，分治部分的代码大概长这样：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;mat solve(mat bas, LL pos) &amp;#123; \\bas是原矩阵，pos代表当前k的大小
+    if (pos == 1) &amp;#123; return bas; &amp;#125;
+    mat s; clear(s);
+    for (int i = 0; i &amp;lt; n; ++i) &amp;#123; s.m[i][i] = 1; &amp;#125;
+    s = (s + qpow(bas, pos &amp;gt;&amp;gt; 1)) * solve(bas, pos &amp;gt;&amp;gt; 1);
+    if (pos &amp;amp; 1) &amp;#123; s = s + qpow(bas, pos); &amp;#125;
+    return s;
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;于是我们惊喜的发现，这种做法又慢又不稳定，所以我们考虑法三。&lt;/p&gt;
+&lt;h3 id=&#34;法三：倍增，单次时间复杂度-O-n-3logk&#34;&gt;法三：倍增，单次时间复杂度 $O(n^3logk)$&lt;/h3&gt;
+&lt;p&gt;我们观察要求的这个式子，发现 $i$ 要枚举到 $k$ 非常慢，那么我们就想办法优化这个枚举的过程，也就是对 $i$ 进行倍增，则有：&lt;/p&gt;
+$$\displaylines{\sum_{i=0}^{log_2k} A^{2^i}(\sum_{j=1}^{2^i} A^j)
+}$$&lt;p&gt;我们显然不能每次都从头到尾加一遍，所以我们用两个数组 $f$ 和 $s$对这个式子进行递推。&lt;/p&gt;
+$$\displaylines{f_i=A^{2^i},s_i=\sum_{j=1}^{2^i}A^j
+}$$&lt;p&gt;不难发现在递推 $f_i$ 时只要每次把 $f_{i-1}$ 平方就可以了，而 $s_i$ 略微复杂一些，求它其实很像刚刚分治的做法，即 $s_i=s_{i-1}+f_{i-1} \times s_{i-1}$。&lt;/p&gt;
+&lt;p&gt;如果题目高速我们 $k$ 保证是 2 的若干次幂，那么这个题已经做完了，但很遗憾我们没有这个条件，所以还要想办法处理剩余的部分。&lt;strong&gt;本过程较为复杂，建议多看几遍。&lt;/strong&gt; 我们知道整数的一个重要性质就是可以将其拆解为若干 2 的幂之和，假设我们的 $i$ 最后枚举到了 $m$ 使得 $2^m &amp;gt; k$ 且 $2^{m-1} &amp;lt; k$，那么此时我们就想要拆解 $k-2^{m-1}$ 这一部分，那么显然我们最简单的方法是从 $m-1$ 开始向下枚举，设循环变量为 $i$，当枚举到一个 $i$ 使得 $2^{m-1}+2^i&amp;lt;k$ 的时候，就从刚刚处理出来的两个数组中取出第 $i$ 项加到答案里就可以了。这样枚举到 $s^{m-1}+2^i=k$ 时说明我们已经完成对答案的处理，输出答案就可以了。&lt;/p&gt;
+&lt;p&gt;下面是参考代码（倍增过程在 $\operatorname{solve}$ 函数部分）：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#define clear(q) memset(q.m, 0, sizeof(q.m))
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    LL n, k;
+    const int N = 41, M = 64, mod = 10;
+    struct mat &amp;#123; LL m[N][N]; &amp;#125;;
+    mat f[M], s[M];
+    mat operator* (const mat &amp;amp;x, const mat &amp;amp;y) &amp;#123;
+        mat ans;
+        clear(ans);
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            for (int k = 0; k &amp;lt; n; ++k) &amp;#123;
+                if (x.m[i][k]) &amp;#123;
+                    for (int j = 0; j &amp;lt; n; ++j) &amp;#123;
+                        ans.m[i][j] = (ans.m[i][j] % mod + (x.m[i][k] * y.m[k][j]) % mod) % mod;
+                    &amp;#125;
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        return ans;
+    &amp;#125;
+    mat operator+ (const mat &amp;amp;x, const mat &amp;amp;y) &amp;#123;
+        mat ans;
+        clear(ans);
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            for (int j = 0; j &amp;lt; n; ++j) &amp;#123;
+                ans.m[i][j] = (x.m[i][j] + y.m[i][j]) % mod;
+            &amp;#125;
+        &amp;#125;
+        return ans;
+    &amp;#125;
+    mat qpow(mat a, LL b) &amp;#123;
+        mat z;
+        clear(z);
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123; z.m[i][i] = 1; &amp;#125;
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            if (b &amp;amp; 1) &amp;#123; z = z * a; &amp;#125;
+            a = a * a; b &amp;gt;&amp;gt;= 1;
+        &amp;#125;
+        return z;
+    &amp;#125;
+    void output(mat o) &amp;#123;
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+            for (int j = 0; j &amp;lt; n; ++j) &amp;#123;
+                cout &amp;lt;&amp;lt; o.m[i][j] % mod;
+                if (j != n - 1) &amp;#123; cout &amp;lt;&amp;lt; &#39; &#39;; &amp;#125;
+            &amp;#125;
+            cout &amp;lt;&amp;lt; &#39;\n&#39;; 
+        &amp;#125; 
+        cout &amp;lt;&amp;lt; &#39;\n&#39;;
+    &amp;#125;
+    void solve() &amp;#123;
+        LL pos = 2, p = 1; // pos用来枚举2的次幂，p用来枚举2的幂次，pos的指数即为p，二者同加同减
+        while (pos &amp;lt;= k) &amp;#123;
+            f[p] = f[p - 1] * f[p - 1];
+            s[p] = s[p - 1] + s[p - 1] * f[p - 1];
+            pos &amp;lt;&amp;lt;= 1; ++p;
+        &amp;#125;
+        pos &amp;gt;&amp;gt;= 1; --p; // 第一次枚举完后肯定会超出k的范围，所以取上一次枚举到的幂
+        LL posback = pos; // posback表示拆分剩余的数时需要用到的2的次幂
+        mat po = f[p], ans = s[p]; // po表示当前已经枚举到的幂次，ans为答案，初始值为第一次枚举时枚举到最大的值
+        for (int i = p; i &amp;gt;= 0; --i) &amp;#123;
+            if (pos + posback &amp;lt;= k) &amp;#123; 
+                ans = ans + po * s[i]; // 加到答案里
+                posback += pos;
+                po = po * f[i];
+            &amp;#125;
+            pos &amp;gt;&amp;gt;= 1; // pos的幂次要和p同步减一
+        &amp;#125;
+        output(ans); // 处理完输出
+    &amp;#125;
+    int work()
+    &amp;#123;
+        while (cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k &amp;amp;&amp;amp; n &amp;amp;&amp;amp; k) &amp;#123;
+            for (int i = 0; i &amp;lt; n; ++i) &amp;#123;
+                for (int j = 0; j &amp;lt; n; ++j) &amp;#123;
+                    cin &amp;gt;&amp;gt; s[0].m[i][j];
+                    f[0].m[i][j] = s[0].m[i][j] = s[0].m[i][j] % mod; 
+                &amp;#125;
+            &amp;#125;
+            solve();
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;ps. 特别提醒，UVa要注意输入和输出格式&lt;/strong&gt;&lt;/p&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

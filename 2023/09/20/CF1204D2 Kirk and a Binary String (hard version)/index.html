@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 CF1204D2 Kirk and a Binary String (hard version) | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 CF1204D2 Kirk and a Binary String (hard version)</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/9/20
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%9E%84%E9%80%A0/" style="color: #03a9f4">构造</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>CF1204D2 Kirk and a Binary String (hard version)</h1>
+<h2 id="形式化题意">形式化题意</h2>
+<p>给你一个长为 $n$ 的仅包含 $0$ 和 $1$ 的串，要求尽可能多地将里面的 $1$ 改成 $0$ 使得在得到的新串中，对于 $\forall l,r\in [1,n](l \le r)$，两个串的 $[l,r]$ 区间内的最长不降子序列等长。</p>
+<h2 id="策略分析">策略分析</h2>
+<p>题中给的数据范围是 $10^5$，我们很容易去思考一些 $O(n \log n)$ 的做法，从而去找数据结构来维护，但这是 CF 的题，所以我们坚信这一定是一道人类智慧题。所以我们充分发扬人类智慧，$O(n)$ 来构造这个题。</p>
+<p>对于只有 $0,1$ 的串来讲，一个序列想要不降其实只需要满足两个条件：</p>
+<ul>
+<li>如果当前位为 $0$，那么后面无论 $0,1$ 都是不降的；</li>
+<li>如果当前位为 $1$，那么后面为 $1$ 才是不降的。</li>
+</ul>
+<p>那么我们是不是很容易发现本题的构造原则：一个 $1$ 能够被替换成 $0$ <strong>当且仅当这个 $1$ 后面的 $1$ 的个数大于等于 $0$ 的个数</strong>。这个结论说出来很抽象，我们用一个例子来理解。</p>
+<pre><code>0 1 1 1 1 1 0 0 0
+1 2 3 4 5 6 7 8 9 
+</code></pre>
+<p>为了方便读者观看，这个串下面的数字是其下标。我们以下标为 $2$ 的这个下标的位置为例，$[2,9]$ 区间内的最长不降子序列是 <code>1 1 1 1 1</code>，这一位改成 $0$ 后变成 <code>0 1 1 1 1</code>，不管怎么变长度都不会变，因为其后 $1$ 比 $0$ 多，最长不降子序列一定是连着一坨 $1$。然而对于下标为 $4$ 这个位置的 $1$ 来讲，这一位后面的 $0$ 比 $1$ 多，我们将这一位换成 $0$ 后，$[4,9]$ 区间内的最长不降子序列从 <code>1 1 1</code> 变成了 <code>0 0 0 0</code>，不符合我们的构造条件。</p>
+<p>出现这种情况的原因是，对于当前位来讲，它的最长不降子序列只能是一堆 $1$，这是我们刚刚提到过的结论，改成 $0$ 后就有了三种选择，而我们必须让它别无选择，这就要求更改的这一位只能继续选后面连一堆 $1$，那么我们发现这种别无选择的情况就必须让当前位后的 $1$ 的数量比 $0$ 的数量多，这就证明了我们刚刚得出的结论，这道题也就做完了。</p>
+<p>在写代码的时候，我们可以把维护个数改成维护 $0$ 与 $1$ 的个数的差值，这样可以简化代码难度，当 $0$ 的个数减去 $1$ 的个数非正时就把这一位的 $1$ 换掉。</p>
+<h2 id="参考代码">参考代码</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;string&gt;
+using namespace std;
+
+namespace SHAWN &#123;
+    string s;
+    int cnt;
+    int work()
+    &#123;
+        cin &gt;&gt; s;
+        for (int i = s.size() - 1; i &gt;= 0; --i) &#123;
+            if (s[i] == '0') &#123; ++cnt; &#125;
+            else if (s[i] == '1' &amp;&amp; cnt &lt;= 0) &#123; s[i] = '0'; &#125;
+            else &#123; --cnt; &#125;
+        &#125;
+        cout &lt;&lt; s &lt;&lt; '\n';
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;状态压缩;容斥&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-10-24T03:48:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/10/24/SP6285%20NGM2%20-%20Another%20Game%20With%20Numbers/</id>
+        <title>题解 SP6285 NGM2 - Another Game With Numbers</title>
+        <link rel="alternate" href="http://example.com/2023/10/24/SP6285%20NGM2%20-%20Another%20Game%20With%20Numbers/"/>
+        <content type="html">&lt;h1&gt;SP6285 NGM2 - Another Game With Numbers&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个长为 $K$ 的数组 $a$，其中 $1 \le K \le 15$ 且 $a_i \le 100$，再给定一个数 $N$，其中 $1 \le N \le 10^9$，要求求出 $[1, N]$ 中有多少数不能被 $a$ 中任意一个数整除。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;显然满足我们要求的数不能被 $a_i$ 整除，同时也不能被 $a$ 中任意 $p(2 \le p \le K)$ 个元素的最小公倍数整除。所以最朴素的想法是通过筛选出能够被整除的数的个数，再用 $N$ 减去它。如果你想到这里了，那么恭喜你这道题已经做完了。由于本题的 $K$ 非常非常小，所以我们可以直接暴力枚举出 $K$ 个数的所有组合的最大公约数，$O(1)$ 求出 $[1, N]$ 中能整除一个数 $x$ 的数有多少，然后做容斥就能得出答案了。&lt;/p&gt;
+&lt;p&gt;具体来讲，我们可以用状态压缩来对所有组合进行枚举，即对于 $K$，我们从 $1$ 枚举到 $2^{K} - 1$，枚举到的第 $i$ 个数的第 $j$ 位为 $1$ 则表示本次选取这位，否则不选，然后每次对所有选取的位置上的数求最小公倍数 $x$，然后用 $N$ 除以 $x$ 就能得出 $N$ 中能整除 $x$ 的数的个数 $y$。根据容斥原理，如果当前选取了奇数个数，就要把 $y$ 加入到答案中，否则将答案减去 $y$。注意这样算出的结果是 $[1, N]$ 中能整除 $a$ 中某个数的数的个数，所以最后要用 $N$ 减去它才能得到答案。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 107;
+    LL a[N];
+    LL n, k, ans;
+    inline LL gcd(LL x, LL y) &amp;#123; return !y ? x : gcd(y, x % y); &amp;#125;
+    inline LL lcm(LL x, LL y) &amp;#123; return x * y / gcd(x, y); &amp;#125;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; k;
+        for (int i = 1; i &amp;lt;= k; ++i) &amp;#123; cin &amp;gt;&amp;gt; a[i]; &amp;#125;
+        for (int i = 1; i &amp;lt; (1 &amp;lt;&amp;lt; k); ++i) &amp;#123;
+            LL lrc = 1, cnt = 0;
+            for (int j = 1; j &amp;lt;= k; ++j) &amp;#123;
+                if (i &amp;amp; (1 &amp;lt;&amp;lt; (j - 1))) &amp;#123;
+                    lrc = lcm(lrc, a[j]);
+                    ++cnt;
+                &amp;#125;
+            &amp;#125;
+            if (cnt &amp;amp; 1) &amp;#123; ans += n / lrc; &amp;#125;
+            else &amp;#123; ans -= n / lrc; &amp;#125;
+        &amp;#125;
+        ans = n - ans;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <category term="状态压缩;容斥" />
+        <updated>2023-10-24T03:48:00.000Z</updated>
+    </entry>
+</feed>

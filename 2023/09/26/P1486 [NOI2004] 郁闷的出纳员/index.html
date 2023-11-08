@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 洛谷 P1486 [NOI2004] 郁闷的出纳员 | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 洛谷 P1486 [NOI2004] 郁闷的出纳员</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/9/26
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%B9%B3%E8%A1%A1%E6%A0%91-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00a596">平衡树;数据结构</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>P1486 [NOI2004] 郁闷的出纳员</h1>
+<h2 id="简要题意">简要题意</h2>
+<p>给定 $n$ 次操作和一个阈值 $min$，每次操作包含一个字符 $opt$ 和一个整数 $k$，操作可以是一下四种之一：</p>
+<ul>
+<li><code>I k</code> 如果 $k$ 小于 $min$ 不操作，否则将 $k$ 扔进一个集合 $s$ 中。</li>
+<li><code>A K</code> 把 $s$ 里所有元素值加上 $k$。</li>
+<li><code>S k</code> 把 $s$ 里所有元素值减去 $k$。</li>
+<li><code>F k</code> 查询 $s$ 里第 $k$ 大的值，如果 $k &gt; \left | s \right | $ 输出 <code>-1</code>。</li>
+</ul>
+<p>在每次操作中，一旦 $s$ 中有元素的值低于阈值 $min$，就要删除这个元素，程序最后要输出删除的元素总数（插入时就因为小于阈值没有插入进来的不算）</p>
+<h2 id="策略分析">策略分析</h2>
+<p>我们看到插入，删除，查询排名理所当然地想到了平衡树；看到全加上，全减去，理所当然地想到了线段树。但是很显然，这题肯定不是树套树。我们考虑，既然是全部加，单点查，我们其实并不用关心每个元素的更改，因为集体的更改不会导致排名的变化，只会影响我们后查询值，所以我们可以把这种更改用一个变量 $tag$ 记下来。</p>
+<h3 id="插入">插入</h3>
+<p>在新插入元素的时候，我们要先对插入的元素减去 $tag$，这样做是为了消除其对插入的值的排名的影响。当我们输出的时候，因为这一部分的值刚好被抵消，所以加上的就是插入它以后对它操作的值，满足题目的要求。与此同时我们要拿一个 $sum$ 来记一共插入了多少次，拿一个 $cnt$ 来记当前集合中的元素个数。</p>
+<h3 id="元素加减">元素加减</h3>
+<p>增加元素必然是直接加到 $tag$ 上就好了，但是为了维护集合内小于阈值的数的个数并成功把他们删除，我们必须要同步更改 $min$，如果集体增加就要下调 $min$，集体减少就要上调 $min$。每次减少的时候我们要进行删除操作，我们在平衡树上不断寻找 $min$ 的前驱并删除（一个数的前驱定义为小于它的最大的数），直到删完为止。</p>
+<h3 id="查询">查询</h3>
+<p>查询直接查就好了，需要注意的是平衡树查排名的时候查的是第 $k$ 小，而我们查的是第 $k$ 大，所以查的时候要传的参数是 $cnt - k + 1$。在这里我们不建议更改平衡树的代码，因为平衡树细节较多码量较大，如果在考场上改写可能会导致不必要的错误以及浪费更多时间，除非万不得已，否则建议只在传参上调整。最后只需要输出总的插入次数减去当前集合的大小就是被删掉的元素个数。</p>
+<h2 id="参考代码">参考代码</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;random&gt;
+#include &lt;ctime&gt;
+#include &lt;limits.h&gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &#123;
+    const int N = 2e5 + 7;
+    mt19937 rd(time(nullptr));
+    namespace Treap &#123;
+        #define ls son[ro][1]
+        #define rs son[ro][0]
+        int cont, root;
+        int son[N][2], pre[N], size[N], cnt[N]; LL val[N];
+        void update(int ro) &#123;
+            if (!ro) &#123; return; &#125;
+            size[ro] = cnt[ro];
+            if (ls) &#123; size[ro] += size[ls]; &#125;
+            if (rs) &#123; size[ro] += size[rs]; &#125; 
+        &#125;
+        void rotate(int ro, int fa, int opt) &#123;
+            int s = son[ro][opt];
+            son[ro][opt] = son[s][!opt];
+            son[s][!opt] = ro;
+            if (!fa) &#123; root = s; &#125;
+            else &#123; son[fa][son[fa][1] == ro] = s; &#125; 
+            update(ro); update(s);
+        &#125;
+        void insert(int ro, int fa, LL x) &#123;
+            if (!ro) &#123;
+                ro = ++cont;
+                cnt[ro] = 1; val[ro] = x;
+                pre[ro] = rd() % INT_MAX;
+                update(ro);
+                if (!fa) &#123; root = ro; &#125;
+                else &#123; son[fa][x &lt; val[fa]] = ro; &#125;
+            &#125;
+            else &#123;
+                if (x == val[ro]) &#123; ++cnt[ro]; update(ro); &#125;
+                else if (x &lt; val[ro]) &#123;
+                    insert(ls, ro, x); update(ro);
+                    if (pre[ls] &lt; pre[ro]) &#123; rotate(ro, fa, 1); &#125;
+                &#125;
+                else &#123;
+                    insert(rs, ro, x); update(ro);
+                    if (pre[rs] &lt; pre[ro]) &#123; rotate(ro, fa, 0); &#125;
+                &#125;
+            &#125;
+        &#125;
+        void del(int ro, int fa, LL x) &#123;
+            if (!ro) &#123; return; &#125;
+            if (x == val[ro]) &#123;
+                --cnt[ro];
+                if (!cnt[ro]) &#123;
+                    int f = fa, s;
+                    update(ro);
+                    while(ls &amp;&amp; rs) &#123;
+                        if (pre[ls] &lt; pre[rs]) &#123; s = ls; rotate(ro, f, 1); f = s; &#125;
+                        else &#123; s = rs; rotate(ro, f, 0); f = s; &#125;
+                    &#125;
+                    while (ls) &#123; s = ls; rotate(ro, f, 1); f = s; &#125;
+                    while (rs) &#123; s = rs; rotate(ro, f, 0); f = s; &#125;
+                    if (root == ro) &#123; root = 0; &#125;
+                    else &#123; son[f][son[f][1] == ro] = 0; &#125;
+                &#125;
+                update(ro);
+            &#125;
+            else &#123;
+                if (x &lt; val[ro]) &#123; del(ls, ro, x); update(ro); &#125;
+                else &#123; del(rs, ro, x); update(ro); &#125;
+            &#125;
+        &#125;
+        LL find_pre(int ro, LL x) &#123;
+            if (!ro) &#123; return LONG_LONG_MIN; &#125;
+            else if (x &gt; val[ro]) &#123; return max(val[ro], find_pre(rs, x)); &#125;
+            else &#123; return find_pre(ls, x); &#125;
+        &#125;
+        LL get_num(int ro, int x) &#123;
+            if (x &lt;= size[ls]) &#123; return get_num(ls, x); &#125;
+            else if (x &lt;= size[ls] + cnt[ro]) &#123; return val[ro]; &#125;
+            else &#123; return get_num(rs, x - size[ls] - cnt[ro]); &#125;
+        &#125;
+        void insert(LL x) &#123; insert(root, 0, x); &#125;
+        void del(LL x) &#123; del(root, 0, x); &#125;
+        LL findpre(LL x) &#123; return find_pre(root, x); &#125;
+        LL getnum(int x) &#123; return get_num(root, x); &#125;
+        #undef ls
+        #undef rs
+    &#125;
+
+    int n; LL _min, tag, cnt, sum;
+    signed work()
+    &#123;
+        cin &gt;&gt; n &gt;&gt; _min;
+        for (int i = 1; i &lt;= n; ++i) &#123; 
+            char opt; LL k; cin &gt;&gt; opt &gt;&gt; k;
+            if (opt == 'I') &#123;
+                if (k - tag &gt;= _min) &#123;
+                    Treap :: insert(k - tag);
+                    ++cnt; ++sum;
+                &#125;
+            &#125;
+            else if (opt == 'A') &#123; _min -= k; tag += k; &#125;
+            else if (opt == 'S') &#123;
+                _min += k; tag -= k;
+                LL tmp;
+                while ((tmp = Treap :: findpre(_min)) != LONG_LONG_MIN) &#123;
+                    Treap :: del(tmp);
+                    --cnt;
+                &#125;
+            &#125;
+            else if (opt == 'F') &#123;
+                if (cnt &lt; k) &#123; cout &lt;&lt; &quot;-1\n&quot;; &#125;
+                else &#123; cout &lt;&lt; Treap :: getnum(cnt - k + 1) + tag &lt;&lt; '\n'; &#125;
+            &#125;
+        &#125;
+        cout &lt;&lt; sum - cnt &lt;&lt; '\n';
+        return 0;
+    &#125;
+&#125;
+
+signed main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

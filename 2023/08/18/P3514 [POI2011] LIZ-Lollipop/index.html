@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 洛谷 P3514 [POI2011] LIZ-Lollipop | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 洛谷 P3514 [POI2011] LIZ-Lollipop</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/18
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%9E%84%E9%80%A0/" style="color: #ffa2c4">构造</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>P3514 [POI2011] LIZ-Lollipop</h1>
+<h2 id="简要题意">简要题意</h2>
+<p>给定一个只有 $1$ 和 $2$ 的序列，给出 $m$ 次询问，每次询问给出一个数 $k$，查询序列中有没有一个子串和为 $k$，如果有则输出区间两端点，如果没有输出 <code>NIE</code>。</p>
+<h2 id="策略分析">策略分析</h2>
+<p>本题最重要的条件就是该序列中只含有 $1$ 和 $2$，因为这个条件，我们就可以得到下面这个性质：<strong>若 $k$ 可以被表示，则 $k-2$ 也一定可以被表示</strong>。这个性质很容易被证明。我们很容易发现，一个区间的两端点有三种情况，全为 $1$，全为 $2$ 以及一边 $1$ 一边 $2$。那么当两边存在 $2$ 时，只需要减掉这个 $2$ 即可；如果是两个 $1$，那么把这两个 $1$ 一起减掉即可。</p>
+<p>现在我们知道了上面这个性质，开始考虑非法情况。既然 $k-2$ 可以被表示，那么我们只需要找到最大的 $k$ 就可以了。如果给出的 $k$ 比我们能找到的最大的数还大，那么这个数是不合法的。</p>
+<p>考虑完非法情况以后，我们来考虑如何求解。我们发现，一个数减去 $2$ 后奇偶性不变，也就是说如果 $k$ 是奇数，那么我们将永远无法得到偶数，反之亦然，所以这要求我们分类讨论，分别求出最大的奇数和最大的偶数。因为题目告诉我们序列长度 $n \le 10^6$，也就是说能够被表示出来的数最多有 $2 \times 10^6$ 种。我们可以提前将这些数的左右区间都预处理出来，然后 $O(1)$ 查询即可。处理这些数的方法是将最大的奇数和偶数分别缩减，每次缩减 $2$ 并记下左右区间，按照最开始分析的性质来移动左右指针，知道两指针相遇为止。</p>
+<h2 id="参考代码">参考代码</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+
+namespace SHAWN &#123;
+    const int N = 1e6 + 7;
+    int a[N];
+    int n, m, jmax, omax, sum;
+    struct node &#123; int l, r; &#125;b[N &lt;&lt; 1];
+    
+    inline void _init() &#123;
+        int jlidx, jridx, olidx, oridx, tmp1, tmp2, tag1, tag2;
+        jlidx = olidx = 1; jridx = oridx = n; tmp1 = tmp2 = 0;
+        for (int i = 1; i &lt;= n; ++i) &#123;
+            tmp1 += a[i];
+            if (a[i] == 1) &#123; tag1 = i + 1; break; &#125;
+        &#125;
+        for (int  i = n; i &gt;= 1; --i) &#123;
+            tmp2 += a[i];
+            if (a[i] == 1) &#123; tag2 = i - 1; break; &#125;
+        &#125;
+        if (sum % 2) &#123;
+            jmax = sum;
+            if (tmp1 &lt; tmp2) &#123;
+                omax = sum - tmp1;
+                olidx = tag1;
+            &#125;
+            else &#123;
+                omax = sum - tmp2;
+                oridx = tag2;
+            &#125;
+        &#125;
+        else &#123;
+            omax = sum;
+            if (tmp1 &lt; tmp2) &#123;
+                jmax = sum - tmp1;
+                jlidx = tag1; 
+            &#125;
+            else &#123;
+                jmax = sum - tmp2;
+                jridx = tag2;
+            &#125;
+        &#125;
+        
+        //----以上处理最大的奇数和偶数以及其左右端点----
+        //----以下分别缩减奇偶数得到所有数的左右端点----
+        
+        int otmp = omax, jtmp = jmax;
+        b[omax] = &#123;olidx, oridx&#125;;
+        b[jmax] = &#123;jlidx, jridx&#125;; 
+        while (olidx &lt; oridx &amp;&amp; otmp &gt; 0) &#123;
+            otmp -= 2;
+            if (a[olidx] == 1) &#123;
+                if (a[oridx] == 1) &#123; b[otmp] = &#123;++olidx, --oridx&#125;; &#125;
+                else if (a[oridx] == 2) &#123; b[otmp] = &#123;olidx, --oridx&#125;; &#125;
+            &#125;
+            else if (a[olidx] == 2) &#123; b[otmp] = &#123;++olidx, oridx&#125;; &#125;
+        &#125;
+        while (jlidx &lt; jridx &amp;&amp; jtmp &gt; 0) &#123;
+            jtmp -= 2;
+            if (a[jlidx] == 1) &#123;
+                if (a[jridx] == 1) &#123; b[jtmp] = &#123;++jlidx, --jridx&#125;; &#125;
+                else if (a[jridx] == 2) &#123; b[jtmp] = &#123;jlidx, --jridx&#125;; &#125;
+            &#125;
+            else if (a[jlidx] == 2) &#123; b[jtmp] = &#123;++jlidx, jridx&#125;; &#125;
+        &#125;
+        return;
+    &#125;
+    
+    int work()
+    &#123;
+        cin &gt;&gt; n &gt;&gt; m;
+        for (int i = 1; i &lt;= n; ++i) &#123;
+            char c; cin &gt;&gt; c;
+            if (c == 'T') &#123; a[i] = 2; &#125;
+            else if (c == 'W') &#123; a[i] = 1; &#125;
+            sum += a[i];
+        &#125;
+        _init();
+        while (m--) &#123;
+            int sar; cin &gt;&gt; sar;
+            if (sar % 2 &amp;&amp; sar &gt; jmax) &#123; cout &lt;&lt; &quot;NIE\n&quot;; continue; &#125;
+            else if (!(sar % 2) &amp;&amp; sar &gt; omax) &#123; cout &lt;&lt; &quot;NIE\n&quot;; continue; &#125;
+            cout &lt;&lt; b[sar].l &lt;&lt; ' ' &lt;&lt; b[sar].r &lt;&lt; '\n';
+        &#125;
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

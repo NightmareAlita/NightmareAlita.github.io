@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"枚举\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/08/29/CF690F1%20Tree%20of%20Life%20(easy)/",
+            "url": "http://example.com/2023/08/29/CF690F1%20Tree%20of%20Life%20(easy)/",
+            "title": "题解 CF690F1 Tree of Life (easy)",
+            "date_published": "2023-08-29T08:09:00.000Z",
+            "content_html": "<h1>CF690F1 Tree of Life (easy)</h1>\n<h2 id=\"简要题意\">简要题意</h2>\n<p>给你一棵树，求树上长度为 $2$ 的路径条数</p>\n<h2 id=\"策略分析\">策略分析</h2>\n<p>我们看下面这张图：</p>\n<p><img src=\"https://s1.ax1x.com/2023/08/29/pPdSEL9.png\" alt=\"\"></p>\n<p>我们发现对于点 $u,v$，$v$ 是与 $u$ 相连的一个点，从 $u$ 出发的长度为 $2$ 的路径条数就等于 $v$ 的度数减去 $1$，因为 $u$ 本身也和 $v$ 相连，所以要把自己减掉。比如说上面这张图中，与 $1$ 距离为 $2$ 的点有 $6,7,8,9,5$ 这 $5$ 个，而 $1$ 的三个子节点的度数分别为 $3,3,2$，分别减去 $1$ 再相加刚好是 $5$。</p>\n<p>我们对这整张图统计以后，其实对于每一个点我们都统计了与它距离为 $2$ 的点，因为存图时是无向图，所以同一条路径一定计算了两次，累加的答案要减半。</p>\n<p>时间复杂度 $O(n^2)$。</p>\n<h2 id=\"参考代码\">参考代码</h2>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#include &lt;vector&gt;\nusing namespace std;\n\nnamespace SHAWN &#123;\n    const int N = 1e4 + 7;\n    vector&lt;int&gt; edge[N];\n    int n, sum;\n    int work()\n    &#123;\n        cin &gt;&gt; n;\n        for (int i = 1, x, y; i &lt; n; ++i) &#123;\n            cin &gt;&gt; x &gt;&gt; y;\n            edge[x].emplace_back(y);\n            edge[y].emplace_back(x);\n        &#125;\n        for (int i = 1; i &lt;= n; ++i) &#123;\n            for (auto it : edge[i]) &#123; \n                sum += edge[it].size() - 1; \n            &#125;\n        &#125;\n        sum &gt;&gt;= 1;\n        cout &lt;&lt; sum &lt;&lt; '\\n';\n        return 0;\n    &#125;\n&#125;\n\nsigned int main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "枚举"
+            ]
+        }
+    ]
+}

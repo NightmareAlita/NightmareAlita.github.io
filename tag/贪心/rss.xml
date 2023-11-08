@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>NERV - SN • Posts by &#34;贪心&#34; tag</title>
+        <link>http://example.com</link>
+        <description></description>
+        <language>zh-cn</language>
+        <pubDate>Sat, 02 Sep 2023 11:43:00 +0800</pubDate>
+        <lastBuildDate>Sat, 02 Sep 2023 11:43:00 +0800</lastBuildDate>
+        <category>OIer 日记</category>
+        <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/09/02/P2376%20[USACO09OCT]%20Allowance%20G/</guid>
+            <title>题解 洛谷 P2376 [USACO09OCT] Allowance G</title>
+            <link>http://example.com/2023/09/02/P2376%20[USACO09OCT]%20Allowance%20G/</link>
+            <category>贪心</category>
+            <pubDate>Sat, 02 Sep 2023 11:43:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P2376 [USACO09OCT] Allowance G&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你 $n$ 种面值的货币，其中货币中面值小的货币的面值可以整除面值大的货币的面值，给你每种面值货币的数量。每周都要给贝茜发至少 $c$ 元的工资，问最多能发多少周。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;首先对于面值大于 $c$ 的货币，显然我们每周给出一张就行了，没有其它办法，所以可以直接把它们的数量加在答案中。接下来是对于面值小于 $c$ 的货币，我们先对所有货币按照面值降序排序，每次选取能够选的最大的，然后再用最小的去填补剩下的那一点点价格缝隙，因为我们有小面值货币面值是大面值货币面值因数这个条件，所以最大配最小这种做法一定会产生最小的浪费，从而得到最优解。如果这一次凑不出来了，那显然是钱不够了，那么所有情况就统计完毕，输出答案即可。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;vector&amp;gt;
+#include &amp;lt;algorithm&amp;gt;
+#define PII pair&amp;lt;int, int&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    vector&amp;lt;PII&amp;gt; v;
+    //v.first 代表面值，v.second 代表货币数量
+    int n, c, ans; 
+    bool cmp(PII x, PII y) &amp;#123; return x.first &amp;gt; y.first; &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; c;
+        for (int i = 1, val, b; i &amp;lt;= n; ++i) &amp;#123;
+            cin &amp;gt;&amp;gt; val &amp;gt;&amp;gt; b;
+            if (val &amp;gt;= c) &amp;#123; ans += b; &amp;#125;
+            else &amp;#123; v.push_back(&amp;#123;val, b&amp;#125;); &amp;#125;
+        &amp;#125;
+        sort(v.begin(), v.end(), cmp);
+        while (true) &amp;#123;
+            int tmp = c;
+            for (int i = 0; i &amp;lt; v.size(); ++i) &amp;#123;
+                while (tmp &amp;amp;&amp;amp; v[i].second &amp;amp;&amp;amp; tmp &amp;gt;= v[i].first) &amp;#123;
+                    tmp -= v[i].first; 
+                    --v[i].second;
+                &amp;#125;
+            &amp;#125;
+            if (tmp &amp;gt; 0) &amp;#123;
+                for (int i = v.size() - 1; i &amp;gt;= 0; --i) &amp;#123;
+                    if (v[i].second &amp;amp;&amp;amp; v[i].first &amp;gt;= tmp) &amp;#123;
+                        tmp -= v[i].first;
+                        --v[i].second;
+                        break;
+                    &amp;#125;
+                &amp;#125;
+            &amp;#125;
+            if (tmp &amp;gt; 0) &amp;#123; break; &amp;#125;
+            ++ans;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/08/28/P5019%20[NOIP2018%20%E6%8F%90%E9%AB%98%E7%BB%84]%20%E9%93%BA%E8%AE%BE%E9%81%93%E8%B7%AF/</guid>
+            <title>题解 洛谷 P5019 [NOIP2018 提高组] 铺设道路</title>
+            <link>http://example.com/2023/08/28/P5019%20[NOIP2018%20%E6%8F%90%E9%AB%98%E7%BB%84]%20%E9%93%BA%E8%AE%BE%E9%81%93%E8%B7%AF/</link>
+            <category>贪心</category>
+            <pubDate>Mon, 28 Aug 2023 10:15:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;P5019 [NOIP2018 提高组] 铺设道路&lt;/h1&gt;
+&lt;p&gt;本题还有一道&lt;a href=&#34;https://www.luogu.com.cn/problem/P1969&#34;&gt;姐妹题&lt;/a&gt;，两题题意一样，代码也一模一样。&lt;/p&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给你一个序列，每次选取一个区间对这个区间内所有数都减去 $1$，使得区间内至少一个数变成 $0$，重复执行这一过程直到整个序列都为 $0$，求最小操作次数。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;本题可以用贪心在 $O(n)$ 复杂度完成。&lt;/p&gt;
+&lt;h3 id=&#34;操作方法&#34;&gt;操作方法&lt;/h3&gt;
+&lt;p&gt;我们可以从头往尾扫，设第 $i$ 个位置的值为 $v_i$，当第 $i$ 个位置的值大于第 $i-1$ 个位置的值时，我们就要给答案加上 $v_{i-1}-v_i$，否则不操作。为了后面能够正常操作，第一次必须将第一个位置的直接减到 $0$。&lt;/p&gt;
+&lt;h3 id=&#34;正确性证明&#34;&gt;正确性证明&lt;/h3&gt;
+&lt;p&gt;考虑如果 $v_i \le v_{i-1}$， 那我们在填第 $i-1$ 个坑的时候一定可以把第 $i$ 个坑填上；而当 $v_i&amp;gt; v_{i-1}$ 时，我们填第$i$ 个坑的时候又可以顺便把第 $i-1$ 个坑填上，由此递推即可得出答案。&lt;/p&gt;
+&lt;h2 id=&#34;代码&#34;&gt;代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e5 + 7;
+    int v[N];
+    long long ans;
+    int work()
+    &amp;#123;
+        int n;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; cin &amp;gt;&amp;gt; v[i]; &amp;#125;
+        ans = v[1];
+        for (int i = 2; i &amp;lt;= n; ++i) &amp;#123;
+            if (v[i] &amp;gt; v[i - 1]) &amp;#123;
+                ans += (v[i] - v[i - 1]);
+            &amp;#125;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

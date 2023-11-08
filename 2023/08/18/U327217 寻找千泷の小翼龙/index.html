@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 洛谷 U327217 寻找千泷の小翼龙 | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 洛谷 U327217 寻找千泷の小翼龙</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/18
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #03a9f4">矩阵加速;动态规划</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>题解 洛谷 U327217 寻找千泷の小翼龙</h1>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/U327217">本题题面</a></p>
+<h4 id="原题（本题由该题数据加强而来）：">原题（本题由该题数据加强而来）：</h4>
+<h3 id="USACO-Training-6-1-1-Postal-Vans">USACO Training 6.1.1 Postal Vans</h3>
+<p>Tiring of their idyllic fields, the cows have moved to a new suburb. The suburb is a rectangular grid of streets with a post office at its Northwest corner. It has four avenues running East-West and $n(1\le n\le 10^{18})$ streets running North-South.</p>
+<p>For example, the following diagram shows such a suburb with $n=5$ streets, with the avenues depicted as horizontal lines, and the post office as a dark blob at the top-left corner:</p>
+<p><img src="https://img1.imgtp.com/2023/08/14/HuR5aj47.png" alt=""></p>
+<p>Each day the postal van leaves the post office, drives around the suburb and returns to the post office, passing exactly once through every intersection (including those on borders or corners). The executives from the post company want to know how many distinct routes can be established for the postal van (of course, the route direction is significant in this count).</p>
+<p>For example, the following diagrams show two such routes for the above suburb:</p>
+<p><img src="https://img1.imgtp.com/2023/08/14/cqJ1rEzT.png" alt=""></p>
+<p>As another example, the following diagrams show all the four possible routes for a suburb with $n=3$ streets:</p>
+<p><img src="https://img1.imgtp.com/2023/08/14/tUwsNA4a.png" alt=""></p>
+<p>Write a program that will determine the number of such distinct routes given the number of streets.</p>
+<p>INPUT FORMAT</p>
+<p>Line 1: Two integers, n, p</p>
+<p>SAMPLE INPUT：</p>
+<pre><code>4 32767
+</code></pre>
+<p>OUTPUT FORMAT</p>
+<p>Line 1: A single integer that tells how many possible distinct routes corresponding to the number of streets given in the input, mod p;</p>
+<p>SAMPLE OUTPUT:</p>
+<pre><code>12
+</code></pre>
+<h4 id="简要题意：">简要题意：</h4>
+<p>给定一个$4\times n$的格子（按照格点计数），从左上角出发沿格子遍历所有格点后再返回起点，要求每个点只遍历一次，计算合法方案的总数 $mod$ $p$ 的值</p>
+<h4 id="策略分析：">策略分析：</h4>
+<p>看到方案数，我们合理地想到了动态规划，而看到数据范围和动态规划，我们合理地想到了矩阵加速。设 $f_i$ 为前 $i$ 列中第 $i$ 列中总的方案数。大家小时候应该都玩过拼管子吧，就那种各种各样形状的管子可以组合成不同的形状，那么本题就是要用类似的方法。</p>
+<p>到达南北方向 $1,2$ 路口的方案只有 $2$ 种，我们将管子如下摆放：</p>
+<p><img src="https://cdn.luogu.com.cn/upload/image_hosting/eu2m5la4.png" alt=""><br>
+<img src="https://cdn.luogu.com.cn/upload/image_hosting/0c03xatj.png" alt=""></p>
+<p>到达南北方向 $1,4$ 路口方案有 $7$ 种，但最后两种等价算作一种：</p>
+<p><img src="https://cdn.luogu.com.cn/upload/image_hosting/ien5q644.png" alt=""><br>
+<img src="https://cdn.luogu.com.cn/upload/image_hosting/zdtegbg0.png" alt=""><br>
+<img src="https://cdn.luogu.com.cn/upload/image_hosting/w7t6gcu7.png" alt=""><br>
+<img src="https://cdn.luogu.com.cn/upload/image_hosting/8i80emnk.png" alt=""><br>
+<img src="https://cdn.luogu.com.cn/upload/image_hosting/qu3xspnd.png" alt=""><br>
+<img src="https://cdn.luogu.com.cn/upload/image_hosting/2e98lwsj.png" alt=""><br>
+<img src="https://cdn.luogu.com.cn/upload/image_hosting/r44dhsqm.png" alt=""><br>
+<img src="https://cdn.luogu.com.cn/upload/image_hosting/cidfxurb.png" alt=""></p>
+<p>由此我们可以推出状态转移方程，即：</p>
+$$\displaylines{f_i=2f_{i-1}+2f_{i-2}-2f_{i-3}+f_{i-4}
+}$$<p>对于这种方法和递推方程正确性的证明参见<a target="_blank" rel="noopener" href="http://blog.csdn.net/jiangshibiao/article/details/21446033">阿蒋大佬的blog</a></p>
+<p>得到了状态转移方程我们就可以得到转移矩阵 $M$ 了,</p>
+$$\displaylines{M=\begin{vmatrix}
+  2&amp;  2&amp;  -2&amp; 1\\
+  1&amp;  0&amp;  0&amp; 0\\
+  0&amp;  1&amp;  0&amp; 0\\
+  0&amp;  0&amp;  1&amp; 0
+\end{vmatrix}}$$<p>我们充分发扬人类智慧，通过大脑和手求得 $f_1=0,f_2=2,f_3=4,f_4=12$</p>
+<p>剩余部分显然没有难度了，直接矩阵加速就可以了，于是我们做完了，下面是 $AC$ 代码</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+#define clear(q) memset(q.m, 0, sizeof(q.m))
+#define LL long long
+using namespace std;
+
+namespace SHAWN &#123;
+    LL n, p;
+    struct mat &#123; LL m[4][4]; &#125;;
+    mat operator* (const mat &amp;x, const mat &amp;y) &#123;
+        mat ans;
+        clear(ans);
+        for (int i = 0; i &lt; 4; ++i) &#123;
+            for (int k = 0; k &lt; 4; ++k) &#123;
+                if (x.m[i][k]) &#123;
+                    for (int j = 0; j &lt; 4; ++j) &#123;
+                        ans.m[i][j] = ((ans.m[i][j] + (x.m[i][k] * y.m[k][j])) % p + p) % p; 
+                    &#125;
+                &#125;
+            &#125;
+        &#125; 
+        return ans;
+    &#125;
+    mat qpow(mat a, LL b) &#123;
+        mat z;
+        clear(z);
+        for (int i = 0; i &lt; 4; ++i) &#123; z.m[i][i] = 1; &#125;
+        while (b) &#123;
+            if (b &amp; 1) &#123; z = z * a; &#125;
+            a = a * a; b &gt;&gt;= 1;
+        &#125;
+        return z;
+    &#125;
+    int work()
+    &#123;
+        cin &gt;&gt; n &gt;&gt; p;
+        if (n &lt;= 4) &#123;
+            switch (n) &#123;
+                case 1 : cout &lt;&lt; &quot;0\n&quot;; break;
+                case 2 : cout &lt;&lt; &quot;2\n&quot;; break;
+                case 3 : cout &lt;&lt; &quot;4\n&quot;; break;
+                case 4 : cout &lt;&lt; &quot;12\n&quot;; break;
+                default : break;
+            &#125;
+            return 0;
+        &#125;
+        mat a;
+        clear(a);
+        a.m[0][0] = 2; a.m[0][1] = 2; a.m[0][2] = -2; a.m[0][3] = 1;
+        a.m[1][0] = 1; a.m[2][1] = 1; a.m[3][2] = 1;
+        mat z = qpow(a, n - 4);
+        LL ans = ((z.m[0][0] * 12 + z.m[0][1] * 4 + z.m[0][2] * 2) % p + p) % p;
+        cout &lt;&lt; ans &lt;&lt; '\n';
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

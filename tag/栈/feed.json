@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"栈\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/08/18/BNDSOJ%201263%20%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/",
+            "url": "http://example.com/2023/08/18/BNDSOJ%201263%20%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/",
+            "title": "题解 BNDS OJ 1263 表达式求值",
+            "date_published": "2023-08-18T09:06:00.000Z",
+            "content_html": "<h1>题解 BNDS OJ 1263 表达式求值</h1>\n<h4 id=\"简要题意：\">简要题意：</h4>\n<p>输入一个表达式，包括 <code>+</code>，<code>-</code>，<code>*</code>，<code>/</code>，<code>(</code>，<code>)</code>。求出表达式的值，保留两位小数（不知道你谷有没有这道题）。</p>\n<p>提供一组样例：</p>\n<p>样例输入：</p>\n<pre><code>9-(6+3*5)/3\n</code></pre>\n<p>样例输出：</p>\n<pre><code>2.00\n</code></pre>\n<h4 id=\"策略分析：\">策略分析：</h4>\n<p>这不是简单的数据结构入门题，我们只需要拿两个栈，一个存数字一个存运算符，碰到后括号就把它到前括号里的值全部算出来。因为在这6个运算符中，除了括号其他均是二元运算符，所以符号栈栈顶运算符（除了括号）一定匹配数字栈的头两个数字\t，按照运算优先级取出来算就可以了。运算优先级我们可以用一个 $ \\operatorname{map} $ 来处理，具体细节见代码：</p>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#include &lt;string&gt;\n#include &lt;cstring&gt;\n#include &lt;unordered_map&gt;\n#include &lt;stack&gt;\n#include &lt;iomanip&gt;\n#define LD long double\nusing namespace std;\n\nnamespace SHAWN &#123;\n    unordered_map&lt;char, int&gt; pri;\n    stack&lt;LD&gt; dig;\n    stack&lt;char&gt; ope;\n    string s;\n    void calcu() &#123;// 出栈计算\n        LD a = dig.top(); dig.pop();\n        LD b = dig.top(); dig.pop();\n        char opt = ope.top(); ope.pop();\n        LD res = 0;\n        if (opt == '+') &#123; res = b + a; &#125;\n        if (opt == '-') &#123; res = b - a; &#125;\n        if (opt == '*') &#123; res = b * a; &#125;\n        if (opt == '/') &#123; res = b / a; &#125;\n        dig.push(res);// 算完的结果塞回数字栈\n    &#125;\n    int work()\n    &#123;\n        pri['+'] = pri['-'] = 1;\n        pri['*'] = pri['/'] = 2;\n        cin &gt;&gt; s;\n        int len = s.length();\n        for (int i = 0; i &lt; len; ++i) &#123;\n            if (isdigit(s[i])) &#123;// 遇到数字就存进栈里\n                int x = 0, j = i;\n                while (j &lt; len &amp;&amp; isdigit(s[j])) &#123;\n                    x = x * 10 + s[j] - '0';\n                    j++;\n                &#125;\n                dig.push(x);\n                i = j - 1;\n            &#125;\n            else if (s[i] == '(') &#123; ope.push(s[i]); &#125;// 左括号进栈\n            else if (s[i] == ')') &#123;// 遇到右括号就一直向前算到上一个左括号\n                while (ope.top() != '(') &#123; calcu(); &#125;\n                ope.pop();\n            &#125;\n            else &#123;// 遇到运算符直接按优先级进行计算\n                while (ope.size() &amp;&amp; pri[ope.top()] &gt;= pri[s[i]]) &#123; calcu(); &#125;\n                ope.push(s[i]); \n            &#125;\n        &#125;\n        while (ope.size()) &#123; calcu(); &#125;// 完成剩余计算\n        cout &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; dig.top() &lt;&lt; '\\n';// 最后的结果就是数字栈栈顶元素，保留两位输出即可\n        return 0;\n    &#125;\n&#125;\n\nsigned int main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "栈"
+            ]
+        }
+    ]
+}

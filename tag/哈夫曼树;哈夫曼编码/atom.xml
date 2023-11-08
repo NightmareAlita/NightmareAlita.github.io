@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;哈夫曼树;哈夫曼编码&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-08-18T08:57:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/08/18/BNDSOJ%201575%20%E5%93%88%E5%A4%AB%E6%9B%BC/</id>
+        <title>题解 BNDS OJ 1575 哈夫曼</title>
+        <link rel="alternate" href="http://example.com/2023/08/18/BNDSOJ%201575%20%E5%93%88%E5%A4%AB%E6%9B%BC/"/>
+        <content type="html">&lt;h1&gt;题解 BNDS OJ 1575 哈夫曼&lt;/h1&gt;
+&lt;h4 id=&#34;前置芝士：&#34;&gt;前置芝士：&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://oi-wiki.org/ds/huffman-tree/&#34;&gt;哈夫曼树&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;给定一个仅包含小写字母的字符序列，要求输出这个序列的哈夫曼编码&lt;/p&gt;
+&lt;h4 id=&#34;分析-求解：&#34;&gt;分析/求解：&lt;/h4&gt;
+&lt;p&gt;哈夫曼建树时要求每次配对权值最小的两个儿子，它们配对所产生的父亲也要重新与其它的树进行比较，所以我们很容易可以想到通过优先队列来维护当前所有的树，具体细节见代码&lt;/p&gt;
+&lt;h4 id=&#34;AC代码：&#34;&gt;AC代码：&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;queue&amp;gt;
+#include &amp;lt;vector&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e6 + 7;
+    struct node &amp;#123; int ma,val,fa,l,r,pos; &amp;#125;;
+    // ma,val,fa,l,r,pos分别表示当前节点对应的字母，出现的数量，父节点编号，左右儿子编号，当前节点编号
+    struct cmp&amp;#123;
+        bool operator()(const node&amp;amp;a, const node&amp;amp;b)const&amp;#123;
+            if(a.val != b.val) &amp;#123; return a.val &amp;gt; b.val; &amp;#125;
+            else &amp;#123; return a.ma &amp;gt; b.ma; &amp;#125;
+        &amp;#125;
+    &amp;#125;;// 重载函数调用运算符
+    priority_queue&amp;lt;node,vector&amp;lt;node&amp;gt;,cmp&amp;gt; q; 
+    // 用优先队列来维护森林
+    string s;
+    node tree[N];
+    // tree[]维护整棵哈夫曼树
+    vector&amp;lt;int&amp;gt; haff[30];
+    // haff[]维护每个字母对应的哈夫曼编码
+    int used[30];
+    // used[]维护每个字母出现的次数
+    int n, m, idx;
+    void build() &amp;#123;
+        while (q.size() &amp;gt;= 2) &amp;#123; // 森林中还有元素时持续配对
+            node x = q.top(); q.pop();
+            node y = q.top(); q.pop();
+            // 取出堆顶两个元素配对
+            if (!x.pos) &amp;#123; tree[++idx] = x; tree[idx].pos = x.pos = idx; &amp;#125;
+            if (!y.pos) &amp;#123; tree[++idx] = y; tree[idx].pos = y.pos = idx; &amp;#125;
+            // 如果取出的点没有在树中则新建一个树上节点
+            node z = &amp;#123;-1,(x.val+y.val), -1, x.pos, y.pos, ++idx&amp;#125;;
+            tree[x.pos].fa = tree[y.pos].fa = idx;
+            q.push(z); tree[idx] = z;
+            // 建立这两个节点的父亲并扔进森林
+        &amp;#125;
+    &amp;#125;
+    void solve() &amp;#123;
+        for (int i = 1; i &amp;lt;= idx; ++i) &amp;#123;
+            // 遍历树上节点找到最原始的代表单独字符的节点
+            if (tree[i].ma != -1) &amp;#123;
+                int now = i;
+                while (tree[now].fa != -1) &amp;#123;
+                    if (now == tree[tree[now].fa].l) &amp;#123; haff[tree[i].ma].push_back(0); &amp;#125;
+                    else &amp;#123; haff[tree[i].ma].push_back(1); &amp;#125;
+                    now = tree[now].fa;
+                    // 向上搜索找根来获取编码
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        for (int i = 1; i &amp;lt;= 27; ++i) &amp;#123;
+            if (haff[i].size()) &amp;#123;
+                for(int j = haff[i].size()-1; j &amp;gt;= 0; --j) &amp;#123; cout &amp;lt;&amp;lt; haff[i][j]; &amp;#125;
+                // 由于获取编码时是反向获取的，所以倒序输出
+                cout &amp;lt;&amp;lt; &#39;\n&#39;;
+            &amp;#125;
+        &amp;#125;
+        for (int i = 0; i &amp;lt;= n; ++i) &amp;#123;
+            int a = s[i] - &#39;a&#39; + 1;
+            for(int j = haff[a].size()-1; j &amp;gt;= 0; --j) &amp;#123; cout &amp;lt;&amp;lt; haff[a][j]; &amp;#125;
+            // 查询并输出整个字符串的哈夫曼编码
+        &amp;#125;
+    &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m &amp;gt;&amp;gt; s;
+        for (int i = 0; i &amp;lt; n; ++i) &amp;#123; used[s[i] - &#39;a&#39; + 1]++; &amp;#125;
+        // 统计每个字母出现的次数
+        for (int i = 1; i &amp;lt;=26; ++i) &amp;#123; 
+            if (used[i]) &amp;#123; // 如果存在当前字母
+                q.push(&amp;#123;i,used[i],0,-1,-1,0&amp;#125;); 
+                // 将该节点作为一个子树插入森林
+            &amp;#125;
+        &amp;#125;
+        build(); // 建树
+        solve(); // 求霍夫曼编码
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <category term="哈夫曼树;哈夫曼编码" />
+        <updated>2023-08-18T08:57:00.000Z</updated>
+    </entry>
+</feed>

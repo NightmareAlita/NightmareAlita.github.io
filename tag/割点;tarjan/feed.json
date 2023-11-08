@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"割点;tarjan\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/08/24/P5058%20[ZJOI2004]%20%E5%97%85%E6%8E%A2%E5%99%A8/",
+            "url": "http://example.com/2023/08/24/P5058%20[ZJOI2004]%20%E5%97%85%E6%8E%A2%E5%99%A8/",
+            "title": "题解 洛谷 P5058 [ZJOI2004] 嗅探器",
+            "date_published": "2023-08-24T01:15:00.000Z",
+            "content_html": "<h1>P5058 [ZJOI2004] 嗅探器</h1>\n<h3 id=\"简要题意\">简要题意</h3>\n<p>给定一张图，再给处图中两个点 $x,y$，现在要在图中删去除了 $x,y$ 以外的一个点使得 $x$ 和 $y$ 不再连通，求要删除的点的编号</p>\n<h3 id=\"题目分析\">题目分析</h3>\n<p><a href=\"https://oi-wiki.org/graph/cut/\">前置芝士</a></p>\n<p>题目要求我们删掉一个点使得给定的两个点不连通，那么其实我们就是要找一个满足要求的割点，如下图标黑的点就是题目给定的两个点：</p>\n<p><img src=\"https://s1.ax1x.com/2023/08/23/pPJqc80.png\" alt=\"\"></p>\n<p>点 $1$ 是一个割点，我们删除点 $1$ 即可使得 $2,4$ 两点不连通，但是并非任意割点都满足要求，比方说下面这张图：</p>\n<p><img src=\"https://s1.ax1x.com/2023/08/23/pPJqg2V.png\" alt=\"\"></p>\n<p>点 $3$ 和点 $4$ 都是图中的割点，但是删去 $4$ 并不能使得目标点 $1,7$ 不连通，所以只有点 $3$ 是符合条件的点，那么我们就要去筛选割点中符合要求的点。</p>\n<p>怎么筛呢？其实我们想一想建立 DFS 树的过程，我们从题中给定的一个点开始搜，那么对于一个符合条件的割点来讲，题中给定的另一个点一定在这个符合条件的割点的子树中。所以在搜的时候加个判断条件就好了。本题因为不能删去根，所以不用考虑根是割点的情况，那么代码也就非常简单：</p>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\nusing namespace std;\n\nnamespace SHAWN &#123;\n    const int N = 1e6 + 7;\n    int head[N], cnt;\n    struct edge &#123; int to, next; &#125;edge[N];\n    int n, tim, x, y;\n    int dfn[N], low[N];\n    bool vis[N], flag[N];\n\n    inline void add(int u, int v) &#123;\n        edge[++cnt].next = head[u];\n        edge[cnt].to = v;\n        head[u] = cnt;\n    &#125;\n\n    void Tarjan(int u, int fa) &#123;\n        low[u] = dfn[u] = ++tim;\n        vis[u] = true;\n        for (int i = head[u]; i; i = edge[i].next) &#123;\n            int v = edge[i].to;\n            if (!vis[v]) &#123;\n                Tarjan(v, u);\n                low[u] = min(low[u], low[v]);\n                // 这里多加一个u!=x和dfn[y]&gt;=dfn[v]的特判就OK了\n                if (fa != u &amp;&amp; low[v] &gt;= dfn[u] &amp;&amp; u != x &amp;&amp; dfn[y] &gt;= dfn[v]) &#123;\n                    flag[u] = true;\n                &#125;\n            &#125;\n            else if (fa != v) &#123;\n                low[u] = min(low[u], dfn[v]);\n            &#125;\n        &#125;\n    &#125;\n\n    int work()\n    &#123;\n        cin &gt;&gt; n;\n        while (cin &gt;&gt; x &gt;&gt; y &amp;&amp; x &amp;&amp; y) &#123;\n            add(x, y); add(y, x);\n        &#125;\n        cin &gt;&gt; x &gt;&gt; y;\n        Tarjan(x, x);\n        for (int i = 1; i &lt;= n; ++i) &#123;\n            if (flag[i]) &#123;\n                cout &lt;&lt; i &lt;&lt; '\\n';\n                return 0;\n            &#125;\n        &#125;\n        cout &lt;&lt; &quot;No solution\\n&quot;;\n        return 0;\n    &#125;\n&#125;\n\nsigned int main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "割点;Tarjan"
+            ]
+        }
+    ]
+}

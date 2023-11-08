@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"容斥;根号分治\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/08/29/P9118%20[%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023]%20%E5%B9%82%E6%AC%A1/",
+            "url": "http://example.com/2023/08/29/P9118%20[%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023]%20%E5%B9%82%E6%AC%A1/",
+            "title": "题解 洛谷 P9118 [春季测试 2023] 幂次",
+            "date_published": "2023-08-29T09:05:00.000Z",
+            "content_html": "<h1>P9118 [春季测试 2023] 幂次</h1>\n<h2 id=\"简要题意\">简要题意</h2>\n<p>给定两个参数 $n,k$，问在区间 $[1,n]$ 中有多少正整数 $x$ 满足 $x = a^p$，其中 $p \\ge k$。</p>\n<h2 id=\"策略分析\">策略分析</h2>\n<p><strong>前置芝士</strong>：区间 $[1,n]$ 中完全平方数有 $\\left \\lfloor \\sqrt{n}  \\right \\rfloor $ 个，这个结论用整除分块很容易就可以证出来。</p>\n<p>有了这个结论，我们就已经处理完了这个题中 $k=2$ 的情况了，我们来分析剩下的情况。</p>\n<p>当 $k=1$ 时，显然区间内每个数都可以表示为 $a^1$，所以答案就是 $n$。</p>\n<p>当 $k \\ge 3$ 时，底数为 $1$ 的情况就直接跳过，我们发现现在底数最小是 $2$，而我们单次计算最大的可能次数就是 $\\log_2 n$，本题中 $n \\le 10^{18}$，所以单次最多计算次数为 $\\left \\lceil \\log_2 10^{18} \\right \\rceil = 60$。所以我们直接暴力枚举就可以了。平方不需要枚举直接用我们的结论，我们从 $\\left \\lfloor \\sqrt[3]{n}   \\right \\rfloor $ 开始枚举即可，枚举到的数标记一下，下次如果标记过则计数器不操作，碰到完全平方数记一下最后把多算的这一次减掉就行。</p>\n<h2 id=\"参考代码\">参考代码</h2>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#include &lt;cmath&gt;\n#include &lt;map&gt;\n#define LL unsigned long long\nusing namespace std;\n\nnamespace SHAWN &#123;\n    LL n, k, bcnt, ans, tmp, p;\n    //tmp表示底数，p表示幂次，ans是答案，bcnt是重复计算的完全平方数\n    map&lt;LL, bool&gt; m;\n    int work()\n    &#123;\n        cin &gt;&gt; n &gt;&gt; k;\n        LL bk = sqrtl(n);\n        // bk是[1,n]中完全平方数的数量\n        for (LL i = 2; i * i * i &lt;= n; ++i) &#123;\n            // 从三次根号下n开始枚举\n            tmp = i * i; p = 2;\n            while (tmp &lt;= n/i) &#123;\n                tmp *= i; ++p;\n                if (m[tmp] || p &lt; k) &#123; continue; &#125;\n                LL k = sqrtl(tmp);\n                if (k * k == tmp) &#123; ++bcnt; &#125;\n                m[tmp] = true; ++ans;\n            &#125;\n        &#125;\n        if (k == 1) &#123; cout &lt;&lt; n &lt;&lt; '\\n'; &#125;\n        else if (k == 2) &#123; cout &lt;&lt; ans - bcnt + bk &lt;&lt; '\\n'; &#125;\n        else if (k &gt;= 3) &#123; cout &lt;&lt; ans + 1 &lt;&lt; '\\n';&#125;\n        return 0;\n    &#125;\n&#125;\n\nsigned int main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n<h2 id=\"特别提醒\">特别提醒</h2>\n<p>本题中要注意的是，开根的时候要用 <code>sqrtl()</code> 而不是 <code>sqrt()</code>，因为我们计算的对象和答案都是长长整型，用 <code>sqrt()</code> 可能会出错。</p>\n",
+            "tags": [
+                "容斥;根号分治"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;矩阵加速;动态规划&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-08-18T09:04:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/08/18/U327217%20%E5%AF%BB%E6%89%BE%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/</id>
+        <title>题解 洛谷 U327217 寻找千泷の小翼龙</title>
+        <link rel="alternate" href="http://example.com/2023/08/18/U327217%20%E5%AF%BB%E6%89%BE%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/"/>
+        <content type="html">&lt;h1&gt;题解 洛谷 U327217 寻找千泷の小翼龙&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.luogu.com.cn/problem/U327217&#34;&gt;本题题面&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;原题（本题由该题数据加强而来）：&#34;&gt;原题（本题由该题数据加强而来）：&lt;/h4&gt;
+&lt;h3 id=&#34;USACO-Training-6-1-1-Postal-Vans&#34;&gt;USACO Training 6.1.1 Postal Vans&lt;/h3&gt;
+&lt;p&gt;Tiring of their idyllic fields, the cows have moved to a new suburb. The suburb is a rectangular grid of streets with a post office at its Northwest corner. It has four avenues running East-West and $n(1\le n\le 10^{18})$ streets running North-South.&lt;/p&gt;
+&lt;p&gt;For example, the following diagram shows such a suburb with $n=5$ streets, with the avenues depicted as horizontal lines, and the post office as a dark blob at the top-left corner:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://img1.imgtp.com/2023/08/14/HuR5aj47.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Each day the postal van leaves the post office, drives around the suburb and returns to the post office, passing exactly once through every intersection (including those on borders or corners). The executives from the post company want to know how many distinct routes can be established for the postal van (of course, the route direction is significant in this count).&lt;/p&gt;
+&lt;p&gt;For example, the following diagrams show two such routes for the above suburb:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://img1.imgtp.com/2023/08/14/cqJ1rEzT.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;As another example, the following diagrams show all the four possible routes for a suburb with $n=3$ streets:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://img1.imgtp.com/2023/08/14/tUwsNA4a.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Write a program that will determine the number of such distinct routes given the number of streets.&lt;/p&gt;
+&lt;p&gt;INPUT FORMAT&lt;/p&gt;
+&lt;p&gt;Line 1: Two integers, n, p&lt;/p&gt;
+&lt;p&gt;SAMPLE INPUT：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;4 32767
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;OUTPUT FORMAT&lt;/p&gt;
+&lt;p&gt;Line 1: A single integer that tells how many possible distinct routes corresponding to the number of streets given in the input, mod p;&lt;/p&gt;
+&lt;p&gt;SAMPLE OUTPUT:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;12
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;给定一个$4\times n$的格子（按照格点计数），从左上角出发沿格子遍历所有格点后再返回起点，要求每个点只遍历一次，计算合法方案的总数 $mod$ $p$ 的值&lt;/p&gt;
+&lt;h4 id=&#34;策略分析：&#34;&gt;策略分析：&lt;/h4&gt;
+&lt;p&gt;看到方案数，我们合理地想到了动态规划，而看到数据范围和动态规划，我们合理地想到了矩阵加速。设 $f_i$ 为前 $i$ 列中第 $i$ 列中总的方案数。大家小时候应该都玩过拼管子吧，就那种各种各样形状的管子可以组合成不同的形状，那么本题就是要用类似的方法。&lt;/p&gt;
+&lt;p&gt;到达南北方向 $1,2$ 路口的方案只有 $2$ 种，我们将管子如下摆放：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/eu2m5la4.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/0c03xatj.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;到达南北方向 $1,4$ 路口方案有 $7$ 种，但最后两种等价算作一种：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/ien5q644.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/zdtegbg0.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/w7t6gcu7.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/8i80emnk.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/qu3xspnd.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/2e98lwsj.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/r44dhsqm.png&#34; alt=&#34;&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/cidfxurb.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;由此我们可以推出状态转移方程，即：&lt;/p&gt;
+$$\displaylines{f_i=2f_{i-1}+2f_{i-2}-2f_{i-3}+f_{i-4}
+}$$&lt;p&gt;对于这种方法和递推方程正确性的证明参见&lt;a href=&#34;http://blog.csdn.net/jiangshibiao/article/details/21446033&#34;&gt;阿蒋大佬的blog&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;得到了状态转移方程我们就可以得到转移矩阵 $M$ 了,&lt;/p&gt;
+$$\displaylines{M=\begin{vmatrix}
+  2&amp;amp;  2&amp;amp;  -2&amp;amp; 1\\
+  1&amp;amp;  0&amp;amp;  0&amp;amp; 0\\
+  0&amp;amp;  1&amp;amp;  0&amp;amp; 0\\
+  0&amp;amp;  0&amp;amp;  1&amp;amp; 0
+\end{vmatrix}}$$&lt;p&gt;我们充分发扬人类智慧，通过大脑和手求得 $f_1=0,f_2=2,f_3=4,f_4=12$&lt;/p&gt;
+&lt;p&gt;剩余部分显然没有难度了，直接矩阵加速就可以了，于是我们做完了，下面是 $AC$ 代码&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#define clear(q) memset(q.m, 0, sizeof(q.m))
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    LL n, p;
+    struct mat &amp;#123; LL m[4][4]; &amp;#125;;
+    mat operator* (const mat &amp;amp;x, const mat &amp;amp;y) &amp;#123;
+        mat ans;
+        clear(ans);
+        for (int i = 0; i &amp;lt; 4; ++i) &amp;#123;
+            for (int k = 0; k &amp;lt; 4; ++k) &amp;#123;
+                if (x.m[i][k]) &amp;#123;
+                    for (int j = 0; j &amp;lt; 4; ++j) &amp;#123;
+                        ans.m[i][j] = ((ans.m[i][j] + (x.m[i][k] * y.m[k][j])) % p + p) % p; 
+                    &amp;#125;
+                &amp;#125;
+            &amp;#125;
+        &amp;#125; 
+        return ans;
+    &amp;#125;
+    mat qpow(mat a, LL b) &amp;#123;
+        mat z;
+        clear(z);
+        for (int i = 0; i &amp;lt; 4; ++i) &amp;#123; z.m[i][i] = 1; &amp;#125;
+        while (b) &amp;#123;
+            if (b &amp;amp; 1) &amp;#123; z = z * a; &amp;#125;
+            a = a * a; b &amp;gt;&amp;gt;= 1;
+        &amp;#125;
+        return z;
+    &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; p;
+        if (n &amp;lt;= 4) &amp;#123;
+            switch (n) &amp;#123;
+                case 1 : cout &amp;lt;&amp;lt; &amp;quot;0\n&amp;quot;; break;
+                case 2 : cout &amp;lt;&amp;lt; &amp;quot;2\n&amp;quot;; break;
+                case 3 : cout &amp;lt;&amp;lt; &amp;quot;4\n&amp;quot;; break;
+                case 4 : cout &amp;lt;&amp;lt; &amp;quot;12\n&amp;quot;; break;
+                default : break;
+            &amp;#125;
+            return 0;
+        &amp;#125;
+        mat a;
+        clear(a);
+        a.m[0][0] = 2; a.m[0][1] = 2; a.m[0][2] = -2; a.m[0][3] = 1;
+        a.m[1][0] = 1; a.m[2][1] = 1; a.m[3][2] = 1;
+        mat z = qpow(a, n - 4);
+        LL ans = ((z.m[0][0] * 12 + z.m[0][1] * 4 + z.m[0][2] * 2) % p + p) % p;
+        cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <category term="矩阵加速;动态规划" />
+        <updated>2023-08-18T09:04:00.000Z</updated>
+    </entry>
+</feed>

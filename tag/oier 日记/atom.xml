@@ -6,6 +6,29 @@
     <updated>2023-09-21T15:00:00.000Z</updated>
     <category term="OIer 日记" />
     <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
     <entry>
         <id>http://example.com/2023/09/21/%E4%B8%80%E5%8F%AA%E5%9C%A8%E5%BD%B9%20OIer%20%E7%9A%84%E8%87%AA%E8%BF%B0/</id>
         <title>一只在役 OIer 的自述</title>

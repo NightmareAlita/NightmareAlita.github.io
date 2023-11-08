@@ -1,0 +1,28 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"数学\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/08/28/P5686%20[CSP-S2019%20%E6%B1%9F%E8%A5%BF]%20%E5%92%8C%E7%A7%AF%E5%92%8C/",
+            "url": "http://example.com/2023/08/28/P5686%20[CSP-S2019%20%E6%B1%9F%E8%A5%BF]%20%E5%92%8C%E7%A7%AF%E5%92%8C/",
+            "title": "题解 洛谷 P5686 [CSP-S2019 江西] 和积和",
+            "date_published": "2023-08-28T03:06:00.000Z",
+            "content_html": "<h1>P5686 [CSP-S2019 江西] 和积和</h1>\n<h2 id=\"简要题意\">简要题意</h2>\n<p>给定两个 $n$ 个元素的序列 $a,b$，求下面这个式子对 $10^9+7$ 取模的结果：</p>\n$$\\displaylines{\\sum_{l=1}^{n}\\sum_{r=l}^{n}(\\sum_{i=l}^{r}a_i \\times \\sum_{i=l}^{r}b_i)\n}$$<h2 id=\"策略分析\">策略分析</h2>\n<p>如果直接模拟那么时间复杂度是爆炸级的 $O(n^3)$，显然正常人都不会这么做，正常人会选择可爱的前缀和，所以最后一层括号复杂度变成 $O(1)$，总复杂度 $O(n^2)$，比刚刚好了很多，但依然是过不去的，所以我们考虑对前缀和进行优化。</p>\n<p>设 $a$ 的前缀数组为 $A$，$b$ 的前缀数组为 $B$。那么上面的式子显然可以写成：</p>\n$$\\displaylines{\\sum_{l=1}^{n}\\sum_{r=l}^n(A_r-A_{l-1})(B_r-B_{l-1}) \\\\\n=\\sum_{l=1}^{n}\\sum_{r=l}^n(A_rB_r+A_{l-1}B_{r-1}-A_rB_{l-1}-A_{l-1}B_r)\n}$$<p>这样看我们求解还不是很方便，因为存在前面的求和符号，我们不便于对整体的式子进行观察，所以我们用一个 $n$ 较小的式子看一下，比方说令 $n=4$，那么我们按照这个式子带进去展开化简得到：</p>\n$$\\displaylines{sum=4(A_1B_1+A_2B_2+A_3B_3+A_4B_4) \\\\\n-(A_1B_2+A_1B_3+A_1B_4+A_2B_1+A_2B_3+A_2B_4 \\\\\n+A_3B_1+A_3B_2+A_3B_4+A_4B_1+A_4B_2+A_4B_3)\n}$$<p>那么前面系数为 $4$ 的那个式子我们就可以 $O(n)$ 求了，关键转移到了如何求后面这一坨东西。我们把 $A$ 和 $B$ 按照下标放到矩阵里看一看：</p>\n$$\\displaylines{\\begin{bmatrix}\n 0&amp;  A_1B_2&amp;  A_1B_3&amp; A_1B_4\\\\\n  A_2B_1&amp;  0&amp;  A_2B_3&amp; A_2B_4\\\\\n  A_3B_1&amp;  A_3B_2&amp;  0&amp; A_3B_4\\\\\n  A_4B_1&amp;  A_4B_2&amp;  A_4B_3&amp; 0 \n\\end{bmatrix}\n}$$<p>我们发现这不就是 $A$ 每一项去乘 $B$ 每一项吗，唯一的遗憾是对角线全是 $0$。我们期望能够对这个式子进行因式分解使其变成两个只包含 $A$ 或 $B$ 的式子相乘，那么其实想办法把这个对角线给它补齐就行了，我们发现对角线的 $A,B$ 下标相等，那么就和刚刚系数为 $4$ 的那个式子一模一样了，所以我们在这多减一遍，前面多加一遍，整个式子的值不变，式子变成这样：</p>\n$$\\displaylines{sum=5 \\times \\sum_{i=1}^{4}A_iB_i-(\\sum_{i=1}^4A_i \\times \\sum_{i=1}^4B_i)\n}$$<p>然后把这个结论归纳到 $n$ 项得：</p>\n$$\\displaylines{\\begin{aligned}\nsum=(n+1) \\times \\sum_{i=1}^{n}A_iB_i-(\\sum_{i=1}^{n}A_i \\times \\sum_{i=1}^{n}B_i) \\\\\n=\\sum_{i=1}^{n}(n+1)\\times A_iB_i-(\\sum_{i=1}^{n}A_i \\times \\sum_{i=1}^{n}B_i)\n\\end{aligned}\n}$$<p>图中三个求和符不存在嵌套，所以每一个都可以拿出来单独计算，时间复杂度降低到了 $O(n)$，于是这道题就做完了。做题的时候要注意，本题给定的数都特别大，所以在求解的过程中不要忘记<strong>时刻取模</strong>。</p>\n<h2 id=\"参考代码\">参考代码</h2>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#define LL long long\nusing namespace std;\n\nnamespace SHAWN &#123;\n    const LL N = 5e5 + 7, mod = 1e9 + 7;\n    LL n, ans, A, B;\n    LL a[N], b[N];\n    int work()\n    &#123;\n        cin &gt;&gt; n;\n        for (int i = 1; i &lt;= n; ++i) &#123; \n            cin &gt;&gt; a[i];\n            a[i] = (a[i] + a[i - 1]) % mod;// 求a的前缀\n        &#125;\n        for (int i = 1; i &lt;= n; ++i) &#123;\n            cin &gt;&gt; b[i];\n            b[i] = (b[i] + b[i - 1]) % mod;// 求b的前缀\n        &#125;\n        for (int i = 1; i &lt;= n; ++i) &#123;\n            ans = (ans % mod + ((n + 1) * a[i]) % mod * b[i] % mod) % mod;\n            // 处理第一个求和符\n            A = (A + a[i]) % mod;\n            // 处理第二个求和符\n            B = (B + b[i]) % mod;\n            // 处理第三个求和符\n        &#125;\n        ans = ((ans - (A * B % mod)) + mod) % mod;\n        // 将三个求和符号按照推出来的式子加到一块\n        cout &lt;&lt; ans % mod &lt;&lt; '\\n';\n        return 0;\n    &#125;\n&#125;\n\nsigned int main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "数学"
+            ]
+        },
+        {
+            "id": "http://example.com/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/",
+            "url": "http://example.com/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/",
+            "title": "题解 洛谷 U334987 营救千泷の小翼龙",
+            "date_published": "2023-08-18T09:05:00.000Z",
+            "content_html": "<h1>U334987 营救千泷の小翼龙</h1>\n<h2 id=\"简要题意\">简要题意</h2>\n<p>给你一个数 $n$ 和 $v$，求 $v \\times \\sum_{i=1}^n i^3 \\bmod 998244353$。</p>\n<h2 id=\"策略分析\">策略分析</h2>\n<p>本题是一道纯纯诈骗题，我们打表或者运用数学归纳法都可以得到如下结论：</p>\n$$\\displaylines{\\sum_{i=1}^n i^3 = (\\sum_{i=1}^ni)^2 = (\\frac{n + n^2}{2})\n}$$<p>于是我们就可以直接带进去 $O(1)$ 算了，于是我们做完了，写代码时请注意取模。</p>\n<h2 id=\"参考代码\">参考代码</h2>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#define LL long long\nusing namespace std;\n\nnamespace SHAWN &#123;\n    const int mod = 998244353;\n    LL n, v, ans;\n    int work()\n    &#123;\n        cin &gt;&gt; n &gt;&gt; v;\n        n %= mod; v %= mod;\n        ans = (1 + n) * n / 2 % mod;\n        ans = ((ans * ans) % mod * v) % mod;\n        cout &lt;&lt; ans &lt;&lt; '\\n';\n        return 0;\n    &#125;\n&#125;\n\nsigned int main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "数学"
+            ]
+        }
+    ]
+}

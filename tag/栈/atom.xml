@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;栈&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-08-18T09:06:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/08/18/BNDSOJ%201263%20%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</id>
+        <title>题解 BNDS OJ 1263 表达式求值</title>
+        <link rel="alternate" href="http://example.com/2023/08/18/BNDSOJ%201263%20%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/"/>
+        <content type="html">&lt;h1&gt;题解 BNDS OJ 1263 表达式求值&lt;/h1&gt;
+&lt;h4 id=&#34;简要题意：&#34;&gt;简要题意：&lt;/h4&gt;
+&lt;p&gt;输入一个表达式，包括 &lt;code&gt;+&lt;/code&gt;，&lt;code&gt;-&lt;/code&gt;，&lt;code&gt;*&lt;/code&gt;，&lt;code&gt;/&lt;/code&gt;，&lt;code&gt;(&lt;/code&gt;，&lt;code&gt;)&lt;/code&gt;。求出表达式的值，保留两位小数（不知道你谷有没有这道题）。&lt;/p&gt;
+&lt;p&gt;提供一组样例：&lt;/p&gt;
+&lt;p&gt;样例输入：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;9-(6+3*5)/3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;样例输出：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;2.00
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;策略分析：&#34;&gt;策略分析：&lt;/h4&gt;
+&lt;p&gt;这不是简单的数据结构入门题，我们只需要拿两个栈，一个存数字一个存运算符，碰到后括号就把它到前括号里的值全部算出来。因为在这6个运算符中，除了括号其他均是二元运算符，所以符号栈栈顶运算符（除了括号）一定匹配数字栈的头两个数字	，按照运算优先级取出来算就可以了。运算优先级我们可以用一个 $ \operatorname{map} $ 来处理，具体细节见代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#include &amp;lt;unordered_map&amp;gt;
+#include &amp;lt;stack&amp;gt;
+#include &amp;lt;iomanip&amp;gt;
+#define LD long double
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    unordered_map&amp;lt;char, int&amp;gt; pri;
+    stack&amp;lt;LD&amp;gt; dig;
+    stack&amp;lt;char&amp;gt; ope;
+    string s;
+    void calcu() &amp;#123;// 出栈计算
+        LD a = dig.top(); dig.pop();
+        LD b = dig.top(); dig.pop();
+        char opt = ope.top(); ope.pop();
+        LD res = 0;
+        if (opt == &#39;+&#39;) &amp;#123; res = b + a; &amp;#125;
+        if (opt == &#39;-&#39;) &amp;#123; res = b - a; &amp;#125;
+        if (opt == &#39;*&#39;) &amp;#123; res = b * a; &amp;#125;
+        if (opt == &#39;/&#39;) &amp;#123; res = b / a; &amp;#125;
+        dig.push(res);// 算完的结果塞回数字栈
+    &amp;#125;
+    int work()
+    &amp;#123;
+        pri[&#39;+&#39;] = pri[&#39;-&#39;] = 1;
+        pri[&#39;*&#39;] = pri[&#39;/&#39;] = 2;
+        cin &amp;gt;&amp;gt; s;
+        int len = s.length();
+        for (int i = 0; i &amp;lt; len; ++i) &amp;#123;
+            if (isdigit(s[i])) &amp;#123;// 遇到数字就存进栈里
+                int x = 0, j = i;
+                while (j &amp;lt; len &amp;amp;&amp;amp; isdigit(s[j])) &amp;#123;
+                    x = x * 10 + s[j] - &#39;0&#39;;
+                    j++;
+                &amp;#125;
+                dig.push(x);
+                i = j - 1;
+            &amp;#125;
+            else if (s[i] == &#39;(&#39;) &amp;#123; ope.push(s[i]); &amp;#125;// 左括号进栈
+            else if (s[i] == &#39;)&#39;) &amp;#123;// 遇到右括号就一直向前算到上一个左括号
+                while (ope.top() != &#39;(&#39;) &amp;#123; calcu(); &amp;#125;
+                ope.pop();
+            &amp;#125;
+            else &amp;#123;// 遇到运算符直接按优先级进行计算
+                while (ope.size() &amp;amp;&amp;amp; pri[ope.top()] &amp;gt;= pri[s[i]]) &amp;#123; calcu(); &amp;#125;
+                ope.push(s[i]); 
+            &amp;#125;
+        &amp;#125;
+        while (ope.size()) &amp;#123; calcu(); &amp;#125;// 完成剩余计算
+        cout &amp;lt;&amp;lt; fixed &amp;lt;&amp;lt; setprecision(2) &amp;lt;&amp;lt; dig.top() &amp;lt;&amp;lt; &#39;\n&#39;;// 最后的结果就是数字栈栈顶元素，保留两位输出即可
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <category term="栈" />
+        <updated>2023-08-18T09:06:00.000Z</updated>
+    </entry>
+</feed>

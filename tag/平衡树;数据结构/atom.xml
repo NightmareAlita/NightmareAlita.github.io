@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;平衡树;数据结构&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-09-26T02:18:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/09/26/P1486%20[NOI2004]%20%E9%83%81%E9%97%B7%E7%9A%84%E5%87%BA%E7%BA%B3%E5%91%98/</id>
+        <title>题解 洛谷 P1486 [NOI2004] 郁闷的出纳员</title>
+        <link rel="alternate" href="http://example.com/2023/09/26/P1486%20[NOI2004]%20%E9%83%81%E9%97%B7%E7%9A%84%E5%87%BA%E7%BA%B3%E5%91%98/"/>
+        <content type="html">&lt;h1&gt;P1486 [NOI2004] 郁闷的出纳员&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定 $n$ 次操作和一个阈值 $min$，每次操作包含一个字符 $opt$ 和一个整数 $k$，操作可以是一下四种之一：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;I k&lt;/code&gt; 如果 $k$ 小于 $min$ 不操作，否则将 $k$ 扔进一个集合 $s$ 中。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;A K&lt;/code&gt; 把 $s$ 里所有元素值加上 $k$。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;S k&lt;/code&gt; 把 $s$ 里所有元素值减去 $k$。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;F k&lt;/code&gt; 查询 $s$ 里第 $k$ 大的值，如果 $k &amp;gt; \left | s \right | $ 输出 &lt;code&gt;-1&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在每次操作中，一旦 $s$ 中有元素的值低于阈值 $min$，就要删除这个元素，程序最后要输出删除的元素总数（插入时就因为小于阈值没有插入进来的不算）&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;我们看到插入，删除，查询排名理所当然地想到了平衡树；看到全加上，全减去，理所当然地想到了线段树。但是很显然，这题肯定不是树套树。我们考虑，既然是全部加，单点查，我们其实并不用关心每个元素的更改，因为集体的更改不会导致排名的变化，只会影响我们后查询值，所以我们可以把这种更改用一个变量 $tag$ 记下来。&lt;/p&gt;
+&lt;h3 id=&#34;插入&#34;&gt;插入&lt;/h3&gt;
+&lt;p&gt;在新插入元素的时候，我们要先对插入的元素减去 $tag$，这样做是为了消除其对插入的值的排名的影响。当我们输出的时候，因为这一部分的值刚好被抵消，所以加上的就是插入它以后对它操作的值，满足题目的要求。与此同时我们要拿一个 $sum$ 来记一共插入了多少次，拿一个 $cnt$ 来记当前集合中的元素个数。&lt;/p&gt;
+&lt;h3 id=&#34;元素加减&#34;&gt;元素加减&lt;/h3&gt;
+&lt;p&gt;增加元素必然是直接加到 $tag$ 上就好了，但是为了维护集合内小于阈值的数的个数并成功把他们删除，我们必须要同步更改 $min$，如果集体增加就要下调 $min$，集体减少就要上调 $min$。每次减少的时候我们要进行删除操作，我们在平衡树上不断寻找 $min$ 的前驱并删除（一个数的前驱定义为小于它的最大的数），直到删完为止。&lt;/p&gt;
+&lt;h3 id=&#34;查询&#34;&gt;查询&lt;/h3&gt;
+&lt;p&gt;查询直接查就好了，需要注意的是平衡树查排名的时候查的是第 $k$ 小，而我们查的是第 $k$ 大，所以查的时候要传的参数是 $cnt - k + 1$。在这里我们不建议更改平衡树的代码，因为平衡树细节较多码量较大，如果在考场上改写可能会导致不必要的错误以及浪费更多时间，除非万不得已，否则建议只在传参上调整。最后只需要输出总的插入次数减去当前集合的大小就是被删掉的元素个数。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;random&amp;gt;
+#include &amp;lt;ctime&amp;gt;
+#include &amp;lt;limits.h&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 2e5 + 7;
+    mt19937 rd(time(nullptr));
+    namespace Treap &amp;#123;
+        #define ls son[ro][1]
+        #define rs son[ro][0]
+        int cont, root;
+        int son[N][2], pre[N], size[N], cnt[N]; LL val[N];
+        void update(int ro) &amp;#123;
+            if (!ro) &amp;#123; return; &amp;#125;
+            size[ro] = cnt[ro];
+            if (ls) &amp;#123; size[ro] += size[ls]; &amp;#125;
+            if (rs) &amp;#123; size[ro] += size[rs]; &amp;#125; 
+        &amp;#125;
+        void rotate(int ro, int fa, int opt) &amp;#123;
+            int s = son[ro][opt];
+            son[ro][opt] = son[s][!opt];
+            son[s][!opt] = ro;
+            if (!fa) &amp;#123; root = s; &amp;#125;
+            else &amp;#123; son[fa][son[fa][1] == ro] = s; &amp;#125; 
+            update(ro); update(s);
+        &amp;#125;
+        void insert(int ro, int fa, LL x) &amp;#123;
+            if (!ro) &amp;#123;
+                ro = ++cont;
+                cnt[ro] = 1; val[ro] = x;
+                pre[ro] = rd() % INT_MAX;
+                update(ro);
+                if (!fa) &amp;#123; root = ro; &amp;#125;
+                else &amp;#123; son[fa][x &amp;lt; val[fa]] = ro; &amp;#125;
+            &amp;#125;
+            else &amp;#123;
+                if (x == val[ro]) &amp;#123; ++cnt[ro]; update(ro); &amp;#125;
+                else if (x &amp;lt; val[ro]) &amp;#123;
+                    insert(ls, ro, x); update(ro);
+                    if (pre[ls] &amp;lt; pre[ro]) &amp;#123; rotate(ro, fa, 1); &amp;#125;
+                &amp;#125;
+                else &amp;#123;
+                    insert(rs, ro, x); update(ro);
+                    if (pre[rs] &amp;lt; pre[ro]) &amp;#123; rotate(ro, fa, 0); &amp;#125;
+                &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        void del(int ro, int fa, LL x) &amp;#123;
+            if (!ro) &amp;#123; return; &amp;#125;
+            if (x == val[ro]) &amp;#123;
+                --cnt[ro];
+                if (!cnt[ro]) &amp;#123;
+                    int f = fa, s;
+                    update(ro);
+                    while(ls &amp;amp;&amp;amp; rs) &amp;#123;
+                        if (pre[ls] &amp;lt; pre[rs]) &amp;#123; s = ls; rotate(ro, f, 1); f = s; &amp;#125;
+                        else &amp;#123; s = rs; rotate(ro, f, 0); f = s; &amp;#125;
+                    &amp;#125;
+                    while (ls) &amp;#123; s = ls; rotate(ro, f, 1); f = s; &amp;#125;
+                    while (rs) &amp;#123; s = rs; rotate(ro, f, 0); f = s; &amp;#125;
+                    if (root == ro) &amp;#123; root = 0; &amp;#125;
+                    else &amp;#123; son[f][son[f][1] == ro] = 0; &amp;#125;
+                &amp;#125;
+                update(ro);
+            &amp;#125;
+            else &amp;#123;
+                if (x &amp;lt; val[ro]) &amp;#123; del(ls, ro, x); update(ro); &amp;#125;
+                else &amp;#123; del(rs, ro, x); update(ro); &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        LL find_pre(int ro, LL x) &amp;#123;
+            if (!ro) &amp;#123; return LONG_LONG_MIN; &amp;#125;
+            else if (x &amp;gt; val[ro]) &amp;#123; return max(val[ro], find_pre(rs, x)); &amp;#125;
+            else &amp;#123; return find_pre(ls, x); &amp;#125;
+        &amp;#125;
+        LL get_num(int ro, int x) &amp;#123;
+            if (x &amp;lt;= size[ls]) &amp;#123; return get_num(ls, x); &amp;#125;
+            else if (x &amp;lt;= size[ls] + cnt[ro]) &amp;#123; return val[ro]; &amp;#125;
+            else &amp;#123; return get_num(rs, x - size[ls] - cnt[ro]); &amp;#125;
+        &amp;#125;
+        void insert(LL x) &amp;#123; insert(root, 0, x); &amp;#125;
+        void del(LL x) &amp;#123; del(root, 0, x); &amp;#125;
+        LL findpre(LL x) &amp;#123; return find_pre(root, x); &amp;#125;
+        LL getnum(int x) &amp;#123; return get_num(root, x); &amp;#125;
+        #undef ls
+        #undef rs
+    &amp;#125;
+
+    int n; LL _min, tag, cnt, sum;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; _min;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; 
+            char opt; LL k; cin &amp;gt;&amp;gt; opt &amp;gt;&amp;gt; k;
+            if (opt == &#39;I&#39;) &amp;#123;
+                if (k - tag &amp;gt;= _min) &amp;#123;
+                    Treap :: insert(k - tag);
+                    ++cnt; ++sum;
+                &amp;#125;
+            &amp;#125;
+            else if (opt == &#39;A&#39;) &amp;#123; _min -= k; tag += k; &amp;#125;
+            else if (opt == &#39;S&#39;) &amp;#123;
+                _min += k; tag -= k;
+                LL tmp;
+                while ((tmp = Treap :: findpre(_min)) != LONG_LONG_MIN) &amp;#123;
+                    Treap :: del(tmp);
+                    --cnt;
+                &amp;#125;
+            &amp;#125;
+            else if (opt == &#39;F&#39;) &amp;#123;
+                if (cnt &amp;lt; k) &amp;#123; cout &amp;lt;&amp;lt; &amp;quot;-1\n&amp;quot;; &amp;#125;
+                else &amp;#123; cout &amp;lt;&amp;lt; Treap :: getnum(cnt - k + 1) + tag &amp;lt;&amp;lt; &#39;\n&#39;; &amp;#125;
+            &amp;#125;
+        &amp;#125;
+        cout &amp;lt;&amp;lt; sum - cnt &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <category term="平衡树;数据结构" />
+        <updated>2023-09-26T02:18:00.000Z</updated>
+    </entry>
+</feed>

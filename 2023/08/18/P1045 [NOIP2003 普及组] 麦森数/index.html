@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 洛谷 P1045 [NOIP2003 普及组] 麦森数 | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 洛谷 P1045 [NOIP2003 普及组] 麦森数</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/18
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6-%E9%AB%98%E7%B2%BE%E5%BA%A6/" style="color: #00a596">二进制;高精度</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>题解 洛谷 P1045 [NOIP2003 普及组] 麦森数</h1>
+<h3 id="简要题意：">简要题意：</h3>
+<p>给定一个数$p$，求$2^p$-1的位数和后500位的值，其中$p\in [1\times10^3,3.1\times10^6]$。</p>
+<h2 id="策略分析：">策略分析：</h2>
+<p>我们可以将这个问题分为两步来处理，第一步求出位数，第二步求后$500$位</p>
+<h3 id="求出位数：">求出位数：</h3>
+<p>首先有一个非常平凡的结论：$10^k$的位数为$k+1$。那么一个$10^k$的数的位数也等于$lg10^k$，设$n =2^p$，因为不存在最后一位为$0$的$2^p$的数，所以$2^p-1$的位数一定与$2^p$的位数相同。我们希望能够将$10^k$所具有的性质应用在$2^p$中，设$10^m=2$，那么$lg2=m$，所以$10^{lg2}=2$，所以$n=2^p=(10^{lg2})^p=10^{(lg2)·p}$，那么$n$的位数就等于$10^{(lg2)·p}$的位数，即$(lg2)·p+1$，那这不就简单多了，直接$cmath$库里随便一搞就出来了</p>
+<h3 id="求后500位的值：">求后500位的值：</h3>
+<p>我们发现一个朴素的高精度乘法的时间复杂度是$O(n^2)$，那么就寄了，所以我们要用<strong>超级快速的高精乘法</strong>，C++里什么样的数据类型存的数最大呢？~~（谁刚说__$int128$拉出去枪毙$5$分钟）~~显然我们要用$unsigned$  $long$  $long$来存储这500位，那么我们就要尽量挑战它的极限，一次乘$2^{60}$ <s>（讨厌没有边界感的$ull$）</s>，这样我们就可以在更短的时间内完成计算</p>
+<h3 id="AC代码：">AC代码：</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cmath&gt;
+#define ULL unsigned long long
+using namespace std;
+
+namespace Rick &#123; int work() &#123; cout &lt;&lt; &quot;Never gonna give you up, never gonna let you down~\n&quot;; &#125; &#125;
+namespace SHAWN &#123;
+    const int N = 507;
+    ULL t[N] = &#123; 1 &#125;;
+    int p;
+    int work()
+    &#123;
+        cin &gt;&gt; p;
+        cout &lt;&lt; (int)(log10(2) * p) + 1 &lt;&lt; '\n';
+        for (; p &gt; 0; p -= 60) &#123;
+            ULL jin = 0;
+            for (int i = 0; i &lt; 500; ++i) &#123;
+                if (p &gt; 60) &#123; t[i] &lt;&lt;= 60; &#125;
+                else &#123; t[i] &lt;&lt;= p; &#125;
+                t[i] += jin; jin = t[i] / 10; t[i] %= 10;
+            &#125;
+        &#125;
+        t[0] -= 1; 
+        // 最开始为了让乘法有值我们设成了1，所以一通操作后要减1
+        for (int i = 499; i &gt;= 0; --i) &#123;
+            cout &lt;&lt; t[i];
+            if (! (i % 50)) &#123; cout &lt;&lt; '\n'; &#125;
+        &#125;
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    // return SHAWN :: work();
+    return Rick :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

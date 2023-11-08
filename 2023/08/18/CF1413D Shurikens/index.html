@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 CF1413D Shurikens | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 CF1413D Shurikens</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/18
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%9E%84%E9%80%A0/" style="color: #03a9f4">构造</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>题解 CF1413D Shurikens</h1>
+<h2 id="简要题意">简要题意</h2>
+<p>给定一个 $n$ 和 $2n$ 个操作，第一种操作 “+” 表示从 $1$ ~ $n$ 中选择一个数插入序列，第二种操作 &quot; - $x$&quot; 表示从当前序列中删除 $x$ 且 $x$ 为当前序列里的最小值，根据给出的操作来推断将数插入序列的合法顺序。</p>
+<h2 id="策略分析">策略分析</h2>
+<h3 id="不合法情况">不合法情况</h3>
+<p>不合法的情况有两种。第一种是当在连续取出的两个值中，后取出的值比前取出的值小，因为每次必须取出序列里最小的值，所以这种情况显然是不符合要求的。第二种情况是取出的操作数比放入的操作数多，这样显然也是不合法的。</p>
+<h3 id="如何处理合法情况">如何处理合法情况</h3>
+<p>我们看到这种有进有出的结构能够想到什么，怎么才能反转操作呢？我们很自然地想到可以用栈来实现。我们倒着进行操作，遇到取数操作就把取出来的数压入栈 $s$，遇到插入操作就把 $s$ 栈顶元素弹出来塞进另一个栈 $ans$ 里，最后把 $ans$ 里的元素依次弹出就是答案所要的序列了。按照刚刚讨论过的不合法情况，当 $s$ 中入栈元素比栈顶元素大则不合法，如果需要弹出时栈 $s$ 为空则不合法。</p>
+<h3 id="正确性证明">正确性证明</h3>
+<p>因为每次都要取序列中的最小值，所以后出来的元素一定是更大的，我们就默认它插入得更早。而倒序插入的时候保证了小的元素一定后进栈，所以也不会出现弹出一个数时它还没插入的情况。当 $s$ 入栈元素大于栈顶元素，就相当于操作时取出的值不是最小值；而当弹栈时栈空了，就说明插入的数量少于取出的数量，刚好就对应上了上面分析的不合法情况。由此就可以判断出其正确性。</p>
+<h2 id="实现">实现</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;stack&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+namespace SHAWN &#123;
+    stack&lt;int&gt; s;
+    stack&lt;int&gt; ans;
+    vector&lt;int&gt; opt;// 记录操作
+    int n;
+    int work()
+    &#123;
+        cin &gt;&gt; n;
+        for (int i = 1; i &lt;= 2 * n; ++i) &#123;
+            char op; int x;
+            cin &gt;&gt; op;
+            if (op == '+') &#123; opt.emplace_back(0); &#125;
+            else if(op == '-') &#123; cin &gt;&gt; x; opt.emplace_back(x); &#125;
+        &#125;
+        for (int i = opt.size() - 1; i &gt;= 0; --i) &#123;
+            // 倒着复现操作
+            if (!opt[i]) &#123;
+                if (s.empty()) &#123; cout &lt;&lt; &quot;NO\n&quot;; return 0; &#125;
+                // 插入的数量少于取出的数量
+                else &#123; ans.push(s.top()); s.pop(); &#125;
+            &#125;
+            else &#123;
+                if (s.size() &amp;&amp; opt[i] &gt; s.top()) &#123; cout &lt;&lt; &quot;NO\n&quot;; return 0; &#125;
+                // 操作时取出的值不是最小值
+                else &#123; s.push(opt[i]); &#125;
+            &#125;
+        &#125;
+        cout &lt;&lt; &quot;YES\n&quot;; 
+        while (!ans.empty()) &#123; cout &lt;&lt; ans.top() &lt;&lt; ' '; ans.pop(); &#125;
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

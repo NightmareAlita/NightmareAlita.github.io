@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"构造;二进制;枚举\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/10/25/CF1809D%20Binary%20String%20Sorting/",
+            "url": "http://example.com/2023/10/25/CF1809D%20Binary%20String%20Sorting/",
+            "title": "题解 洛谷 CF1809D Binary String Sorting",
+            "date_published": "2023-10-25T09:17:00.000Z",
+            "content_html": "<h1>CF1809D Binary String Sorting</h1>\n<h2 id=\"简要题意\">简要题意</h2>\n<p>给定一个 $01$ 串，要求你交换相邻两个数或删掉一个数，使得该串单调不降。其中交换相邻两个数的代价是 $10^{12}$，删除的代价是 $10^{12} + 1$，求最小代价。</p>\n<h2 id=\"策略分析\">策略分析</h2>\n<p>本题需要我们发现一个重要的性质，因为我们需要把数列变成形如 <code>00000...11111</code> 的形式，所以必然存在一个分界点，这个分解点的两边的数可能是 $10$ 或 $01$。现在假设我们知道这个分界点在哪里了，那么我们就要把分界点左边的 $1$ 想办法弄到右边，或者直接扔掉。我们发现，除非是 $10$ 情况下的分界点左边的那个 $1$，其余的 $1$ 删掉的代价一定比一次一次交换过来少，因为删除只需要一次，而交换至少需要两次，显然 $2 \\times 10^{12} &gt; 10^{12} + 1$，处理分界点右边的 $0$ 同理。那么我们只需要枚举这个分界点在哪里，并判断分界点两边的数是 $10$ 还是 $01$ 即可，如果是 $10$ 还要额外判断一下转更优还是不转更优，顺序枚举一遍即可得解。</p>\n<p>具体来讲，我们对于每个位置，预处理出其前面（包括自己在内）有多少个 $1$，后面有多少个 $0$，枚举到每一个位置的时候用预处理出的值乘以代价即可，注意预处理的前后缀数组要多组数据清空。</p>\n<p>时间复杂度 $O(Tn)$。</p>\n<h2 id=\"参考代码\">参考代码</h2>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#include &lt;string&gt;\n#include &lt;cstring&gt;\n#define LL long long\nusing namespace std;\n\nnamespace SHAWN &#123;\n    const LL N = 3e5 + 7, C = 1e12 + 1;\n    LL q[N], h[N];\n    int T;\n    signed work()\n    &#123;\n        cin &gt;&gt; T;\n        while (T--) &#123;\n            string s; cin &gt;&gt; s;\n            int len = s.length();\n            s = ' ' + s;\n            LL ans = 1e18;\n            for (int i = 1; i &lt;= len; ++i) &#123;\n                q[i] = q[i - 1];\n                if (s[i] == '1') &#123; ++q[i]; &#125;\n            &#125;\n            for (int i = len; i &gt;= 1; --i) &#123;\n                h[i] = h[i + 1];\n                if (s[i] == '0') &#123; ++h[i]; &#125;\n            &#125;\n            for (int i = 0; i &lt;= len; ++i) &#123;\n                if (s[i] == '1' &amp;&amp; s[i + 1] == '0') &#123;\n                    ans = min(ans, q[i - 1] * C + h[i + 2] * C + C - 1);\n                &#125;\n                ans = min(ans, q[i] * C + h[i + 1] * C);\n            &#125;\n            cout &lt;&lt; ans &lt;&lt; '\\n';\n            for (int i = 0; i &lt;= len; ++i) &#123; q[i] = h[i] = 0; &#125;\n        &#125;\n        return 0;\n    &#125;\n&#125;\n\nsigned main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "构造;二进制;枚举"
+            ]
+        }
+    ]
+}

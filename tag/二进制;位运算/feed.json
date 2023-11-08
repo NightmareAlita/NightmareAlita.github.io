@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"二进制;位运算\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/09/26/AT_arc129_a%20[ARC129A]%20Smaller%20XOR/",
+            "url": "http://example.com/2023/09/26/AT_arc129_a%20[ARC129A]%20Smaller%20XOR/",
+            "title": "题解 AT_arc129_a [ARC129A] Smaller XOR",
+            "date_published": "2023-09-26T00:05:00.000Z",
+            "content_html": "<h1>AT_arc129_a [ARC129A] Smaller XOR</h1>\n<h2 id=\"简要题意\">简要题意</h2>\n<p>给你三个数 $N, L, R$，询问满足 $x \\in [L, R]$ 且 $(x \\oplus N) &lt; N$ 的整数 $x$ 的个数。</p>\n<h2 id=\"策略分析\">策略分析</h2>\n<p>我们考虑异或运算的性质，当某一位为 $0$ 时，它异或一个值可能增大或者不变，当某一位为 $1$ 时，它异或一个值可能减小或不变，也就是说一个数 $k$ 想要满足异或一个 $x$ 要比自己原来小，那么 $x$ 最高位的数值要是 $1$，且刚好要能对的上 $k$ 最高位那个 $1$。只要这一位变成 $0$ 了，后面 $x$ 的其它位想怎么取就怎么取，总之不管怎么取都一定比原来的数小。那么假设 $k$ 的第 $p$ 位为最高位，根据前面的分析，$x \\in [2^p,2^{p+1}-1]$ 就可以满足条件，又因为 $x \\in [L,R]$，二者取个交集即可。</p>\n<p>上面我们讨论了能够得到 $x$ 的个数的性质，下面就把它套用在本题上。我们从 $N$ 的最低位开始扫，每当扫到一个 $1$ 就对以这一位为最高位的数计算一下 $x$ 的个数，然后累加起来就是本题的答案。</p>\n<h2 id=\"参考代码\">参考代码</h2>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#define LL long long\nusing namespace std;\n\nnamespace SHAWN &#123;\n    LL n, l, r, ans; \n    int work()\n    &#123;\n        cin &gt;&gt; n &gt;&gt; l &gt;&gt; r;\n        for (int i = 0; (1ll &lt;&lt; i) &lt;= n; ++i) &#123;\n            LL xl = 1ll &lt;&lt; i, xr = (xl &lt;&lt; 1) - 1;\n            if (!(xl &amp; n)) &#123; continue; &#125;\n            LL edgel = max(l, xl), edger = min(r, xr);\n            ans = max(ans, ans + edger - edgel + 1);\n        &#125;\n        cout &lt;&lt; ans &lt;&lt; '\\n';\n        return 0;\n    &#125;\n&#125;\n\nsigned main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "二进制;位运算"
+            ]
+        }
+    ]
+}

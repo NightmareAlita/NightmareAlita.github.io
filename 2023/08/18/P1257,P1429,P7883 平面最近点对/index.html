@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 洛谷 P1257/P1429/P7883 平面最近点对 | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 洛谷 P1257/P1429/P7883 平面最近点对</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/18
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%88%86%E6%B2%BB/" style="color: #ff7d73">分治</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>题解 洛谷 P1257/P1429/P7883 平面最近点对</h1>
+<h2 id="本文主要介绍分治法">本文主要介绍分治法</h2>
+<h3 id="P1257">P1257</h3>
+<p>因为数据范围太小从而可以$n^2$水过，所以只评了个橙，那么直接$n^2$做就可以了</p>
+<h3 id="P1429-P7883">P1429/P7883</h3>
+<p>这两道题的数据范围都在$10^5$，所以我们期望的时间复杂度是$O(nlogn)$，这时候我们就不要充分发扬人类智慧了（，果断使用分治</p>
+<h3 id="分治策略">分治策略</h3>
+<p>考虑将这些点划分成若干区间进行比较，因为点是乱序的，所以我们先对所有点按照$x$坐标从小到大进行排序，排好序以后从中间序号的点来二分整个$xOy$系，递归二分若干次后，我们只需要对三种情况的点进行比较就可以了</p>
+<p>1.两个点都在$mid$左边</p>
+<p>2.两个点都在$mid$右边</p>
+<p>3.一个在左边，一个在右边</p>
+<p>诶！我们发现这种对比方式是不是在哪里见过呀，没错，就是逆序对！<s>那么这个题可以说和逆序对没有什么关系</s>。但是我们在分治的时候采取的策略是有相似之处的，前两种情况只需要用最普通的递归就可以轻松解决，像这样：</p>
+<pre><code class="language-cpp">dis = min(solve(l,mid), solve(mid + 1, r));
+</code></pre>
+<p>在实现的时候我们可以发现我们先处理出来了在各自一边的最近点对的距离$dis$,那么接下来我们其实就是要把跨区间的点对的$dis$和当前的$dis$比较然后取$min$，所以我们把距离中线$mid$水平距离小于$dis$的点都取出来扔进一个容器里（你看这个数组它就很好用），很容易证明水平距离大于$dis$的点不可能满足条件（直角三角形斜边长大于直角边总会用吧）</p>
+<p>$Well $ $Done!$ 我们离成功只剩一步之遥</p>
+<p>将这些点取出来以后，我们先对这些点按照$y$进行排序，然后枚举这些点，分别以每个点为圆心，半径为$dis$画圆，然后把圆内的点与圆心的距离和$dis$比较取较小的即可。请注意：这里的$dis$是实时更新的，所以圆的半径在不断缩小或者不变。</p>
+<p>于是这道题就做完了，下面是$P1429$的$AC$代码，$P7883$只要在它的基础上把$long$ $double$改成$long$ $long$即可</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;iomanip&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#define LD long double
+using namespace std;
+
+namespace SHAWN &#123;
+    const int N = 2e5 + 7;
+    const LD INF = 1e18;
+    struct node &#123; LD x, y; &#125;pt[N];
+    int que[N];
+    int n;
+    bool cmp1 (node a, node b) &#123; return a.x &lt; b.x; &#125;
+    bool cmp2 (int a, int b) &#123; return pt[a].y &lt; pt[b].y; &#125;
+    LD getlen(node a, node b) &#123; return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y); &#125;
+    LD solve(int l, int r)  &#123;
+        if (l == r) &#123; return INF; &#125;
+        if (l == r - 1) &#123; return getlen(pt[l], pt[r]); &#125;
+        int mid = l + ((r - l) &gt;&gt; 1);
+        LD dis = min(solve(l, mid), solve(mid + 1, r));
+        int idx = 0;
+        for (int i = l; i &lt;= r; ++i) &#123;
+            if ((pt[mid].x - pt[i].x) * (pt[mid].x - pt[i].x) &lt; dis) &#123;
+                que[++idx] = i;
+            &#125;
+        &#125;
+        sort(que + 1, que + idx + 1, cmp2);
+        for (int i = 1; i &lt;= idx; ++i) &#123;
+            for (int j = i + 1; j &lt;= idx &amp;&amp; ((pt[que[i]].y - pt[que[j]].y) * (pt[que[i]].y - pt[que[j]].y)) &lt; dis; ++j) &#123;
+                dis = min(dis, getlen(pt[que[i]], pt[que[j]]));
+            &#125;
+        &#125;
+        return dis;
+    &#125;
+    int work()
+    &#123;
+        cin &gt;&gt; n;
+        for (int i = 1; i &lt;= n; ++i) &#123; cin &gt;&gt; pt[i].x &gt;&gt; pt[i].y; &#125;
+        sort(pt + 1, pt + n + 1, cmp1);
+        cout &lt;&lt; fixed &lt;&lt; setprecision(4) &lt;&lt; sqrt(solve(1, n)) &lt;&lt; '\n';
+        return 0;
+    &#125;
+&#125;
+
+signed int main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

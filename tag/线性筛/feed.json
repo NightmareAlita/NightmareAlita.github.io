@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"线性筛\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/08/28/P7960%20[NOIP2021]%20%E6%8A%A5%E6%95%B0/",
+            "url": "http://example.com/2023/08/28/P7960%20[NOIP2021]%20%E6%8A%A5%E6%95%B0/",
+            "title": "题解 洛谷 P7960 [NOIP2021] 报数",
+            "date_published": "2023-08-28T02:15:00.000Z",
+            "content_html": "<h1>P7960 [NOIP2021] 报数</h1>\n<h2 id=\"简要题意\">简要题意</h2>\n<p>报数游戏，凡是这个数字十进制表示含有 $7$的数和它的倍数都不能报，给定 $T$ 组询问，每次询问给定一个数 $x$，回答下一个要报的数，若 $x$ 是不能报的数，输出 <code>-1</code>。</p>\n<h2 id=\"策略分析\">策略分析</h2>\n<p>经过良久的思考，我们发现找不到任何可行的 $O(1)$ 性质，所以我们<s>本能的采用暴力</s>。类似线性筛法求素数，我们线性筛求不能报的数的倍数。如果是可以报的数，我们就要记下它该报的下一个数，如果是不可以报的数，我们就要打标记。具体的解释见代码。</p>\n<h2 id=\"参考代码\">参考代码</h2>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\nusing namespace std;\n\nnamespace SHAWN &#123;\n    const int N = 1e7 + 10;\n    int chk[N];\n    int t, x, lst;\n    // 我们可以把不符合要求的数的下一个看做-1\n    // 这样开一个数组就够了\n    \n    inline bool judge(int k) &#123;\n    // 判断这个数十进制表示里有没有7\n        while (k) &#123;\n            if (k % 10 == 7) &#123; return true; &#125;\n            k /= 10;\n        &#125;\n        return false;\n    &#125;\n\n    inline void _init() &#123;\n    \t// 线性筛\n        for (int i = 1; i &lt; N; ++i) &#123;\n            if (chk[i] == -1) &#123; continue; &#125;\n            // 已经标记过了就跳过\n            if (judge(i)) &#123;// 如果十进制含有7\n                for (int j = i; j &lt; N; j += i) &#123;\n                    chk[j] = -1;\n                &#125;// 这个数的所有倍数的下一个数都记成-1\n            &#125;\n            // 如果\n            else &#123;// 如果这个数满足要求\n            \tchk[lst] = i;\n            \tlst = i;\n                // 记下它下一个合法的数\n            &#125;\n        &#125;\n    &#125;\n    \n    int work()\n    &#123;\n        _init();\n        cin &gt;&gt; t;\n        while (t--) &#123;\n            cin &gt;&gt; x;\n            cout &lt;&lt; chk[x] &lt;&lt; '\\n';\n        &#125;\n        return 0;\n    &#125;\n&#125;\n\nsigned int main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "线性筛"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>题解 洛谷 P1438 无聊的数列 | NERV - SN</title>
+        <meta name="author" content="NightmareAlita" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/avatar.jpg" />
+        <script src="https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdn.staticfile.org/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.16.8/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>NERV - SN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;NERV - SN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+                <div class="article">
+    <div>
+        <h1>题解 洛谷 P1438 无聊的数列</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/8/18
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">线段树;数据结构</a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1>P1438 无聊的数列</h1>
+<h2 id="简要题意">简要题意</h2>
+<p>给定一个序列 $a$，要求进行两种操作。</p>
+<ul>
+<li>对于区间 $[l,r]$ 对应加上一个长为 $r - l +1$，首项为 $K$，公差为 $D$ 的等差数列；</li>
+<li>查询第 $p$ 个数的值。</li>
+</ul>
+<h2 id="策略分析">策略分析</h2>
+<p>题目要求将一段等差数列加到一段区间上去。我们一眼丁真想到了线段树，但是对于加的不是同一个值的情况，朴素的做法只能进行单点修改，如果这样单点改下去再单点查，和直接在数组上模拟没有任何区别，我们写线段树不光要多递归几层还很废空间。</p>
+<p>遇到这种一眼就是线段树却不知道如何维护的题，我们就需要重新再回去审题来寻找操作的<strong>特殊性质</strong>。我们发现这道题的特殊性质就是等差数列。那么等差数列有什么性质呢？<s>等差数列等差</s>。虽然说这是一句废话，但是却恰恰揭示了这道题的关键，<strong>等差数列的差分序列中的值除了开头结尾以外完全相同</strong>。我们发现，对于一个从 $l$ 位置开始到 $r$ 位置结束的公差为 $d$ 的等差数列的差分序列有如下性质：</p>
+<ul>
+<li>对于位置 $l$ ，它的值一定等于等差数列的首项；</li>
+<li>对于位置区间 $[l + 1, r]$ 内的每个位置，它的值一定等于公差 $d$；</li>
+<li>对于位置 $r + 1$，它的值一定等于等差数列的末项。</li>
+</ul>
+<p>有了这三个性质后，我们就可以把题目变成对原序列的差分序列进行一次区间加和两次单点修改，时间复杂度就大大缩减了。而单点求值其实就是求差分序列的前缀和，这样我们就可以做了，但是有如下细节需要注意：</p>
+<ul>
+<li>由于差分序列要修改 $r + 1$ 位置，所以不难发现我们建树的区间不是 $[1,n]$ 而是 $[1, n + 1]$；</li>
+<li>题目给的数据范围很有迷惑性，容易给人造成不用开 <code>long long</code> 的假象，然而如果不开就会 <code>WA on 1st</code>；</li>
+<li>题目给的修改区间存在数据使得 $l=r$，此时我们 <code>update(1, l + 1, r, d);</code> 这句就会 RE，需要特判。</li>
+</ul>
+<h2 id="参考代码">参考代码</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#define LL long long
+#define ls ro &lt;&lt; 1
+#define rs ro &lt;&lt; 1 | 1
+using namespace std;
+
+namespace SHAWN &#123;
+    const int N = 1e5 + 7;
+    struct tree &#123; int l, r; LL sum, tag; &#125;tree[N &lt;&lt; 2];
+    int n, m;
+    LL a[N];
+    void pushup(int ro) &#123; tree[ro].sum = tree[ls].sum + tree[rs].sum; &#125;
+    void build(int ro, int l, int r) &#123;
+        tree[ro].l = l; tree[ro].r = r;
+        tree[ro].tag = 0;
+        if (l &gt;= r) &#123;
+            tree[ro].sum = a[l] - a[l - 1];
+            return;
+        &#125;
+        int mid = l + ((r - l) &gt;&gt; 1);
+        build(ls, l, mid); build(rs, mid + 1, r);
+        pushup(ro);
+    &#125;
+    void pushdown(int ro) &#123;
+        if (tree[ro].tag) &#123;
+            tree[ls].sum += (tree[ls].r - tree[ls].l + 1) * tree[ro].tag;
+            tree[rs].sum += (tree[rs].r - tree[rs].l + 1) * tree[ro].tag;
+            tree[ls].tag += tree[ro].tag;
+            tree[rs].tag += tree[ro].tag;
+            tree[ro].tag = 0;
+        &#125;
+    &#125;
+    void update(int ro, int l, int r, LL x) &#123;
+        int lt = tree[ro].l, rt = tree[ro].r;
+        if (l &lt;= lt &amp;&amp; r &gt;= rt) &#123;
+            tree[ro].sum += (rt - lt + 1) * x;
+            tree[ro].tag += x;
+            return;
+        &#125;
+        pushdown(ro);
+        int mid = lt + ((rt - lt) &gt;&gt; 1);
+        if (l &lt;= mid) &#123; update(ls, l, r, x); &#125;
+        if (r &gt; mid) &#123; update(rs, l, r, x); &#125;
+        pushup(ro);
+    &#125;
+    LL getsum(int ro, int l, int r) &#123;
+        int lt = tree[ro].l, rt = tree[ro].r;
+        if (l &lt;= lt &amp;&amp; r &gt;= rt) &#123; return tree[ro].sum; &#125;
+        pushdown(ro);
+        int mid = lt + ((rt - lt) &gt;&gt; 1); LL res = 0;
+        if (l &lt;= mid) &#123; res += getsum(ls, l, r); &#125;
+        if (r &gt; mid) &#123; res += getsum(rs, l, r); &#125;
+        return res;
+    &#125;
+    signed work()
+    &#123;
+        cin &gt;&gt; n &gt;&gt; m;
+        for (int i = 1; i &lt;= n; ++i) &#123; cin &gt;&gt; a[i]; &#125;
+        build(1, 1, n + 1);
+        while (m--) &#123;
+            int opt; cin &gt;&gt; opt;
+            if (opt == 1) &#123; 
+                int l, r; LL k, d; cin &gt;&gt; l &gt;&gt; r &gt;&gt; k &gt;&gt; d;
+                if (l != r) &#123;
+                    update(1, l, l, k);
+                    update(1, l + 1, r, d);
+                    update(1, r + 1, r + 1, -((r - l) * d + k));
+                &#125;
+                else &#123; 
+                    update(1, l, l, k); 
+                    update(1, r + 1, r + 1, -k);
+                &#125;
+            &#125;
+            else if (opt == 2) &#123;
+                int p; cin &gt;&gt; p;
+                cout &lt;&lt; getsum(1, 1, p) &lt;&lt; '\n';
+            &#125;
+        &#125;
+        return 0;
+    &#125;
+&#125;
+
+signed main() &#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 NERV - SN
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;NightmareAlita
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+        <div>
+            备案号：
+            
+            
+            
+        </div>
+        
+    </div>
+</footer>
+
+            </div>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>

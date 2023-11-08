@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;对顶堆;数据结构&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-08-18T09:05:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/08/18/P1168%20%E4%B8%AD%E4%BD%8D%E6%95%B0/</id>
+        <title>题解 洛谷 P1168 中位数</title>
+        <link rel="alternate" href="http://example.com/2023/08/18/P1168%20%E4%B8%AD%E4%BD%8D%E6%95%B0/"/>
+        <content type="html">&lt;h1&gt;题解 洛谷 P1168 中位数&lt;/h1&gt;
+&lt;p&gt;由于这道题目比较水，所以机房中诞生了四种做法，分别是权值线段树、堆、二分以及 $\operatorname{multiset}$。&lt;/p&gt;
+&lt;h3 id=&#34;这里主要介绍本题的堆解法&#34;&gt;这里主要介绍本题的堆解法&lt;/h3&gt;
+&lt;p&gt;通过读题我们可以轻易发现，每两次插入数据就需要进行一次访问，且期间必须维护当前访问过的所有元素组成的数列具有单调性 。&lt;/p&gt;
+&lt;h4 id=&#34;问题一：如何维护数列的单调性&#34;&gt;问题一：如何维护数列的单调性&lt;/h4&gt;
+&lt;p&gt;于是我们很容易想到可以使用优先队列对其插入的数字进行动态排序来维护其单调性。如果你不知道什么是优先队列，那么不妨先通过下面的传送门去看一看优先队列的用法：&lt;br&gt;
+&lt;a href=&#34;https://blog.csdn.net/weixin_36888577/article/details/79937886?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167776821716800184138808%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;amp;request_id=167776821716800184138808&amp;amp;biz_id=0&amp;amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-79937886-null-null.142%5Ev73%5Epc_search_v2,201%5Ev4%5Eadd_ask,239%5Ev2%5Einsert_chatgpt&amp;amp;utm_term=%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97&amp;amp;spm=1018.2226.3001.4187&#34;&gt;点我&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;于是你现在明白了什么是优先队列，我们只需要在维护好的单调队列里取出中位数就可以了。所以此时你发现，由于单调队列是一个队列，想要访问中间的元素，就只能把它前面的元素全部弹出来，这样弹出一遍插入一遍甚至不如每次 sort 时间效率高，于是问题来了。&lt;/p&gt;
+&lt;h4 id=&#34;问题二：如何快速地在每次访问中提取中位数&#34;&gt;问题二：如何快速地在每次访问中提取中位数&lt;/h4&gt;
+&lt;p&gt;既然我们一定需要把队列分成两段，那么我们直接定义两个优先队列就可以完美地解决问题。我们将前奇数个（这里假设为前 $\mathit{K}$  个）数列切分后扔进左队列、右队列和中位数三种位置，那么左边的队列维护第 $ 1 $ ~ $\left[\frac{K}{2}\right]$ 个元素，右边的队列维护第 $(\left[\frac{K}{2}\right]+2)$ ~ $K$ 个元素，第$(\left[\frac{K}{2}\right]+1)$ 个元素也就是剩下的那个元素就是中位数，将其定义为 mid 。左边的队列从大到小，使用大根堆，右边的队列从小到大，使用小根堆，定义如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;typedef long long LL;
+priority_queue&amp;lt;LL,vector&amp;lt;LL&amp;gt;,greater&amp;lt;LL&amp;gt; &amp;gt; Right;
+priority_queue&amp;lt;LL,vector&amp;lt;LL&amp;gt;,less&amp;lt;LL&amp;gt; &amp;gt; Left;
+LL mid;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;接下来在每个奇数次插入时，如果插入的数比 mid 小，就塞进左队列，如果比 mid 大，就塞进右队列。&lt;strong&gt;需要注意的是：为了确保 mid 就是中位数，必须在每次访问时对两个队列内的元素个数进行平衡！&lt;/strong&gt; 所以这是最后一个问题。&lt;/p&gt;
+&lt;h4 id=&#34;问题三：平衡两个队列内的元素个数&#34;&gt;问题三：平衡两个队列内的元素个数&lt;/h4&gt;
+&lt;p&gt;我们不妨设其中一个队列元素个数为 $x$ ，另一个队列元素个数为 $y$，设 $x&amp;gt;y$ ，则从 $x$ 队列中转移到 $y$ 队列中的元素个数为 $(\frac{x-y}{2}-1)$ 个，最后只需要把 mid 插入到 $y$ 中，再将 $x$ 的队头元素弹出来更新为新的 mid 即可。&lt;strong&gt;注意：这一步操作必须先进行当前步骤的插入再进行元素个数平衡&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;至此，我们已经解决了这个题目的所有小问题，下面是AC代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;iostream&amp;gt;
+#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;vector&amp;gt;
+#include&amp;lt;queue&amp;gt;
+using namespace std;
+
+namespace SHAWN&amp;#123;
+    //定义部分不解释
+	typedef long long LL;
+	priority_queue&amp;lt;LL,vector&amp;lt;LL&amp;gt;,greater&amp;lt;LL&amp;gt; &amp;gt; Right;
+	priority_queue&amp;lt;LL,vector&amp;lt;LL&amp;gt;,less&amp;lt;LL&amp;gt; &amp;gt; Left;
+	LL n,mid=0;
+
+	int main()
+	&amp;#123;
+		cin&amp;gt;&amp;gt;n;//读入n并进行n次插入
+		for(LL i=1,x;i&amp;lt;=n;i++)&amp;#123;
+			cin&amp;gt;&amp;gt;x;
+			if(i==1)&amp;#123;//i=1的情况边界易出错，所以做一个特判
+				mid=x;
+				cout&amp;lt;&amp;lt;mid&amp;lt;&amp;lt;&amp;quot;\n&amp;quot;;
+				continue;
+			&amp;#125;
+			if(x&amp;lt;=mid) Left.push(x);
+			else if(x&amp;gt;mid) Right.push(x);
+			if(i&amp;amp;1)&amp;#123;//当插入次数为奇数时进行一次平衡和查询
+                //定义左右队列的大小
+				LL llen=Left.size(),rlen=Right.size();
+				if(llen&amp;lt;rlen)&amp;#123;//如果左队列个数比右队列个数少
+					Left.push(mid);//将中位数进行转移
+					LL cha=(rlen-llen)/2;//计算转移数量
+					for(int j=1;i&amp;lt;cha;j++)&amp;#123;//循环进行转移
+						LL tmp=Right.top();
+						Left.push(tmp);
+						Right.pop();
+					&amp;#125;
+					mid=Right.top();//更新中位数
+					Right.pop();
+				&amp;#125;
+				else if(llen&amp;gt;rlen)&amp;#123;//如果右队列个数比左队列个数少
+					Right.push(mid);//将中位数进行转移
+					LL cha=(llen-rlen)/2;//计算转移数量
+					for(int j=1;i&amp;lt;cha;j++)&amp;#123;//循环进行转移
+						LL tmp=Left.top();
+						Right.push(tmp);
+						Left.pop();
+					&amp;#125;
+					mid=Left.top();//更新中位数
+					Left.pop();
+				&amp;#125;
+				cout&amp;lt;&amp;lt;mid&amp;lt;&amp;lt;&amp;quot;\n&amp;quot;;//操作完成后输出中位数
+			&amp;#125;
+			else continue;//插入次数为偶数次时直接跳过平衡过程
+		&amp;#125;
+		return 0;
+	&amp;#125;
+&amp;#125;
+
+int main()&amp;#123;
+	ios::sync_with_stdio(false);
+	cin.tie(0);cout.tie(0);
+	return SHAWN::main();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;以上，如果有不对的地方，还请各位大佬指正！&lt;/p&gt;
+</content>
+        <category term="对顶堆;数据结构" />
+        <updated>2023-08-18T09:05:00.000Z</updated>
+    </entry>
+</feed>

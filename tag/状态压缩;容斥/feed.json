@@ -1,0 +1,18 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "NERV - SN • All posts by \"状态压缩;容斥\" tag",
+    "description": "",
+    "home_page_url": "http://example.com",
+    "items": [
+        {
+            "id": "http://example.com/2023/10/24/SP6285%20NGM2%20-%20Another%20Game%20With%20Numbers/",
+            "url": "http://example.com/2023/10/24/SP6285%20NGM2%20-%20Another%20Game%20With%20Numbers/",
+            "title": "题解 SP6285 NGM2 - Another Game With Numbers",
+            "date_published": "2023-10-24T03:48:00.000Z",
+            "content_html": "<h1>SP6285 NGM2 - Another Game With Numbers</h1>\n<h2 id=\"简要题意\">简要题意</h2>\n<p>给定一个长为 $K$ 的数组 $a$，其中 $1 \\le K \\le 15$ 且 $a_i \\le 100$，再给定一个数 $N$，其中 $1 \\le N \\le 10^9$，要求求出 $[1, N]$ 中有多少数不能被 $a$ 中任意一个数整除。</p>\n<h2 id=\"策略分析\">策略分析</h2>\n<p>显然满足我们要求的数不能被 $a_i$ 整除，同时也不能被 $a$ 中任意 $p(2 \\le p \\le K)$ 个元素的最小公倍数整除。所以最朴素的想法是通过筛选出能够被整除的数的个数，再用 $N$ 减去它。如果你想到这里了，那么恭喜你这道题已经做完了。由于本题的 $K$ 非常非常小，所以我们可以直接暴力枚举出 $K$ 个数的所有组合的最大公约数，$O(1)$ 求出 $[1, N]$ 中能整除一个数 $x$ 的数有多少，然后做容斥就能得出答案了。</p>\n<p>具体来讲，我们可以用状态压缩来对所有组合进行枚举，即对于 $K$，我们从 $1$ 枚举到 $2^{K} - 1$，枚举到的第 $i$ 个数的第 $j$ 位为 $1$ 则表示本次选取这位，否则不选，然后每次对所有选取的位置上的数求最小公倍数 $x$，然后用 $N$ 除以 $x$ 就能得出 $N$ 中能整除 $x$ 的数的个数 $y$。根据容斥原理，如果当前选取了奇数个数，就要把 $y$ 加入到答案中，否则将答案减去 $y$。注意这样算出的结果是 $[1, N]$ 中能整除 $a$ 中某个数的数的个数，所以最后要用 $N$ 减去它才能得到答案。</p>\n<h2 id=\"参考代码\">参考代码</h2>\n<pre><code class=\"language-cpp\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\n#define LL long long\nusing namespace std;\n\nnamespace SHAWN &#123;\n    const int N = 107;\n    LL a[N];\n    LL n, k, ans;\n    inline LL gcd(LL x, LL y) &#123; return !y ? x : gcd(y, x % y); &#125;\n    inline LL lcm(LL x, LL y) &#123; return x * y / gcd(x, y); &#125;\n    signed work()\n    &#123;\n        cin &gt;&gt; n &gt;&gt; k;\n        for (int i = 1; i &lt;= k; ++i) &#123; cin &gt;&gt; a[i]; &#125;\n        for (int i = 1; i &lt; (1 &lt;&lt; k); ++i) &#123;\n            LL lrc = 1, cnt = 0;\n            for (int j = 1; j &lt;= k; ++j) &#123;\n                if (i &amp; (1 &lt;&lt; (j - 1))) &#123;\n                    lrc = lcm(lrc, a[j]);\n                    ++cnt;\n                &#125;\n            &#125;\n            if (cnt &amp; 1) &#123; ans += n / lrc; &#125;\n            else &#123; ans -= n / lrc; &#125;\n        &#125;\n        ans = n - ans;\n        cout &lt;&lt; ans &lt;&lt; '\\n';\n        return 0;\n    &#125;\n&#125;\n\nsigned main() &#123;\n    ios :: sync_with_stdio(false);\n    cin.tie(nullptr);\n    return SHAWN :: work();\n&#125;\n</code></pre>\n",
+            "tags": [
+                "状态压缩;容斥"
+            ]
+        }
+    ]
+}

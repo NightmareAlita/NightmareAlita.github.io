@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;分治&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-08-18T09:05:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/</id>
+        <title>题解 洛谷 P1257/P1429/P7883 平面最近点对</title>
+        <link rel="alternate" href="http://example.com/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/"/>
+        <content type="html">&lt;h1&gt;题解 洛谷 P1257/P1429/P7883 平面最近点对&lt;/h1&gt;
+&lt;h2 id=&#34;本文主要介绍分治法&#34;&gt;本文主要介绍分治法&lt;/h2&gt;
+&lt;h3 id=&#34;P1257&#34;&gt;P1257&lt;/h3&gt;
+&lt;p&gt;因为数据范围太小从而可以$n^2$水过，所以只评了个橙，那么直接$n^2$做就可以了&lt;/p&gt;
+&lt;h3 id=&#34;P1429-P7883&#34;&gt;P1429/P7883&lt;/h3&gt;
+&lt;p&gt;这两道题的数据范围都在$10^5$，所以我们期望的时间复杂度是$O(nlogn)$，这时候我们就不要充分发扬人类智慧了（，果断使用分治&lt;/p&gt;
+&lt;h3 id=&#34;分治策略&#34;&gt;分治策略&lt;/h3&gt;
+&lt;p&gt;考虑将这些点划分成若干区间进行比较，因为点是乱序的，所以我们先对所有点按照$x$坐标从小到大进行排序，排好序以后从中间序号的点来二分整个$xOy$系，递归二分若干次后，我们只需要对三种情况的点进行比较就可以了&lt;/p&gt;
+&lt;p&gt;1.两个点都在$mid$左边&lt;/p&gt;
+&lt;p&gt;2.两个点都在$mid$右边&lt;/p&gt;
+&lt;p&gt;3.一个在左边，一个在右边&lt;/p&gt;
+&lt;p&gt;诶！我们发现这种对比方式是不是在哪里见过呀，没错，就是逆序对！&lt;s&gt;那么这个题可以说和逆序对没有什么关系&lt;/s&gt;。但是我们在分治的时候采取的策略是有相似之处的，前两种情况只需要用最普通的递归就可以轻松解决，像这样：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;dis = min(solve(l,mid), solve(mid + 1, r));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在实现的时候我们可以发现我们先处理出来了在各自一边的最近点对的距离$dis$,那么接下来我们其实就是要把跨区间的点对的$dis$和当前的$dis$比较然后取$min$，所以我们把距离中线$mid$水平距离小于$dis$的点都取出来扔进一个容器里（你看这个数组它就很好用），很容易证明水平距离大于$dis$的点不可能满足条件（直角三角形斜边长大于直角边总会用吧）&lt;/p&gt;
+&lt;p&gt;$Well $ $Done!$ 我们离成功只剩一步之遥&lt;/p&gt;
+&lt;p&gt;将这些点取出来以后，我们先对这些点按照$y$进行排序，然后枚举这些点，分别以每个点为圆心，半径为$dis$画圆，然后把圆内的点与圆心的距离和$dis$比较取较小的即可。请注意：这里的$dis$是实时更新的，所以圆的半径在不断缩小或者不变。&lt;/p&gt;
+&lt;p&gt;于是这道题就做完了，下面是$P1429$的$AC$代码，$P7883$只要在它的基础上把$long$ $double$改成$long$ $long$即可&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;iomanip&amp;gt;
+#include &amp;lt;cmath&amp;gt;
+#include &amp;lt;algorithm&amp;gt;
+#define LD long double
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 2e5 + 7;
+    const LD INF = 1e18;
+    struct node &amp;#123; LD x, y; &amp;#125;pt[N];
+    int que[N];
+    int n;
+    bool cmp1 (node a, node b) &amp;#123; return a.x &amp;lt; b.x; &amp;#125;
+    bool cmp2 (int a, int b) &amp;#123; return pt[a].y &amp;lt; pt[b].y; &amp;#125;
+    LD getlen(node a, node b) &amp;#123; return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y); &amp;#125;
+    LD solve(int l, int r)  &amp;#123;
+        if (l == r) &amp;#123; return INF; &amp;#125;
+        if (l == r - 1) &amp;#123; return getlen(pt[l], pt[r]); &amp;#125;
+        int mid = l + ((r - l) &amp;gt;&amp;gt; 1);
+        LD dis = min(solve(l, mid), solve(mid + 1, r));
+        int idx = 0;
+        for (int i = l; i &amp;lt;= r; ++i) &amp;#123;
+            if ((pt[mid].x - pt[i].x) * (pt[mid].x - pt[i].x) &amp;lt; dis) &amp;#123;
+                que[++idx] = i;
+            &amp;#125;
+        &amp;#125;
+        sort(que + 1, que + idx + 1, cmp2);
+        for (int i = 1; i &amp;lt;= idx; ++i) &amp;#123;
+            for (int j = i + 1; j &amp;lt;= idx &amp;amp;&amp;amp; ((pt[que[i]].y - pt[que[j]].y) * (pt[que[i]].y - pt[que[j]].y)) &amp;lt; dis; ++j) &amp;#123;
+                dis = min(dis, getlen(pt[que[i]], pt[que[j]]));
+            &amp;#125;
+        &amp;#125;
+        return dis;
+    &amp;#125;
+    int work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; cin &amp;gt;&amp;gt; pt[i].x &amp;gt;&amp;gt; pt[i].y; &amp;#125;
+        sort(pt + 1, pt + n + 1, cmp1);
+        cout &amp;lt;&amp;lt; fixed &amp;lt;&amp;lt; setprecision(4) &amp;lt;&amp;lt; sqrt(solve(1, n)) &amp;lt;&amp;lt; &#39;\n&#39;;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed int main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <category term="分治" />
+        <updated>2023-08-18T09:05:00.000Z</updated>
+    </entry>
+</feed>

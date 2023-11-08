@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>NERV - SN • Posts by &#34;构造;二进制;枚举&#34; tag</title>
+        <link>http://example.com</link>
+        <description></description>
+        <language>zh-cn</language>
+        <pubDate>Wed, 25 Oct 2023 17:17:00 +0800</pubDate>
+        <lastBuildDate>Wed, 25 Oct 2023 17:17:00 +0800</lastBuildDate>
+        <category>OIer 日记</category>
+        <category>图论</category>
+        <category>构造</category>
+        <category>二进制;位运算</category>
+        <category>栈</category>
+        <category>哈夫曼树;哈夫曼编码</category>
+        <category>枚举</category>
+        <category>构造;二进制;枚举</category>
+        <category>二进制</category>
+        <category>二进制;高精度</category>
+        <category>平面几何</category>
+        <category>分治</category>
+        <category>对顶堆;数据结构</category>
+        <category>平衡树;数据结构</category>
+        <category>线段树;数据结构</category>
+        <category>贪心</category>
+        <category>矩阵乘法;倍增</category>
+        <category>数学</category>
+        <category>线性筛</category>
+        <category>割边;Tarjan</category>
+        <category>割点;Tarjan</category>
+        <category>容斥;根号分治</category>
+        <category>状态压缩;容斥</category>
+        <category>矩阵加速;动态规划</category>
+        <category>雷电法王</category>
+        <item>
+            <guid isPermalink="true">http://example.com/2023/10/25/CF1809D%20Binary%20String%20Sorting/</guid>
+            <title>题解 洛谷 CF1809D Binary String Sorting</title>
+            <link>http://example.com/2023/10/25/CF1809D%20Binary%20String%20Sorting/</link>
+            <category>构造;二进制;枚举</category>
+            <pubDate>Wed, 25 Oct 2023 17:17:00 +0800</pubDate>
+            <description><![CDATA[ &lt;h1&gt;CF1809D Binary String Sorting&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个 $01$ 串，要求你交换相邻两个数或删掉一个数，使得该串单调不降。其中交换相邻两个数的代价是 $10^{12}$，删除的代价是 $10^{12} + 1$，求最小代价。&lt;/p&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;本题需要我们发现一个重要的性质，因为我们需要把数列变成形如 &lt;code&gt;00000...11111&lt;/code&gt; 的形式，所以必然存在一个分界点，这个分解点的两边的数可能是 $10$ 或 $01$。现在假设我们知道这个分界点在哪里了，那么我们就要把分界点左边的 $1$ 想办法弄到右边，或者直接扔掉。我们发现，除非是 $10$ 情况下的分界点左边的那个 $1$，其余的 $1$ 删掉的代价一定比一次一次交换过来少，因为删除只需要一次，而交换至少需要两次，显然 $2 \times 10^{12} &amp;gt; 10^{12} + 1$，处理分界点右边的 $0$ 同理。那么我们只需要枚举这个分界点在哪里，并判断分界点两边的数是 $10$ 还是 $01$ 即可，如果是 $10$ 还要额外判断一下转更优还是不转更优，顺序枚举一遍即可得解。&lt;/p&gt;
+&lt;p&gt;具体来讲，我们对于每个位置，预处理出其前面（包括自己在内）有多少个 $1$，后面有多少个 $0$，枚举到每一个位置的时候用预处理出的值乘以代价即可，注意预处理的前后缀数组要多组数据清空。&lt;/p&gt;
+&lt;p&gt;时间复杂度 $O(Tn)$。&lt;/p&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;string&amp;gt;
+#include &amp;lt;cstring&amp;gt;
+#define LL long long
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const LL N = 3e5 + 7, C = 1e12 + 1;
+    LL q[N], h[N];
+    int T;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; T;
+        while (T--) &amp;#123;
+            string s; cin &amp;gt;&amp;gt; s;
+            int len = s.length();
+            s = &#39; &#39; + s;
+            LL ans = 1e18;
+            for (int i = 1; i &amp;lt;= len; ++i) &amp;#123;
+                q[i] = q[i - 1];
+                if (s[i] == &#39;1&#39;) &amp;#123; ++q[i]; &amp;#125;
+            &amp;#125;
+            for (int i = len; i &amp;gt;= 1; --i) &amp;#123;
+                h[i] = h[i + 1];
+                if (s[i] == &#39;0&#39;) &amp;#123; ++h[i]; &amp;#125;
+            &amp;#125;
+            for (int i = 0; i &amp;lt;= len; ++i) &amp;#123;
+                if (s[i] == &#39;1&#39; &amp;amp;&amp;amp; s[i + 1] == &#39;0&#39;) &amp;#123;
+                    ans = min(ans, q[i - 1] * C + h[i + 2] * C + C - 1);
+                &amp;#125;
+                ans = min(ans, q[i] * C + h[i + 1] * C);
+            &amp;#125;
+            cout &amp;lt;&amp;lt; ans &amp;lt;&amp;lt; &#39;\n&#39;;
+            for (int i = 0; i &amp;lt;= len; ++i) &amp;#123; q[i] = h[i] = 0; &amp;#125;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

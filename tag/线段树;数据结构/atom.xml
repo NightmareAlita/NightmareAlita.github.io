@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://example.com</id>
+    <title>NERV - SN • Posts by &#34;线段树;数据结构&#34; tag</title>
+    <link href="http://example.com" />
+    <updated>2023-08-18T09:05:00.000Z</updated>
+    <category term="OIer 日记" />
+    <category term="图论" />
+    <category term="构造" />
+    <category term="二进制;位运算" />
+    <category term="栈" />
+    <category term="哈夫曼树;哈夫曼编码" />
+    <category term="枚举" />
+    <category term="构造;二进制;枚举" />
+    <category term="二进制" />
+    <category term="二进制;高精度" />
+    <category term="平面几何" />
+    <category term="分治" />
+    <category term="对顶堆;数据结构" />
+    <category term="平衡树;数据结构" />
+    <category term="线段树;数据结构" />
+    <category term="贪心" />
+    <category term="矩阵乘法;倍增" />
+    <category term="数学" />
+    <category term="线性筛" />
+    <category term="割边;Tarjan" />
+    <category term="割点;Tarjan" />
+    <category term="容斥;根号分治" />
+    <category term="状态压缩;容斥" />
+    <category term="矩阵加速;动态规划" />
+    <category term="雷电法王" />
+    <entry>
+        <id>http://example.com/2023/08/18/P1438%20%E6%97%A0%E8%81%8A%E7%9A%84%E6%95%B0%E5%88%97/</id>
+        <title>题解 洛谷 P1438 无聊的数列</title>
+        <link rel="alternate" href="http://example.com/2023/08/18/P1438%20%E6%97%A0%E8%81%8A%E7%9A%84%E6%95%B0%E5%88%97/"/>
+        <content type="html">&lt;h1&gt;P1438 无聊的数列&lt;/h1&gt;
+&lt;h2 id=&#34;简要题意&#34;&gt;简要题意&lt;/h2&gt;
+&lt;p&gt;给定一个序列 $a$，要求进行两种操作。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于区间 $[l,r]$ 对应加上一个长为 $r - l +1$，首项为 $K$，公差为 $D$ 的等差数列；&lt;/li&gt;
+&lt;li&gt;查询第 $p$ 个数的值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
+&lt;p&gt;题目要求将一段等差数列加到一段区间上去。我们一眼丁真想到了线段树，但是对于加的不是同一个值的情况，朴素的做法只能进行单点修改，如果这样单点改下去再单点查，和直接在数组上模拟没有任何区别，我们写线段树不光要多递归几层还很废空间。&lt;/p&gt;
+&lt;p&gt;遇到这种一眼就是线段树却不知道如何维护的题，我们就需要重新再回去审题来寻找操作的&lt;strong&gt;特殊性质&lt;/strong&gt;。我们发现这道题的特殊性质就是等差数列。那么等差数列有什么性质呢？&lt;s&gt;等差数列等差&lt;/s&gt;。虽然说这是一句废话，但是却恰恰揭示了这道题的关键，&lt;strong&gt;等差数列的差分序列中的值除了开头结尾以外完全相同&lt;/strong&gt;。我们发现，对于一个从 $l$ 位置开始到 $r$ 位置结束的公差为 $d$ 的等差数列的差分序列有如下性质：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于位置 $l$ ，它的值一定等于等差数列的首项；&lt;/li&gt;
+&lt;li&gt;对于位置区间 $[l + 1, r]$ 内的每个位置，它的值一定等于公差 $d$；&lt;/li&gt;
+&lt;li&gt;对于位置 $r + 1$，它的值一定等于等差数列的末项。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;有了这三个性质后，我们就可以把题目变成对原序列的差分序列进行一次区间加和两次单点修改，时间复杂度就大大缩减了。而单点求值其实就是求差分序列的前缀和，这样我们就可以做了，但是有如下细节需要注意：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由于差分序列要修改 $r + 1$ 位置，所以不难发现我们建树的区间不是 $[1,n]$ 而是 $[1, n + 1]$；&lt;/li&gt;
+&lt;li&gt;题目给的数据范围很有迷惑性，容易给人造成不用开 &lt;code&gt;long long&lt;/code&gt; 的假象，然而如果不开就会 &lt;code&gt;WA on 1st&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;题目给的修改区间存在数据使得 $l=r$，此时我们 &lt;code&gt;update(1, l + 1, r, d);&lt;/code&gt; 这句就会 RE，需要特判。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;参考代码&#34;&gt;参考代码&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;cstdio&amp;gt;
+#define LL long long
+#define ls ro &amp;lt;&amp;lt; 1
+#define rs ro &amp;lt;&amp;lt; 1 | 1
+using namespace std;
+
+namespace SHAWN &amp;#123;
+    const int N = 1e5 + 7;
+    struct tree &amp;#123; int l, r; LL sum, tag; &amp;#125;tree[N &amp;lt;&amp;lt; 2];
+    int n, m;
+    LL a[N];
+    void pushup(int ro) &amp;#123; tree[ro].sum = tree[ls].sum + tree[rs].sum; &amp;#125;
+    void build(int ro, int l, int r) &amp;#123;
+        tree[ro].l = l; tree[ro].r = r;
+        tree[ro].tag = 0;
+        if (l &amp;gt;= r) &amp;#123;
+            tree[ro].sum = a[l] - a[l - 1];
+            return;
+        &amp;#125;
+        int mid = l + ((r - l) &amp;gt;&amp;gt; 1);
+        build(ls, l, mid); build(rs, mid + 1, r);
+        pushup(ro);
+    &amp;#125;
+    void pushdown(int ro) &amp;#123;
+        if (tree[ro].tag) &amp;#123;
+            tree[ls].sum += (tree[ls].r - tree[ls].l + 1) * tree[ro].tag;
+            tree[rs].sum += (tree[rs].r - tree[rs].l + 1) * tree[ro].tag;
+            tree[ls].tag += tree[ro].tag;
+            tree[rs].tag += tree[ro].tag;
+            tree[ro].tag = 0;
+        &amp;#125;
+    &amp;#125;
+    void update(int ro, int l, int r, LL x) &amp;#123;
+        int lt = tree[ro].l, rt = tree[ro].r;
+        if (l &amp;lt;= lt &amp;amp;&amp;amp; r &amp;gt;= rt) &amp;#123;
+            tree[ro].sum += (rt - lt + 1) * x;
+            tree[ro].tag += x;
+            return;
+        &amp;#125;
+        pushdown(ro);
+        int mid = lt + ((rt - lt) &amp;gt;&amp;gt; 1);
+        if (l &amp;lt;= mid) &amp;#123; update(ls, l, r, x); &amp;#125;
+        if (r &amp;gt; mid) &amp;#123; update(rs, l, r, x); &amp;#125;
+        pushup(ro);
+    &amp;#125;
+    LL getsum(int ro, int l, int r) &amp;#123;
+        int lt = tree[ro].l, rt = tree[ro].r;
+        if (l &amp;lt;= lt &amp;amp;&amp;amp; r &amp;gt;= rt) &amp;#123; return tree[ro].sum; &amp;#125;
+        pushdown(ro);
+        int mid = lt + ((rt - lt) &amp;gt;&amp;gt; 1); LL res = 0;
+        if (l &amp;lt;= mid) &amp;#123; res += getsum(ls, l, r); &amp;#125;
+        if (r &amp;gt; mid) &amp;#123; res += getsum(rs, l, r); &amp;#125;
+        return res;
+    &amp;#125;
+    signed work()
+    &amp;#123;
+        cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; m;
+        for (int i = 1; i &amp;lt;= n; ++i) &amp;#123; cin &amp;gt;&amp;gt; a[i]; &amp;#125;
+        build(1, 1, n + 1);
+        while (m--) &amp;#123;
+            int opt; cin &amp;gt;&amp;gt; opt;
+            if (opt == 1) &amp;#123; 
+                int l, r; LL k, d; cin &amp;gt;&amp;gt; l &amp;gt;&amp;gt; r &amp;gt;&amp;gt; k &amp;gt;&amp;gt; d;
+                if (l != r) &amp;#123;
+                    update(1, l, l, k);
+                    update(1, l + 1, r, d);
+                    update(1, r + 1, r + 1, -((r - l) * d + k));
+                &amp;#125;
+                else &amp;#123; 
+                    update(1, l, l, k); 
+                    update(1, r + 1, r + 1, -k);
+                &amp;#125;
+            &amp;#125;
+            else if (opt == 2) &amp;#123;
+                int p; cin &amp;gt;&amp;gt; p;
+                cout &amp;lt;&amp;lt; getsum(1, 1, p) &amp;lt;&amp;lt; &#39;\n&#39;;
+            &amp;#125;
+        &amp;#125;
+        return 0;
+    &amp;#125;
+&amp;#125;
+
+signed main() &amp;#123;
+    ios :: sync_with_stdio(false);
+    cin.tie(nullptr);
+    return SHAWN :: work();
+&amp;#125;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+        <category term="线段树;数据结构" />
+        <updated>2023-08-18T09:05:00.000Z</updated>
+    </entry>
+</feed>
