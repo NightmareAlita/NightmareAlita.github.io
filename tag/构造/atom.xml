@@ -4,30 +4,30 @@
     <title>NERV - SN • Posts by &#34;构造&#34; tag</title>
     <link href="http://example.com" />
     <updated>2023-09-26T06:57:00.000Z</updated>
-    <category term="OIer 日记" />
-    <category term="图论" />
-    <category term="构造" />
     <category term="二进制;位运算" />
-    <category term="栈" />
+    <category term="构造" />
     <category term="哈夫曼树;哈夫曼编码" />
-    <category term="枚举" />
+    <category term="栈" />
     <category term="构造;二进制;枚举" />
+    <category term="枚举" />
+    <category term="平面几何" />
     <category term="二进制" />
     <category term="二进制;高精度" />
-    <category term="平面几何" />
-    <category term="分治" />
     <category term="对顶堆;数据结构" />
-    <category term="平衡树;数据结构" />
     <category term="线段树;数据结构" />
+    <category term="分治" />
+    <category term="平衡树;数据结构" />
     <category term="贪心" />
-    <category term="矩阵乘法;倍增" />
-    <category term="数学" />
-    <category term="线性筛" />
-    <category term="割边;Tarjan" />
     <category term="割点;Tarjan" />
-    <category term="容斥;根号分治" />
+    <category term="数学" />
+    <category term="割边;Tarjan" />
+    <category term="线性筛" />
     <category term="状态压缩;容斥" />
+    <category term="容斥;根号分治" />
+    <category term="图论" />
     <category term="矩阵加速;动态规划" />
+    <category term="矩阵乘法;倍增" />
+    <category term="OIer 日记" />
     <category term="雷电法王" />
     <entry>
         <id>http://example.com/2023/09/26/AT_arc129_b%20[ARC129B]%20Range%20Point%20Distance/</id>
@@ -79,14 +79,14 @@ signed main() &amp;#123;
         <updated>2023-09-26T06:57:00.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/</id>
-        <title>题解 CF1204D2 Kirk and a Binary String (hard version)</title>
-        <link rel="alternate" href="http://example.com/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/"/>
-        <content type="html">&lt;h1&gt;CF1204D2 Kirk and a Binary String (hard version)&lt;/h1&gt;
+        <id>http://example.com/2023/09/20/CF1204D1%20Kirk%20and%20a%20Binary%20String%20(easy%20version)/</id>
+        <title>题解 CF1204D1 Kirk and a Binary String (easy version)</title>
+        <link rel="alternate" href="http://example.com/2023/09/20/CF1204D1%20Kirk%20and%20a%20Binary%20String%20(easy%20version)/"/>
+        <content type="html">&lt;h1&gt;CF1204D1 Kirk and a Binary String (easy version)&lt;/h1&gt;
 &lt;h2 id=&#34;形式化题意&#34;&gt;形式化题意&lt;/h2&gt;
 &lt;p&gt;给你一个长为 $n$ 的仅包含 $0$ 和 $1$ 的串，要求尽可能多地将里面的 $1$ 改成 $0$ 使得在得到的新串中，对于 $\forall l,r\in [1,n](l \le r)$，两个串的 $[l,r]$ 区间内的最长不降子序列等长。&lt;/p&gt;
 &lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
-&lt;p&gt;题中给的数据范围是 $10^5$，我们很容易去思考一些 $O(n \log n)$ 的做法，从而去找数据结构来维护，但这是 CF 的题，所以我们坚信这一定是一道人类智慧题。所以我们充分发扬人类智慧，$O(n)$ 来构造这个题。&lt;/p&gt;
+&lt;p&gt;题中给的数据范围完全可以 $O(n^2)$ 搜过，但这是 CF 的题，所以我们坚信这一定是一道人类智慧题。所以我们充分发扬人类智慧，$O(n)$ 来构造这个题。&lt;/p&gt;
 &lt;p&gt;对于只有 $0,1$ 的串来讲，一个序列想要不降其实只需要满足两个条件：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;如果当前位为 $0$，那么后面无论 $0,1$ 都是不降的；&lt;/li&gt;
@@ -132,14 +132,14 @@ signed int main() &amp;#123;
         <updated>2023-09-20T07:41:00.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2023/09/20/CF1204D1%20Kirk%20and%20a%20Binary%20String%20(easy%20version)/</id>
-        <title>题解 CF1204D1 Kirk and a Binary String (easy version)</title>
-        <link rel="alternate" href="http://example.com/2023/09/20/CF1204D1%20Kirk%20and%20a%20Binary%20String%20(easy%20version)/"/>
-        <content type="html">&lt;h1&gt;CF1204D1 Kirk and a Binary String (easy version)&lt;/h1&gt;
+        <id>http://example.com/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/</id>
+        <title>题解 CF1204D2 Kirk and a Binary String (hard version)</title>
+        <link rel="alternate" href="http://example.com/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/"/>
+        <content type="html">&lt;h1&gt;CF1204D2 Kirk and a Binary String (hard version)&lt;/h1&gt;
 &lt;h2 id=&#34;形式化题意&#34;&gt;形式化题意&lt;/h2&gt;
 &lt;p&gt;给你一个长为 $n$ 的仅包含 $0$ 和 $1$ 的串，要求尽可能多地将里面的 $1$ 改成 $0$ 使得在得到的新串中，对于 $\forall l,r\in [1,n](l \le r)$，两个串的 $[l,r]$ 区间内的最长不降子序列等长。&lt;/p&gt;
 &lt;h2 id=&#34;策略分析&#34;&gt;策略分析&lt;/h2&gt;
-&lt;p&gt;题中给的数据范围完全可以 $O(n^2)$ 搜过，但这是 CF 的题，所以我们坚信这一定是一道人类智慧题。所以我们充分发扬人类智慧，$O(n)$ 来构造这个题。&lt;/p&gt;
+&lt;p&gt;题中给的数据范围是 $10^5$，我们很容易去思考一些 $O(n \log n)$ 的做法，从而去找数据结构来维护，但这是 CF 的题，所以我们坚信这一定是一道人类智慧题。所以我们充分发扬人类智慧，$O(n)$ 来构造这个题。&lt;/p&gt;
 &lt;p&gt;对于只有 $0,1$ 的串来讲，一个序列想要不降其实只需要满足两个条件：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;如果当前位为 $0$，那么后面无论 $0,1$ 都是不降的；&lt;/li&gt;
