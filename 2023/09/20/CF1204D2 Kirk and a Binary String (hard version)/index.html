@@ -275,6 +275,9 @@ mjx-container[display="true"] + br {
                        title="RSS 订阅"></a>
                 
                 
+                    <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索">
+                    </a>
+                
             </nav>
             <div id="search-form-wrap">
                 <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://NightmareAlita.github.io"></form>
@@ -324,8 +327,14 @@ mjx-container[display="true"] + br {
             
         </div>
         <footer class="article-footer">
-            <a data-url="http://nightmarealita.github.io/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/" data-id="clos2f8v000051s4s6v8834a5" data-title="题解 CF1204D2 Kirk and a Binary String (hard version)"
+            <a data-url="http://nightmarealita.github.io/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/" data-id="clos9b1nc000g804s4lfj7t3n" data-title="题解 CF1204D2 Kirk and a Binary String (hard version)"
                class="article-share-link">分享</a>
+            
+                <a href="/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/#comments" class="article-comment-link">
+                    <span class="post-comments-count valine-comment-count" data-xid="/2023/09/20/CF1204D2%20Kirk%20and%20a%20Binary%20String%20(hard%20version)/"
+                          itemprop="commentCount"></span>
+                    留言
+                </a>
             
             
             
@@ -343,14 +352,14 @@ mjx-container[display="true"] + br {
                 
                     
                     
-                        <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="一只在役 OIer 的自述" class="lazyload">
+                        <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 CF1204D1 Kirk and a Binary String (easy version)" class="lazyload">
                     
                 
-                <a href="/2023/09/21/%E4%B8%80%E5%8F%AA%E5%9C%A8%E5%BD%B9%20OIer%20%E7%9A%84%E8%87%AA%E8%BF%B0/"></a>
+                <a href="/2023/09/20/CF1204D1%20Kirk%20and%20a%20Binary%20String%20(easy%20version)/"></a>
                 <div class="article-nav-caption">前一篇</div>
                 <h3 class="article-nav-title">
                     
-                        一只在役 OIer 的自述
+                        题解 CF1204D1 Kirk and a Binary String (easy version)
                     
                 </h3>
             </div>
@@ -360,14 +369,14 @@ mjx-container[display="true"] + br {
                 
                     
                     
-                        <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 CF1204D1 Kirk and a Binary String (easy version)" class="lazyload">
+                        <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 CF1537E2 Erase and Extend (Hard Version)" class="lazyload">
                     
                 
-                <a href="/2023/09/20/CF1204D1%20Kirk%20and%20a%20Binary%20String%20(easy%20version)/"></a>
+                <a href="/2023/09/13/CF1537E2%20Erase%20and%20Extend%20(Hard%20Version)/"></a>
                 <div class="article-nav-caption">后一篇</div>
                 <h3 class="article-nav-title">
                     
-                        题解 CF1204D1 Kirk and a Binary String (easy version)
+                        题解 CF1537E2 Erase and Extend (Hard Version)
                     
                 </h3>
             </div>
@@ -378,6 +387,10 @@ mjx-container[display="true"] + br {
     
 </article>
 
+
+    <section id="comments" class="vcomment">
+
+    </section>
 
 
 
@@ -626,6 +639,29 @@ mjx-container[display="true"] + br {
 
 
 
+    
+<script src="https://unpkg.com/valine@1.5.1/dist/Valine.min.js"></script>
+
+    <script>
+        var GUEST_INFO = ['nick', 'mail', 'link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function (item) {
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        var recordIP = JSON.parse('true');
+        var highlight = JSON.parse('true');
+
+        new Valine({
+            el: '.vcomment',
+            appId: "liwkCiHtRuR5xqr1Y6fiXUQP-gzGzoHsz",
+            appKey: "jw6AYsha8JyRqkuZqeCdLUGN",
+            placeholder: "Just go go",
+            pageSize: '10',
+            avatar: 'mp',
+            lang: 'zh-cn',
+            recordIP: recordIP,
+            highlight: highlight
+        });
+    </script>
 
 
 
@@ -635,6 +671,35 @@ mjx-container[display="true"] + br {
 
 
 
+
+
+    
+<script src="https://unpkg.com/algoliasearch@4.17.1/dist/algoliasearch-lite.umd.js"></script>
+
+    
+<script src="https://unpkg.com/instantsearch.js@4.56.1/dist/instantsearch.production.min.js"></script>
+
+    
+<script src="/js/search.js"></script>
+
+    <script>
+        var CONFIG = {
+            root: '/',
+            algolia: {
+                applicationID: "1SSU9I04X0",
+                apiKey: "307c1b204deb7f659d58e1af037f014d",
+                indexName: "Search",
+                hits: {
+                    "per_page": parseInt("10")
+                },
+                labels: {
+                    "input_placeholder": "搜索.....",
+                    "hits_empty": "未发现与 「${query}」相关内容",
+                    "hits_stats": "找到${hits}条结果（用时 ${time} ms）"
+                }
+            }
+        };
+    </script>
 
 
     </div>

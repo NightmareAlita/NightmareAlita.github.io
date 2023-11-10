@@ -276,6 +276,9 @@ mjx-container[display="true"] + br {
                        title="RSS 订阅"></a>
                 
                 
+                    <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索">
+                    </a>
+                
             </nav>
             <div id="search-form-wrap">
                 <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://NightmareAlita.github.io"></form>
@@ -320,8 +323,14 @@ mjx-container[display="true"] + br {
             
         </div>
         <footer class="article-footer">
-            <a data-url="http://nightmarealita.github.io/2023/08/29/P9118%20[%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023]%20%E5%B9%82%E6%AC%A1/" data-id="clos2f8vf001o1s4s6hod1en6" data-title="题解 洛谷 P9118 [春季测试 2023] 幂次"
+            <a data-url="http://nightmarealita.github.io/2023/08/29/P9118%20[%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023]%20%E5%B9%82%E6%AC%A1/" data-id="clos9b1od001o804s98rdcrbo" data-title="题解 洛谷 P9118 [春季测试 2023] 幂次"
                class="article-share-link">分享</a>
+            
+                <a href="/2023/08/29/P9118%20%5B%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023%5D%20%E5%B9%82%E6%AC%A1/#comments" class="article-comment-link">
+                    <span class="post-comments-count valine-comment-count" data-xid="/2023/08/29/P9118%20%5B%E6%98%A5%E5%AD%A3%E6%B5%8B%E8%AF%95%202023%5D%20%E5%B9%82%E6%AC%A1/"
+                          itemprop="commentCount"></span>
+                    留言
+                </a>
             
             
             
@@ -374,6 +383,10 @@ mjx-container[display="true"] + br {
     
 </article>
 
+
+    <section id="comments" class="vcomment">
+
+    </section>
 
 
 
@@ -622,6 +635,29 @@ mjx-container[display="true"] + br {
 
 
 
+    
+<script src="https://unpkg.com/valine@1.5.1/dist/Valine.min.js"></script>
+
+    <script>
+        var GUEST_INFO = ['nick', 'mail', 'link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function (item) {
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        var recordIP = JSON.parse('true');
+        var highlight = JSON.parse('true');
+
+        new Valine({
+            el: '.vcomment',
+            appId: "liwkCiHtRuR5xqr1Y6fiXUQP-gzGzoHsz",
+            appKey: "jw6AYsha8JyRqkuZqeCdLUGN",
+            placeholder: "Just go go",
+            pageSize: '10',
+            avatar: 'mp',
+            lang: 'zh-cn',
+            recordIP: recordIP,
+            highlight: highlight
+        });
+    </script>
 
 
 
@@ -631,6 +667,35 @@ mjx-container[display="true"] + br {
 
 
 
+
+
+    
+<script src="https://unpkg.com/algoliasearch@4.17.1/dist/algoliasearch-lite.umd.js"></script>
+
+    
+<script src="https://unpkg.com/instantsearch.js@4.56.1/dist/instantsearch.production.min.js"></script>
+
+    
+<script src="/js/search.js"></script>
+
+    <script>
+        var CONFIG = {
+            root: '/',
+            algolia: {
+                applicationID: "1SSU9I04X0",
+                apiKey: "307c1b204deb7f659d58e1af037f014d",
+                indexName: "Search",
+                hits: {
+                    "per_page": parseInt("10")
+                },
+                labels: {
+                    "input_placeholder": "搜索.....",
+                    "hits_empty": "未发现与 「${query}」相关内容",
+                    "hits_stats": "找到${hits}条结果（用时 ${time} ms）"
+                }
+            }
+        };
+    </script>
 
 
     </div>

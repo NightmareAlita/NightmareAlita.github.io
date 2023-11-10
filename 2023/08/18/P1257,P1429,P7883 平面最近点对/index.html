@@ -275,6 +275,9 @@ mjx-container[display="true"] + br {
                        title="RSS 订阅"></a>
                 
                 
+                    <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索">
+                    </a>
+                
             </nav>
             <div id="search-form-wrap">
                 <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://NightmareAlita.github.io"></form>
@@ -322,8 +325,14 @@ mjx-container[display="true"] + br {
             
         </div>
         <footer class="article-footer">
-            <a data-url="http://nightmarealita.github.io/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/" data-id="clos2f8va00131s4sapufdoj5" data-title="题解 洛谷 P1257/P1429/P7883 平面最近点对"
+            <a data-url="http://nightmarealita.github.io/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/" data-id="clos9b1nx0010804sfb6fd736" data-title="题解 洛谷 P1257/P1429/P7883 平面最近点对"
                class="article-share-link">分享</a>
+            
+                <a href="/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/#comments" class="article-comment-link">
+                    <span class="post-comments-count valine-comment-count" data-xid="/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/"
+                          itemprop="commentCount"></span>
+                    留言
+                </a>
             
             
             
@@ -341,14 +350,14 @@ mjx-container[display="true"] + br {
                 
                     
                     
-                        <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 洛谷 P1438 无聊的数列" class="lazyload">
+                        <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 BNDS OJ 1263 表达式求值" class="lazyload">
                     
                 
-                <a href="/2023/08/18/P1438%20%E6%97%A0%E8%81%8A%E7%9A%84%E6%95%B0%E5%88%97/"></a>
+                <a href="/2023/08/18/BNDSOJ%201263%20%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/"></a>
                 <div class="article-nav-caption">前一篇</div>
                 <h3 class="article-nav-title">
                     
-                        题解 洛谷 P1438 无聊的数列
+                        题解 BNDS OJ 1263 表达式求值
                     
                 </h3>
             </div>
@@ -376,6 +385,10 @@ mjx-container[display="true"] + br {
     
 </article>
 
+
+    <section id="comments" class="vcomment">
+
+    </section>
 
 
 
@@ -624,6 +637,29 @@ mjx-container[display="true"] + br {
 
 
 
+    
+<script src="https://unpkg.com/valine@1.5.1/dist/Valine.min.js"></script>
+
+    <script>
+        var GUEST_INFO = ['nick', 'mail', 'link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function (item) {
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        var recordIP = JSON.parse('true');
+        var highlight = JSON.parse('true');
+
+        new Valine({
+            el: '.vcomment',
+            appId: "liwkCiHtRuR5xqr1Y6fiXUQP-gzGzoHsz",
+            appKey: "jw6AYsha8JyRqkuZqeCdLUGN",
+            placeholder: "Just go go",
+            pageSize: '10',
+            avatar: 'mp',
+            lang: 'zh-cn',
+            recordIP: recordIP,
+            highlight: highlight
+        });
+    </script>
 
 
 
@@ -633,6 +669,35 @@ mjx-container[display="true"] + br {
 
 
 
+
+
+    
+<script src="https://unpkg.com/algoliasearch@4.17.1/dist/algoliasearch-lite.umd.js"></script>
+
+    
+<script src="https://unpkg.com/instantsearch.js@4.56.1/dist/instantsearch.production.min.js"></script>
+
+    
+<script src="/js/search.js"></script>
+
+    <script>
+        var CONFIG = {
+            root: '/',
+            algolia: {
+                applicationID: "1SSU9I04X0",
+                apiKey: "307c1b204deb7f659d58e1af037f014d",
+                indexName: "Search",
+                hits: {
+                    "per_page": parseInt("10")
+                },
+                labels: {
+                    "input_placeholder": "搜索.....",
+                    "hits_empty": "未发现与 「${query}」相关内容",
+                    "hits_stats": "找到${hits}条结果（用时 ${time} ms）"
+                }
+            }
+        };
+    </script>
 
 
     </div>
