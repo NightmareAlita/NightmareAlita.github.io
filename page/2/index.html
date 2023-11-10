@@ -13,7 +13,7 @@
     
     <title>
         
-        NERV OI</title>
+        NERV SN</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CUbuntu%20Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
     
@@ -23,14 +23,14 @@
 <link rel="stylesheet" href="/css/loader.css">
 
     <meta property="og:type" content="website">
-<meta property="og:title" content="NERV OI">
+<meta property="og:title" content="NERV SN">
 <meta property="og:url" content="http://nightmarealita.github.io/page/2/index.html">
-<meta property="og:site_name" content="NERV OI">
+<meta property="og:site_name" content="NERV SN">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="NightmareAlita">
 <meta name="twitter:card" content="summary">
     
-        <link rel="alternate" href="/atom.xml" title="NERV OI" type="application/atom+xml">
+        <link rel="alternate" href="/atom.xml" title="NERV SN" type="application/atom+xml">
     
     
         <link rel="shortcut icon" href="/images/favicon.ico">
@@ -229,7 +229,7 @@ mjx-container[display="true"] + br {
                 
                     
                     
-                        <a href="/" id="logo"><h1>NERV OI</h1></a>
+                        <a href="/" id="logo"><h1>NERV SN</h1></a>
                     
                 
             </div>
@@ -327,6 +327,96 @@ Tiring of their idyllic fields, the cows have moved to a new suburb. The suburb 
         
     <div class="post-wrap-right wow fadeInUp">
         
+            <a class="post-link" href="/2023/08/18/P1438%20%E6%97%A0%E8%81%8A%E7%9A%84%E6%95%B0%E5%88%97/"></a>
+        
+        <div class="post-cover-right">
+            
+                
+                
+                    <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 洛谷 P1438 无聊的数列" class="lazyload">
+                
+            
+        </div>
+        <div class="post-info">
+            <div class="post-meta">
+                <a><span class="icon-calendar"></span>2023-08-18</a>
+                
+                    <a><span class="icon-pencil"></span>1k 字</a>
+                
+                
+                    <a><span class="icon-clock"></span>4 分钟</a>
+                
+            </div>
+            <h2 class="post-title">题解 洛谷 P1438 无聊的数列</h2>
+            <article class="post-article">
+                
+                    P1438 无聊的数列
+简要题意
+给定一个序列 ，要求进行两种操作。
+
+对于区间  对应加上一个长为 ，首项为 ，公差为  的等差数列；
+查询第  个数的值。
+
+策略分析
+题目要求将一段等差数列加到一段区间上去。我们一眼丁真想到了线段树，但是对于加的不是同一个值的情况，朴素的做法只能进行单点修改，如果这样单点改下去再单点查，和直接在数组上模拟没有任何区别，我们写线段树不光要多递归几层还很废空间。
+遇到这种一眼就是线段树却不知道如何维护的题，我们就需要重新再回去审题来寻找操作的特殊性质。我们发现这道题的特殊性质就是等差数列。那么等差数列有什么性质呢？等差数列等差。虽然说这是一句
+                
+            </article>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="post-wrap-left wow fadeInUp">
+        
+            <a class="post-link" href="/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/"></a>
+        
+        
+        <div class="post-cover-left">
+            
+                
+                
+                    <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 洛谷 P1257/P1429/P7883 平面最近点对" class="lazyload">
+                
+            
+
+        </div>
+        <div class="post-info">
+            <div class="post-meta">
+                <a><span class="icon-calendar"></span>2023-08-18</a>
+                
+                    <a><span class="icon-pencil"></span>880 字</a>
+                
+                
+                    <a><span class="icon-clock"></span>3 分钟</a>
+                
+            </div>
+            <h2 class="post-title">题解 洛谷 P1257/P1429/P7883 平面最近点对</h2>
+            <article class="post-article">
+                
+                    题解 洛谷 P1257/P1429/P7883 平面最近点对
+本文主要介绍分治法
+P1257
+因为数据范围太小从而可以水过，所以只评了个橙，那么直接做就可以了
+P1429/P7883
+这两道题的数据范围都在，所以我们期望的时间复杂度是，这时候我们就不要充分发扬人类智慧了（，果断使用分治
+分治策略
+考虑将这些点划分成若干区间进行比较，因为点是乱序的，所以我们先对所有点按照坐标从小到大进行排序，排好序以后从中间序号的点来二分整个系，递归二分若干次后，我们只需要对三种情况的点进行比较就可以了
+1.两个点都在左边
+2.两个点都在右边
+3.一个在左边，一个在右边
+诶！我们发现这种对
+                
+            </article>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="post-wrap-right wow fadeInUp">
+        
             <a class="post-link" href="/2023/08/18/P1168%20%E4%B8%AD%E4%BD%8D%E6%95%B0/"></a>
         
         <div class="post-cover-right">
@@ -365,147 +455,17 @@ Tiring of their idyllic fields, the cows have moved to a new suburb. The suburb 
         
     <div class="post-wrap-left wow fadeInUp">
         
-            <a class="post-link" href="/2023/08/18/P1438%20%E6%97%A0%E8%81%8A%E7%9A%84%E6%95%B0%E5%88%97/"></a>
-        
-        
-        <div class="post-cover-left">
-            
-                
-                
-                    <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 洛谷 P1438 无聊的数列" class="lazyload">
-                
-            
-
-        </div>
-        <div class="post-info">
-            <div class="post-meta">
-                <a><span class="icon-calendar"></span>2023-08-18</a>
-                
-                    <a><span class="icon-pencil"></span>1k 字</a>
-                
-                
-                    <a><span class="icon-clock"></span>4 分钟</a>
-                
-            </div>
-            <h2 class="post-title">题解 洛谷 P1438 无聊的数列</h2>
-            <article class="post-article">
-                
-                    P1438 无聊的数列
-简要题意
-给定一个序列 ，要求进行两种操作。
-
-对于区间  对应加上一个长为 ，首项为 ，公差为  的等差数列；
-查询第  个数的值。
-
-策略分析
-题目要求将一段等差数列加到一段区间上去。我们一眼丁真想到了线段树，但是对于加的不是同一个值的情况，朴素的做法只能进行单点修改，如果这样单点改下去再单点查，和直接在数组上模拟没有任何区别，我们写线段树不光要多递归几层还很废空间。
-遇到这种一眼就是线段树却不知道如何维护的题，我们就需要重新再回去审题来寻找操作的特殊性质。我们发现这道题的特殊性质就是等差数列。那么等差数列有什么性质呢？等差数列等差。虽然说这是一句
-                
-            </article>
-        </div>
-    </div>
-
-
-    
-        
-    <div class="post-wrap-right wow fadeInUp">
-        
-            <a class="post-link" href="/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/"></a>
-        
-        <div class="post-cover-right">
-            
-                
-                
-                    <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 洛谷 P1257/P1429/P7883 平面最近点对" class="lazyload">
-                
-            
-        </div>
-        <div class="post-info">
-            <div class="post-meta">
-                <a><span class="icon-calendar"></span>2023-08-18</a>
-                
-                    <a><span class="icon-pencil"></span>880 字</a>
-                
-                
-                    <a><span class="icon-clock"></span>3 分钟</a>
-                
-            </div>
-            <h2 class="post-title">题解 洛谷 P1257/P1429/P7883 平面最近点对</h2>
-            <article class="post-article">
-                
-                    题解 洛谷 P1257/P1429/P7883 平面最近点对
-本文主要介绍分治法
-P1257
-因为数据范围太小从而可以水过，所以只评了个橙，那么直接做就可以了
-P1429/P7883
-这两道题的数据范围都在，所以我们期望的时间复杂度是，这时候我们就不要充分发扬人类智慧了（，果断使用分治
-分治策略
-考虑将这些点划分成若干区间进行比较，因为点是乱序的，所以我们先对所有点按照坐标从小到大进行排序，排好序以后从中间序号的点来二分整个系，递归二分若干次后，我们只需要对三种情况的点进行比较就可以了
-1.两个点都在左边
-2.两个点都在右边
-3.一个在左边，一个在右边
-诶！我们发现这种对
-                
-            </article>
-        </div>
-    </div>
-
-
-    
-        
-    <div class="post-wrap-left wow fadeInUp">
-        
-            <a class="post-link" href="/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/"></a>
-        
-        
-        <div class="post-cover-left">
-            
-                
-                
-                    <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 洛谷 U334987 营救千泷の小翼龙" class="lazyload">
-                
-            
-
-        </div>
-        <div class="post-info">
-            <div class="post-meta">
-                <a><span class="icon-calendar"></span>2023-08-18</a>
-                
-                    <a><span class="icon-pencil"></span>161 字</a>
-                
-                
-                    <a><span class="icon-clock"></span>1 分钟</a>
-                
-            </div>
-            <h2 class="post-title">题解 洛谷 U334987 营救千泷の小翼龙</h2>
-            <article class="post-article">
-                
-                    U334987 营救千泷の小翼龙
-简要题意
-给你一个数  和 ，求 。
-策略分析
-本题是一道纯纯诈骗题，我们打表或者运用数学归纳法都可以得到如下结论：  于是我们就可以直接带进去  算了，于是我们做完了，写代码时请注意取模。
-参考代码
-123456789101112131415161718192021222324#include &amp;lt;iostream&amp;gt;#include &amp;lt;cstdio&amp;gt;#define LL long longusing namespace std;namespace SHAWN {    const int mod = 998244353;  
-                
-            </article>
-        </div>
-    </div>
-
-
-    
-        
-    <div class="post-wrap-right wow fadeInUp">
-        
             <a class="post-link" href="/2023/08/18/UVA11149%20Power%20of%20Matrix/"></a>
         
-        <div class="post-cover-right">
+        
+        <div class="post-cover-left">
             
                 
                 
                     <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 UVA11149 Power of Matrix" class="lazyload">
                 
             
+
         </div>
         <div class="post-info">
             <div class="post-meta">
@@ -527,6 +487,46 @@ P1429/P7883
 法二：分治，单次时间复杂度 
 我们可以按照分治的定义照猫画虎，将原式变成这样： 
 然后递归处理即可，分治部分的代码大概长这样： 12345678mat solve(mat bas, LL pos) { \\bas是原矩阵，pos代表当前k的大小    if (pos == 1) { return bas; }    mat s; clear(s);    for (int i = 0; i &amp;lt; n; +
+                
+            </article>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="post-wrap-right wow fadeInUp">
+        
+            <a class="post-link" href="/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/"></a>
+        
+        <div class="post-cover-right">
+            
+                
+                
+                    <img data-src="https://d-sketon.top/img/backimg/bg1.jpg" data-sizes="auto" alt="题解 洛谷 U334987 营救千泷の小翼龙" class="lazyload">
+                
+            
+        </div>
+        <div class="post-info">
+            <div class="post-meta">
+                <a><span class="icon-calendar"></span>2023-08-18</a>
+                
+                    <a><span class="icon-pencil"></span>161 字</a>
+                
+                
+                    <a><span class="icon-clock"></span>1 分钟</a>
+                
+            </div>
+            <h2 class="post-title">题解 洛谷 U334987 营救千泷の小翼龙</h2>
+            <article class="post-article">
+                
+                    U334987 营救千泷の小翼龙
+简要题意
+给你一个数  和 ，求 。
+策略分析
+本题是一道纯纯诈骗题，我们打表或者运用数学归纳法都可以得到如下结论：  于是我们就可以直接带进去  算了，于是我们做完了，写代码时请注意取模。
+参考代码
+123456789101112131415161718192021222324#include &amp;lt;iostream&amp;gt;#include &amp;lt;cstdio&amp;gt;#define LL long longusing namespace std;namespace SHAWN {    const int mod = 998244353;  
                 
             </article>
         </div>
