@@ -330,51 +330,12 @@ mjx-container[display="true"] + br {
         
     <div class="post-wrap-right wow fadeInUp">
         
-            <a class="post-link" href="/2023/08/28/P7960%20%5BNOIP2021%5D%20%E6%8A%A5%E6%95%B0/"></a>
+            <a class="post-link" href="/2023/08/28/P5019%20%5BNOIP2018%20%E6%8F%90%E9%AB%98%E7%BB%84%5D%20%E9%93%BA%E8%AE%BE%E9%81%93%E8%B7%AF/"></a>
         
         <div class="post-cover-right">
             
-                <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1691164800000/acquyfidmhxkocmkb8-169124187179427.jpg" data-sizes="auto" alt="题解 洛谷 P7960 [NOIP2021] 报数" class="lazyload">
-            
-        </div>
-        <div class="post-info">
-            <div class="post-meta">
-                <a><span class="icon-calendar"></span>2023-08-28</a>
-                
-                    <a><span class="icon-pencil"></span>395 字</a>
-                
-                
-                    <a><span class="icon-clock"></span>1 分钟</a>
-                
-            </div>
-            <h2 class="post-title">题解 洛谷 P7960 [NOIP2021] 报数</h2>
-            <article class="post-article">
-                
-                    P7960 [NOIP2021] 报数
-简要题意
-报数游戏，凡是这个数字十进制表示含有 的数和它的倍数都不能报，给定  组询问，每次询问给定一个数 ，回答下一个要报的数，若  是不能报的数，输出 -1。
-策略分析
-经过良久的思考，我们发现找不到任何可行的  性质，所以我们本能的采用暴力。类似线性筛法求素数，我们线性筛求不能报的数的倍数。如果是可以报的数，我们就要记下它该报的下一个数，如果是不可以报的数，我们就要打标记。具体的解释见代码。
-参考代码
-12345678910111213141516171819202122232425262728293031323334353637383
-                
-            </article>
-        </div>
-    </div>
-
-
-    
-        
-    <div class="post-wrap-left wow fadeInUp">
-        
-            <a class="post-link" href="/2023/08/28/P5019%20%5BNOIP2018%20%E6%8F%90%E9%AB%98%E7%BB%84%5D%20%E9%93%BA%E8%AE%BE%E9%81%93%E8%B7%AF/"></a>
-        
-        
-        <div class="post-cover-left">
-            
                 <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1691078400000/7ds5fbmtv51ruchmhn-16911464843598%20(2).jpg" data-sizes="auto" alt="题解 洛谷 P5019 [NOIP2018 提高组] 铺设道路" class="lazyload">
             
-
         </div>
         <div class="post-info">
             <div class="post-meta">
@@ -399,6 +360,45 @@ mjx-container[display="true"] + br {
 我们可以从头往尾扫，设第  个位置的值为 ，当第  个位置的值大于第  个位置的值时，我们就要给答案加上 ，否则不操作。为了后面能够正常操作，第一次必须将第一个位置的直接减到 。
 正确性证明
 考虑如果 ， 那我们在填第  个坑的时候一定可以把第  个坑填上；而当  时，我们
+                
+            </article>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="post-wrap-left wow fadeInUp">
+        
+            <a class="post-link" href="/2023/08/28/P7960%20%5BNOIP2021%5D%20%E6%8A%A5%E6%95%B0/"></a>
+        
+        
+        <div class="post-cover-left">
+            
+                <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1691164800000/acquyfidmhxkocmkb8-169124187179427.jpg" data-sizes="auto" alt="题解 洛谷 P7960 [NOIP2021] 报数" class="lazyload">
+            
+
+        </div>
+        <div class="post-info">
+            <div class="post-meta">
+                <a><span class="icon-calendar"></span>2023-08-28</a>
+                
+                    <a><span class="icon-pencil"></span>395 字</a>
+                
+                
+                    <a><span class="icon-clock"></span>1 分钟</a>
+                
+            </div>
+            <h2 class="post-title">题解 洛谷 P7960 [NOIP2021] 报数</h2>
+            <article class="post-article">
+                
+                    P7960 [NOIP2021] 报数
+简要题意
+报数游戏，凡是这个数字十进制表示含有 的数和它的倍数都不能报，给定  组询问，每次询问给定一个数 ，回答下一个要报的数，若  是不能报的数，输出 -1。
+策略分析
+经过良久的思考，我们发现找不到任何可行的  性质，所以我们本能的采用暴力。类似线性筛法求素数，我们线性筛求不能报的数的倍数。如果是可以报的数，我们就要记下它该报的下一个数，如果是不可以报的数，我们就要打标记。具体的解释见代码。
+参考代码
+12345678910111213141516171819202122232425262728293031323334353637383
                 
             </article>
         </div>
