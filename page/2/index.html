@@ -411,51 +411,12 @@ P1429/P7883
         
     <div class="post-wrap-right wow fadeInUp">
         
-            <a class="post-link" href="/2023/08/18/UVA11149%20Power%20of%20Matrix/"></a>
+            <a class="post-link" href="/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/"></a>
         
         <div class="post-cover-right">
             
-                <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1696867200000/eg5n3ln47g3gwngp8d-169690919260813.png" data-sizes="auto" alt="题解 UVA11149 Power of Matrix" class="lazyload">
-            
-        </div>
-        <div class="post-info">
-            <div class="post-meta">
-                <a><span class="icon-calendar"></span>2023-08-18</a>
-                
-                    <a><span class="icon-pencil"></span>1.1k 字</a>
-                
-                
-                    <a><span class="icon-clock"></span>5 分钟</a>
-                
-            </div>
-            <h2 class="post-title">题解 UVA11149 Power of Matrix</h2>
-            <article class="post-article">
-                
-                    题解 UVA11149 Power of Matrix
-简要题意：
-给定一个  的矩阵  和一个数 ，求 $_{i = 1}{k}Ai $。
-法一：暴力求解，单次时间复杂度 
-法二：分治，单次时间复杂度 
-我们可以按照分治的定义照猫画虎，将原式变成这样： 
-然后递归处理即可，分治部分的代码大概长这样： 12345678mat solve(mat bas, LL pos) { \\bas是原矩阵，pos代表当前k的大小    if (pos == 1) { return bas; }    mat s; clear(s);    for (int i = 0; i &amp;lt; n; +
-                
-            </article>
-        </div>
-    </div>
-
-
-    
-        
-    <div class="post-wrap-left wow fadeInUp">
-        
-            <a class="post-link" href="/2023/08/18/U334987%20%E8%90%A5%E6%95%91%E5%8D%83%E6%B3%B7%E3%81%AE%E5%B0%8F%E7%BF%BC%E9%BE%99/"></a>
-        
-        
-        <div class="post-cover-left">
-            
                 <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1693756800000/t1dzqplxaigyxddm24-16938138641743%E4%B8%83%E5%AE%9E%E8%A7%92%E8%89%B2%E5%A1%94.png" data-sizes="auto" alt="题解 洛谷 U334987 营救千泷の小翼龙" class="lazyload">
             
-
         </div>
         <div class="post-info">
             <div class="post-meta">
@@ -477,6 +438,45 @@ P1429/P7883
 本题是一道纯纯诈骗题，我们打表或者运用数学归纳法都可以得到如下结论：  于是我们就可以直接带进去  算了，于是我们做完了，写代码时请注意取模。
 参考代码
 123456789101112131415161718192021222324#include &amp;lt;iostream&amp;gt;#include &amp;lt;cstdio&amp;gt;#define LL long longusing namespace std;namespace SHAWN {    const int mod = 998244353;  
+                
+            </article>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="post-wrap-left wow fadeInUp">
+        
+            <a class="post-link" href="/2023/08/18/UVA11149%20Power%20of%20Matrix/"></a>
+        
+        
+        <div class="post-cover-left">
+            
+                <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1696867200000/eg5n3ln47g3gwngp8d-169690919260813.png" data-sizes="auto" alt="题解 UVA11149 Power of Matrix" class="lazyload">
+            
+
+        </div>
+        <div class="post-info">
+            <div class="post-meta">
+                <a><span class="icon-calendar"></span>2023-08-18</a>
+                
+                    <a><span class="icon-pencil"></span>1.1k 字</a>
+                
+                
+                    <a><span class="icon-clock"></span>5 分钟</a>
+                
+            </div>
+            <h2 class="post-title">题解 UVA11149 Power of Matrix</h2>
+            <article class="post-article">
+                
+                    题解 UVA11149 Power of Matrix
+简要题意：
+给定一个  的矩阵  和一个数 ，求 $_{i = 1}{k}Ai $。
+法一：暴力求解，单次时间复杂度 
+法二：分治，单次时间复杂度 
+我们可以按照分治的定义照猫画虎，将原式变成这样： 
+然后递归处理即可，分治部分的代码大概长这样： 12345678mat solve(mat bas, LL pos) { \\bas是原矩阵，pos代表当前k的大小    if (pos == 1) { return bas; }    mat s; clear(s);    for (int i = 0; i &amp;lt; n; +
                 
             </article>
         </div>
