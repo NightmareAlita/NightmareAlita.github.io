@@ -290,49 +290,14 @@ mjx-container[display="true"] + br {
         
     <div class="post-wrap-left wow fadeInUp">
         
-            <a class="post-link" href="/2023/08/18/P1168%20%E4%B8%AD%E4%BD%8D%E6%95%B0/"></a>
+            <a class="post-link" href="/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/"></a>
         
         
         <div class="post-cover-left">
             
-                <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1693756800000/hfsczrc34r9ehje72c-16938138465494%E5%8D%A1%E5%88%97%E6%8F%90%E4%BA%A4.png" data-sizes="auto" alt="题解 洛谷 P1168 中位数" class="lazyload">
-            
-
-        </div>
-        <div class="post-info">
-            <div class="post-meta">
-                <a><span class="icon-calendar"></span>2023-08-18</a>
-                
-                    <a><span class="icon-pencil"></span>1.1k 字</a>
-                
-                
-                    <a><span class="icon-clock"></span>4 分钟</a>
-                
-            </div>
-            <h2 class="post-title">题解 洛谷 P1168 中位数</h2>
-            <article class="post-article">
-                
-                    题解 洛谷 P1168 中位数
-由于这道题目比较水，所以机房中诞生了四种做法，分别是权值线段树、堆、二分以及 。
-这里主要介绍本题的堆解法
-通过读题我们可以轻易发现，每两次插入数据就需要进行一次访问，且期间必须维护当前访问过的所有元素组成的数列具有单调性 。 #### 问题一：如何维护数列的单调性 于是我们很容易想到可以使用优先队列对其插入的数字进行动态排序来维护其单调性。如果你不知道什么是优先队列，那么不妨先通过下面的传送门去看一看优先队列的用法： 点我
-于是你现在明白了什么是优先队列，我们只需要在维护好的单调队列里取出中位数就可以了。所以此时你发现，由于单调队列是一个队列，想要访问
-                
-            </article>
-        </div>
-    </div>
-
-
-    
-        
-    <div class="post-wrap-right wow fadeInUp">
-        
-            <a class="post-link" href="/2023/08/18/P1257,P1429,P7883%20%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9/"></a>
-        
-        <div class="post-cover-right">
-            
                 <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1693756800000/82k7hjhylf296syxci-16938138283395%E8%AF%BA%E5%AE%89%E8%A7%92%E8%89%B2%E5%A1%94(%E5%90%AB%E5%B7%AE%E5%88%86%EF%BC%89.png" data-sizes="auto" alt="题解 洛谷 P1257/P1429/P7883 平面最近点对" class="lazyload">
             
+
         </div>
         <div class="post-info">
             <div class="post-meta">
@@ -367,16 +332,14 @@ P1429/P7883
 
     
         
-    <div class="post-wrap-left wow fadeInUp">
+    <div class="post-wrap-right wow fadeInUp">
         
             <a class="post-link" href="/2023/08/18/P1438%20%E6%97%A0%E8%81%8A%E7%9A%84%E6%95%B0%E5%88%97/"></a>
         
-        
-        <div class="post-cover-left">
+        <div class="post-cover-right">
             
                 <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1696867200000/eg5n3ln47g3gwngp8d-169690919260813.png" data-sizes="auto" alt="题解 洛谷 P1438 无聊的数列" class="lazyload">
             
-
         </div>
         <div class="post-info">
             <div class="post-meta">
@@ -401,6 +364,43 @@ P1429/P7883
 策略分析
 题目要求将一段等差数列加到一段区间上去。我们一眼丁真想到了线段树，但是对于加的不是同一个值的情况，朴素的做法只能进行单点修改，如果这样单点改下去再单点查，和直接在数组上模拟没有任何区别，我们写线段树不光要多递归几层还很废空间。
 遇到这种一眼就是线段树却不知道如何维护的题，我们就需要重新再回去审题来寻找操作的特殊性质。我们发现这道题的特殊性质就是等差数列。那么等差数列有什么性质呢？等差数列等差。虽然说这是一句
+                
+            </article>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="post-wrap-left wow fadeInUp">
+        
+            <a class="post-link" href="/2023/08/18/P1168%20%E4%B8%AD%E4%BD%8D%E6%95%B0/"></a>
+        
+        
+        <div class="post-cover-left">
+            
+                <img data-src="https://media-cdn-zspms.kurogame.com/pnswebsite/website2.0/images/1693756800000/hfsczrc34r9ehje72c-16938138465494%E5%8D%A1%E5%88%97%E6%8F%90%E4%BA%A4.png" data-sizes="auto" alt="题解 洛谷 P1168 中位数" class="lazyload">
+            
+
+        </div>
+        <div class="post-info">
+            <div class="post-meta">
+                <a><span class="icon-calendar"></span>2023-08-18</a>
+                
+                    <a><span class="icon-pencil"></span>1.1k 字</a>
+                
+                
+                    <a><span class="icon-clock"></span>4 分钟</a>
+                
+            </div>
+            <h2 class="post-title">题解 洛谷 P1168 中位数</h2>
+            <article class="post-article">
+                
+                    题解 洛谷 P1168 中位数
+由于这道题目比较水，所以机房中诞生了四种做法，分别是权值线段树、堆、二分以及 。
+这里主要介绍本题的堆解法
+通过读题我们可以轻易发现，每两次插入数据就需要进行一次访问，且期间必须维护当前访问过的所有元素组成的数列具有单调性 。 #### 问题一：如何维护数列的单调性 于是我们很容易想到可以使用优先队列对其插入的数字进行动态排序来维护其单调性。如果你不知道什么是优先队列，那么不妨先通过下面的传送门去看一看优先队列的用法： 点我
+于是你现在明白了什么是优先队列，我们只需要在维护好的单调队列里取出中位数就可以了。所以此时你发现，由于单调队列是一个队列，想要访问
                 
             </article>
         </div>
